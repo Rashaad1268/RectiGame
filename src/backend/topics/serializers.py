@@ -36,4 +36,4 @@ class TopicSerializer(TopicCreateSerializer):
 
     class Meta(TopicCreateSerializer.Meta):
         fields = ('name', 'slug', 'description', 'image', 'banner',
-                  'tags', 'member_count', 'is_member')
+                  'created_at', 'tags', 'member_count', 'is_member')

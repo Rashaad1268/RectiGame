@@ -13,6 +13,11 @@ module.exports = {
   plugins: [require('daisyui')],
   daisyui: {
     logs: false,
-    themes: ['forest'],
+    themes: {
+      "forest": {
+        ...require("daisyui/src/colors/themes")["[data-theme=forest]"],
+        "error": "blue"
+      }
+    },
   },
 };

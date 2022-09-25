@@ -15,22 +15,22 @@
 	});
 </script>
 
-<div 
-	class="grid grow gap-[1px]"
->
+<svelte:head>
+	<title>Topics</title>
+</svelte:head>
+
+<div class="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
 	{#each $topics?.results || [] as topic}
 		<TopicCard {topic} />
-		<!-- <TopicCard {topic} />
-		<TopicCard {topic} /> -->
 	{:else}
 		<button class="btn loading">Loading topics</button>
 	{/each}
 </div>
 
 <style global lang="postcss">
-/* @media (min-width: 580px) { */
+@media (max-width: 320px) {
 	.grid {
-		grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+		grid-template-columns: 1fr;
 	}
-/* } */
+}
 </style>

@@ -3,6 +3,7 @@
 	import { fetchApi } from '$lib/api';
 	import * as stores from '$lib/stores';
 	import { userData } from '$lib/stores';
+	import { Popover, PopoverButton, PopoverPanel } from '@rgossiaux/svelte-headlessui';
 
 	$: isLoggedIn = $userData !== null;
 	$: homepageUrl = isLoggedIn ? '/' : '/welcome';
@@ -19,7 +20,7 @@
 	}
 </script>
 
-<div class="navbar fixed bg-base-100 border-b border-base-200 shadow-lg">
+<div class="navbar z-50 fixed bg-base-100 border-b border-base-200 shadow-lg">
 	<div class="navbar-start">
 		<div class="dropdown">
 			<!-- svelte-ignore a11y-label-has-associated-control -->
@@ -92,39 +93,43 @@
 	</div>
 	<div class="navbar-end pr-3">
 		<div class="dropdown dropdown-end">
-			<!-- svelte-ignore a11y-label-has-associated-control -->
-			<label tabindex="0" class="btn btn-ghost btn-circle avatar">
-				<div class="w-10">
-					{#if $userData?.profile.profile_picture}
-						<img src={$userData?.profile.profile_picture} class="rounded-full" alt="profile pic" />
-					{:else}
-						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
-							<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-							<path
-								fill-rule="evenodd"
-								d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-							/>
-						</svg>
-					{/if}
-				</div>
-			</label>
-			<ul
-				tabindex="0"
-				class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
-			>
-			{#if isLoggedIn}
-			<li><button on:click={logout}>Logout</button></li>
-			{:else}
-			<li><a href="/login">Login</a></li>
-			<li><a href="/signup">Signup</a></li>
-			{/if}
-			</ul>
+			<Popover>
+				<PopoverButton>
+					<!-- svelte-ignore a11y-label-has-associated-control -->
+					<label tabindex="0" class="btn btn-ghost btn-circle avatar">
+						<div class="w-10">
+							{#if $userData?.profile.profile_picture}
+								<img
+									src={$userData?.profile.profile_picture}
+									class="rounded-full"
+									alt="profile pic"
+								/>
+							{:else}
+								<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+									<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+									<path
+										fill-rule="evenodd"
+										d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+									/>
+								</svg>
+							{/if}
+						</div>
+					</label>
+				</PopoverButton>
+				<PopoverPanel>
+					<ul
+						tabindex="0"
+						class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
+					>
+						{#if isLoggedIn}
+							<li><button on:click={logout}>Logout</button></li>
+						{:else}
+							<li><a href="/login">Login</a></li>
+							<li><a href="/signup">Signup</a></li>
+						{/if}
+					</ul>
+				</PopoverPanel>
+			</Popover>
 		</div>
 	</div>
 </div>
-
-<style lang="postcss">
-	.nav-title {
-		font-family: gamer-font;
-	}
-</style>

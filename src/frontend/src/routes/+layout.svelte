@@ -3,8 +3,8 @@
 	import '../app.css';
 
 	import { fetchApi } from '$lib/api';
-	import Footer from '$lib/footer.svelte';
-	import NavBar from '$lib/navbar.svelte';
+	import Footer from '$lib/components/footer.svelte';
+	import NavBar from '$lib/components/navbar.svelte';
 	import { joinedTopics, userData } from '$lib/stores';
 
 	export let data: any;
@@ -28,8 +28,8 @@
 <NavBar />
 
 <!-- So the navbar doesn't overlap the content -->
-<div class="pt-[68px]">
+<main class="pt-[68px] min-h-screen">
 	<slot />
-</div>
+</main>
 
 <Footer />

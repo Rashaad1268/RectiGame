@@ -19,53 +19,47 @@
 	<title>Welcome to Gamerz.lk</title>
 </svelte:head>
 
-<main>
-	<span class="show" />
-	<!-- Keep an empty span with the show class to make vite not purge it -->
+<span class="show" />
+<!-- Keep an empty span with the show class to make vite not purge it -->
 
-	<div class="sections">
-		<div class="section hidden-elem" style="--delay: 1;">
-			<div class="ml-8">
-				<div class="title-text">
-					<h1>From gamers</h1>
-					<h1>to gamers</h1>
-				</div>
-				<div class="description-text">
-					<p>Gamerz.lk is a website made for Sri Lankan gamers</p>
-					<p>to connect with each other</p>
-				</div>
+<div class="sections">
+	<div class="section hidden-elem" style="--delay: 1;">
+		<div class="ml-8">
+			<div class="title-text">
+				<h1>From gamers</h1>
+				<h1>to gamers</h1>
 			</div>
-			<img src="/2_people_gaming.jpg" class="section-img" alt="2 people gaming" />
-		</div>
-
-		<br /><br /><br /><br />
-
-		<div class="section hidden-elem" style="--delay: 2;">
-			<div class="ml-8">
-				<div class="title-text">
-					<h1>Not a gamer?</h1>
-					<h1>No problem</h1>
-				</div>
-				<div class="description-text">
-					<p>Gamerz.lk can also be used by sports players</p>
-					<p>to connect with each other and organize matches</p>
-				</div>
+			<div class="description-text">
+				<p>Gamerz.lk is a website made for Sri Lankan gamers</p>
+				<p>to connect with each other</p>
 			</div>
-			<img
-				src="/people_playing_basketball.jpg"
-				class="section-img"
-				alt="2 people gaming"
-			/>
 		</div>
+		<img src="/2_people_gaming.jpg" class="section-img" alt="2 people gaming" />
 	</div>
 
-	<div class="flex flex-col items-center">
-		<h1 class="text-green-500 text-6xl font-semibold text-center pt-32 pb-3">
-			So what are you waiting for?
-		</h1>
-		<a href="/signup"><button class="btn btn-primary btn-lg btn-wide">Join us</button></a>
+	<br /><br /><br /><br />
+
+	<div class="section hidden-elem" style="--delay: 2;">
+		<div class="ml-8">
+			<div class="title-text">
+				<h1>Not a gamer?</h1>
+				<h1>No problem</h1>
+			</div>
+			<div class="description-text">
+				<p>Gamerz.lk can also be used by sports players</p>
+				<p>to connect with each other and organize matches</p>
+			</div>
+		</div>
+		<img src="/people_playing_basketball.jpg" class="section-img" alt="2 people gaming" />
 	</div>
-</main>
+</div>
+
+<div class="flex flex-col items-center">
+	<h1 class="text-green-500 text-6xl font-semibold text-center pt-32 pb-3">
+		So what are you waiting for?
+	</h1>
+	<a href="/signup"><button class="btn btn-primary btn-lg btn-wide">Join us</button></a>
+</div>
 
 <style lang="postcss">
 	.sections {

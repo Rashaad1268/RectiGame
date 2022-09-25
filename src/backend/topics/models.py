@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.conf import settings
+from django.utils import timezone
 
 
 class TopicTag(models.Model):
@@ -25,6 +26,7 @@ class Topic(models.Model):
     banner = models.ImageField(upload_to='topic/banners', null=True, blank=True)
     tags = models.ManyToManyField(TopicTag, blank=True)
     members = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
     def save(self, *args, **kwargs):
         if self._state.adding and not self.slug:

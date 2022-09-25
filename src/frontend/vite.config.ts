@@ -7,12 +7,12 @@ const config: UserConfig = {
 		proxy: {
 		  '/api/': {
 			// Backend API Proxy
-			target: 'http://192.168.8.101:8000/',
+			target: 'http://127.0.0.1:8000/',
 			changeOrigin: true,
 		},
 		'/static/': {
 			// Staticfiles Proxy
-			target: 'http://192.168.8.101:8000/',
+			target: 'http://127.0.0.1:8000/',
 			changeOrigin: true,
 		  }
 		}
