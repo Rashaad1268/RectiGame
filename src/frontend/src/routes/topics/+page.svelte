@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fetchApi } from '$lib/api';
-	import { topics } from '$lib/stores';
+	import { topics } from '$lib/stores/';
 	import { onMount } from 'svelte';
 
 	import TopicCard from './topicCard.svelte';
@@ -19,18 +19,22 @@
 	<title>Topics</title>
 </svelte:head>
 
-<div class="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
-	{#each $topics?.results || [] as topic}
+<div class="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 mr-2">
+	{#each $topics?.results || [] as topic (topic.slug)}
 		<TopicCard {topic} />
 	{:else}
 		<button class="btn loading">Loading topics</button>
 	{/each}
 </div>
 
-<style global lang="postcss">
-@media (max-width: 320px) {
+<style lang="postcss">
 	.grid {
-		grid-template-columns: 1fr;
+		/* @apply grid-cols-2; */
 	}
-}
+
+	@media (max-width: 320px) {
+		.grid {
+			@apply grid-cols-1 mr-4;
+		}
+	}
 </style>

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { userData } from '$lib/stores';
+	import { userData } from '$lib/stores/';
+	import { toastStore } from '$lib/stores/';
 </script>
 
 <svelte:head>
@@ -14,7 +15,15 @@
 {:else}
 	<h1 class="text-center text-xl font-semibold">Hello {$userData?.username}</h1>
 	<ul class="text-center text-lg">
-		<li><a href="/topics" class="link link-hover text-blue-500">View topics</a></li>
+		<li><a href="/topics" class="link link-hover">View topics</a></li>
 	</ul>
 {/if}
+
+<button class="btn btn-primary" on:click={() => {
+	toastStore.set({
+		message: "Hello world",
+		type: "error",
+		delay: 25000
+	});
+}}>Show Toast</button>
 </div>

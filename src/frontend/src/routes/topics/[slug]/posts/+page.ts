@@ -1,6 +1,6 @@
 import { get } from 'svelte/store';
 import { error } from '@sveltejs/kit';
-import type { PageLoad } from './$types';
+import type { PageLoad } from '../$types';
 import { topics } from '$lib/stores/';
 
 export const load: PageLoad = async function ({ fetch, params }) {

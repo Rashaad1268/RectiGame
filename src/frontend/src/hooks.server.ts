@@ -1,5 +1,4 @@
-
-import type {Handle} from '@sveltejs/kit'
+import type { Handle } from '@sveltejs/kit';
 
 import { parseCookies } from '$lib/api';
 
@@ -23,4 +22,4 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	return await resolve(event);
-}
+};

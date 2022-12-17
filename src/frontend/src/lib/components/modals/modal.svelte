@@ -8,7 +8,7 @@
 <dir class="pl-0">
 	<Transition show={isOpen}>
 		<Dialog on:close={() => (isOpen = false)} {...$$restProps}>
-			<div class="fixed z-10 inset-0 overflow-y-auto flex justify-center items-center">
+			<div class="fixed z-50 inset-0 overflow-y-auto flex justify-center items-center">
 				<div class="block items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
 					<TransitionChild
 						enter="ease-out duration-300"

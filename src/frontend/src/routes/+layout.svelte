@@ -5,7 +5,8 @@
 	import { fetchApi } from '$lib/api';
 	import Footer from '$lib/components/footer.svelte';
 	import NavBar from '$lib/components/navbar.svelte';
-	import { joinedTopics, userData } from '$lib/stores';
+	import { joinedTopics, userData } from '$lib/stores/';
+	import Toast from '$lib/components/toast.svelte';
 
 	export let data: any;
 
@@ -28,8 +29,10 @@
 <NavBar />
 
 <!-- So the navbar doesn't overlap the content -->
-<main class="pt-[68px] min-h-screen">
+<main class="min-h-screen">
 	<slot />
 </main>
 
 <Footer />
+
+<Toast />

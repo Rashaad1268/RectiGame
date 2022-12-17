@@ -5,7 +5,7 @@
 	import { slide } from 'svelte/transition';
 
 	import { fetchApi, formatApiErrors } from '$lib/api';
-	import { userData, joinedTopics } from '$lib/stores';
+	import { userData, joinedTopics } from '$lib/stores/';
 
 
 	export let data: any;

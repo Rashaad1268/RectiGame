@@ -1,11 +1,15 @@
 <script defer lang="ts">
 	import { onMount } from 'svelte';
 
+	
+
 	onMount(() => {
 		const observer = new IntersectionObserver((entries) => {
 			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
 					entry.target.classList.add('show');
+				} else {
+					entry.target.classList.remove('show')
 				}
 			});
 		});
@@ -20,14 +24,14 @@
 </svelte:head>
 
 <span class="show" />
-<!-- Keep an empty span with the show class to make vite not purge it -->
+<!-- Have an empty span with the show class so vite doesn't purge that css class -->
 
 <div class="sections">
-	<div class="section hidden-elem" style="--delay: 1;">
+	<div class="section hidden-elem" style="--delay: 2;">
 		<div class="ml-8">
-			<div class="title-text">
+			<div class="title-text hover-underline-text">
 				<h1>From gamers</h1>
-				<h1>to gamers</h1>
+				<h1>To gamers</h1>
 			</div>
 			<div class="description-text">
 				<p>Gamerz.lk is a website made for Sri Lankan gamers</p>
@@ -37,11 +41,9 @@
 		<img src="/2_people_gaming.jpg" class="section-img" alt="2 people gaming" />
 	</div>
 
-	<br /><br /><br /><br />
-
-	<div class="section hidden-elem" style="--delay: 2;">
+	<div class="section hidden-elem" style="--delay: 4;">
 		<div class="ml-8">
-			<div class="title-text">
+			<div class="title-text hover-underline-text">
 				<h1>Not a gamer?</h1>
 				<h1>No problem</h1>
 			</div>
@@ -52,26 +54,55 @@
 		</div>
 		<img src="/people_playing_basketball.jpg" class="section-img" alt="2 people gaming" />
 	</div>
-</div>
 
-<div class="flex flex-col items-center">
+<div class="section-col items-center gap-2">
 	<h1 class="text-green-500 text-6xl font-semibold text-center pt-32 pb-3">
 		So what are you waiting for?
 	</h1>
 	<a href="/signup"><button class="btn btn-primary btn-lg btn-wide">Join us</button></a>
 </div>
 
+<div class="flex flex-col items-center mt-32">
+	<h1 class="text-5xl text-center font-semibold text-green-500 mb-2">Join Our Discord server</h1>
+	<iframe
+		src="https://discord.com/widget?id=1019570280194117683&theme=dark"
+		title="Discord server widget"
+		class="h-80 w-[200px] sm:w-[450px] md:w-[600px] lg:w-[700px]"
+		allowtransparency={true}
+		frameborder="0"
+	/>
+</div>
+</div>
+
+
 <style lang="postcss">
 	.sections {
-		/* TODO: use a grid layout */
+		/* NOTE: maybe use a grid layout */
+	}
+
+	.section, .section-col {
+		@apply flex flex-col pt-10 px-4 min-h-[80vh];
 	}
 
 	.section {
-		@apply flex justify-start flex-col md:flex-row pt-10 px-4;
+		@apply md:flex-row;
 	}
 
 	.title-text {
 		@apply text-green-500 text-6xl font-semibold md:pt-[15%];
+	}
+
+	.hover-underline-text {
+		background-image: linear-gradient(268.26deg,#097d8d,#60a654 102.45%);
+
+        background-size: 0% 3px;
+        background-repeat: no-repeat;
+        background-position: left bottom;
+        transition: background-size 400ms ease;
+	}
+	
+	.hover-underline-text:hover {
+		background-size: 100% 3px;
 	}
 
 	.description-text {
@@ -79,20 +110,21 @@
 	}
 
 	.section-img {
-		@apply rounded w-[100%] justify-end px-5 pt-1 pl-8 md:w-[55%] md:pt-0 lg:ml-16;
+		@apply rounded object-contain self-start px-5 pt-1 pl-8 md:w-[55%] md:pt-0 lg:ml-16;
 	}
 
-	/* Comment the below animation classes because it messes with other contents of the website */
-	/* .hidden-elem {
-		opacity: 0;
-		filter: blur(3 px);
-		transform: translateX(-100%);
-		transition: all calc(1s * var(--delay));
+	/* Do not use the animations for now because it looks bad */
+	.hidden-elem {
+		opacity: 0.2;
+		filter: blur(3px);
+		transform: translateY(-10px);
+		transition: all calc(300ms * var(--delay));
 	}
 
 	.show {
+		/* z-index: -10; */
 		opacity: 1;
 		filter: blur(0);
-		transform: translateX(0);
-	} */
+		transform: translateY(0);
+	}
 </style>

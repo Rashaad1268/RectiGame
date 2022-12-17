@@ -6,3 +6,13 @@
 	font-family: gamer-font;
 	src: url('/gamer_font.ttf');
 }
+
+@layer components {
+	.gamer-font {
+		font-family: gamer-font;
+	}
+
+	a.link {
+		@apply text-blue-500;
+	}
+}

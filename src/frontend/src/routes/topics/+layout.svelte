@@ -2,7 +2,7 @@
 	import SideBar from './sideBar.svelte';
 </script>
 
-<div class="flex w-full gap-1">
+<div class="flex gap-4">
 	<SideBar />
 	<slot />
 </div>

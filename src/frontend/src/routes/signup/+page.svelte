@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { fetchApi, formatApiErrors } from '$lib/api';
-	import { userData, joinedTopics } from '$lib/stores';
+	import { userData, joinedTopics } from '$lib/stores/';
 	import { faLock } from '@fortawesome/free-solid-svg-icons';
 	import FaIcon from 'svelte-fa';
 	import { slide } from 'svelte/transition';

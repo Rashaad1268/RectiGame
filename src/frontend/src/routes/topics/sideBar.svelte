@@ -1,14 +1,15 @@
 <script lang="ts">
-	import { joinedTopics } from '$lib/stores';
+	import { joinedTopics } from '$lib/stores/';
 </script>
 
-<div class="w-14 sm:w-16 flex flex-col items-center gap-2 grow-0 mx-1 mt-2">
-	{#each $joinedTopics as topic}
-		<a href="/topics/{topic.slug}" class="sidebar-icon group">
+
+<div class="flex flex-col items-center gap-2 grow-0 mx-1 mt-2">
+	{#each $joinedTopics as topic (topic.slug)}
+		<a href="/topics/{topic.slug}/posts" class="sidebar-icon group">
 			<img
 				src={topic.image}
 				alt={topic.name}
-				class="rounded-3xl group-hover:rounded-2xl transition-transform"
+				class="rounded-2xl group-hover:rounded-lg transition-transform"
 			/>
 			<span class="sidebar-tooltip group-hover:scale-100">
 				{topic.name}
@@ -19,7 +20,7 @@
 
 <style lang="postcss">
 	.sidebar-icon {
-		@apply relative flex items-center justify-center w-14 sm:w-16;
+		@apply relative flex items-center justify-center w-12 sm:w-14;
 	}
 
 	.sidebar-tooltip {

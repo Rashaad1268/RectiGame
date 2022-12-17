@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { fetchApi } from '$lib/api';
-	import * as stores from '$lib/stores';
-	import { userData } from '$lib/stores';
+	import { clearUserData, toastStore, userData } from '$lib/stores/';
 	import { Popover, PopoverButton, PopoverPanel } from '@rgossiaux/svelte-headlessui';
 
 	$: isLoggedIn = $userData !== null;
@@ -12,15 +11,41 @@
 		const response = await fetchApi('auth/logout/', { method: 'POST' });
 
 		if (response.ok) {
-			stores.userData.set(null);
-			stores.joinedTopics.set([]);
-			stores.topics.set(null);
+			clearUserData();
+			toastStore.set({
+				message: 'Logged Out',
+				delay: 3000
+			});
 			goto('/welcome');
+		} else {
+			toastStore.set({
+				message: 'Failed to logout',
+				type: 'error'
+			});
+		}
+	}
+	interface NavLinkInterface {
+		name: string;
+		href?: string;
+		sublinks?: Array<{ name: string; href: string }> | undefined;
+	}
+
+	let navLinks: Array<NavLinkInterface> = [];
+
+	$: {
+		if (!isLoggedIn) {
+			navLinks = [
+				{name: "Signup", href: "signup/"},
+				{name: "Login", href: "login/"},
+				...navLinks
+			];
+		} else {
+			navLinks = navLinks.filter((item) => !['login', 'signup'].includes(item.name.toLowerCase()));
 		}
 	}
 </script>
 
-<div class="navbar z-50 fixed bg-base-100 border-b border-base-200 shadow-lg">
+<nav class="navbar z-50 sticky top-0 right-0 bg-base-100 shadow-2xl">
 	<div class="navbar-start">
 		<div class="dropdown">
 			<!-- svelte-ignore a11y-label-has-associated-control -->
@@ -43,25 +68,30 @@
 				tabindex="0"
 				class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
 			>
-				<li><a href={homepageUrl}>Item 1</a></li>
-				<li tabindex="0">
-					<a href={homepageUrl} class="justify-between">
-						Parent
-						<svg
-							class="fill-current"
-							xmlns="http://www.w3.org/2000/svg"
-							width="24"
-							height="24"
-							viewBox="0 0 24 24"
-							><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" /></svg
-						>
-					</a>
-					<ul class="p-2">
-						<li><a href={homepageUrl}>Submenu 1</a></li>
-						<li><a href={homepageUrl}>Submenu 2</a></li>
-					</ul>
-				</li>
-				<li><a href={homepageUrl}>Item 3</a></li>
+				{#each navLinks as link (link.name)}
+					{#if !link.sublinks}
+						<li><a href={link.href}>{link.name}</a></li>
+					{:else}
+						<li tabindex="0">
+							<a href={link.href} class="justify-between">
+								{link.name}
+								<svg
+									class="fill-current"
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" /></svg
+								>
+							</a>
+							<ul class="p-2 bg-neutral">
+								{#each link.sublinks || [] as sublink}
+									<li><a href={sublink.href}>{sublink.name}</a></li>
+								{/each}
+							</ul>
+						</li>
+					{/if}
+				{/each}
 			</ul>
 		</div>
 		<a class="text-2xl sm:text-3xl" style="font-family: gamer-font;" href={homepageUrl}
@@ -70,25 +100,30 @@
 	</div>
 	<div class="navbar-center hidden lg:flex">
 		<ul class="menu menu-horizontal p-0">
-			<li><a href={homepageUrl}>Item 1</a></li>
-			<li tabindex="0">
-				<a href={homepageUrl}>
-					Parent
-					<svg
-						class="fill-current"
-						xmlns="http://www.w3.org/2000/svg"
-						width="20"
-						height="20"
-						viewBox="0 0 24 24"
-						><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg
-					>
-				</a>
-				<ul class="p-2">
-					<li><a href={homepageUrl}>Submenu 1</a></li>
-					<li><a href={homepageUrl}>Submenu 2</a></li>
-				</ul>
-			</li>
-			<li><a href={homepageUrl}>Item 3</a></li>
+			{#each navLinks as link (link.name)}
+				{#if !link.sublinks}
+					<li><a href={link.href}>{link.name}</a></li>
+				{:else}
+					<li tabindex="0">
+						<a href={homepageUrl} class="justify-between">
+							{link.name}
+							<svg
+								class="fill-white"
+								xmlns="http://www.w3.org/2000/svg"
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" /></svg
+							>
+						</a>
+						<ul class="p-2 bg-neutral">
+							{#each link?.sublinks || [] as sublink}
+								<li><a href={sublink.href}>{sublink.name}</a></li>
+							{/each}
+						</ul>
+					</li>
+				{/if}
+			{/each}
 		</ul>
 	</div>
 	<div class="navbar-end pr-3">
@@ -132,4 +167,4 @@
 			</Popover>
 		</div>
 	</div>
-</div>
+</nav>

@@ -1,4 +1,3 @@
-from zlib import DEF_BUF_SIZE
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
@@ -9,6 +8,7 @@ from topics.models import Topic
 class Post(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
     content = models.TextField(max_length=1000)
     created_at = models.DateTimeField(default=timezone.now)
     edited_at = models.DateTimeField(blank=True, null=True)
