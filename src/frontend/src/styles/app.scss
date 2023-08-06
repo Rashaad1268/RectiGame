@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './theme.scss';
+@import './text.scss';
+
+:root {
+	--navbar-height: 64px;
+}
+
+html {
+	display: block;
+	font-size: 13px;
+	@media (min-width: 1024px) {
+		font-size: 16px;
+	}
+}
+
+body {
+	min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	@apply font-normal;
+}

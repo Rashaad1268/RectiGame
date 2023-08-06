@@ -4,5 +4,8 @@
 
 <div class="flex gap-4">
 	<SideBar />
-	<slot />
+	
+	<div class="w-full">
+		<slot />
+	</div>
 </div>

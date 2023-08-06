@@ -10,7 +10,7 @@
 	function handleTopicLeave() {
 		isModalOpen = false;
 
-		fetchApi(`topics/${topic.slug}/join/`, {
+		fetchApi(`topics/${topic.slug}/leave/`, {
 			method: 'POST'
 		}).then((response) => {
 			if (response.ok) {
@@ -23,7 +23,7 @@
 	}
 </script>
 
-<Modal bind:isOpen={isModalOpen} textAlign="center">
+<Modal bind:isOpen={isModalOpen}>
 	<ModalTitle>Are you sure that you want to leave the topic?</ModalTitle>
 
 	<p>

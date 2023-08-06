@@ -13,6 +13,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     edited_at = models.DateTimeField(blank=True, null=True)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='post_likes')
+    dislikes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='post_dislikes')
 
     def save(self, *args, **kwargs):
         if not self._state.adding:

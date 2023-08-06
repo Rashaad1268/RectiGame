@@ -4,12 +4,15 @@ export const parseCookies = (cookieString: string, name: string) =>
 export const getCookie = (name: string) =>
 	document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || null;
 
+interface CustomRequestInit extends RequestInit {
+	csrfToken?: string;
+}
+
 export const fetchApi = async (
 	endpoint: string,
-	options?: RequestInit,
-	csrfTk?: string | null
+	options?: CustomRequestInit
 ): Promise<Response> => {
-	const csrfToken = csrfTk ? csrfTk : getCookie('csrftoken');
+	const csrfToken = options?.csrfToken ? options?.csrfToken : getCookie('csrftoken');
 	const defaultOptions = { ...options };
 
 	defaultOptions.headers = {

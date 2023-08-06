@@ -1,0 +1,5 @@
+html {
+	&.dark {
+		@apply bg-discordDark-830 text-stone-200;
+	}
+}

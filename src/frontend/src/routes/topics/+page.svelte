@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { fetchApi } from '$lib/api';
+	import Button from '$lib/components/button.svelte';
 	import { topics } from '$lib/stores/';
 	import { onMount } from 'svelte';
 
@@ -19,22 +20,26 @@
 	<title>Topics</title>
 </svelte:head>
 
-<div class="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 mr-2">
+<div id="topics-grid">
 	{#each $topics?.results || [] as topic (topic.slug)}
 		<TopicCard {topic} />
+		<TopicCard {topic} />
 	{:else}
-		<button class="btn loading">Loading topics</button>
+		<Button aria-label="loading indicator button">Loading topics</Button>
 	{/each}
 </div>
 
-<style lang="postcss">
-	.grid {
-		/* @apply grid-cols-2; */
+<style lang="scss">
+	#topics-grid {
+		@apply grid gap-3 gap-y-4 pt-4 pr-4 overflow-y-auto;
+		max-width: 100%; /* DON'T TOUCH THIS!, WITHOUT THIS THE auto-fit DOESN'T WORK FOR SOME REASON */
+
+		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
 	}
 
-	@media (max-width: 320px) {
-		.grid {
-			@apply grid-cols-1 mr-4;
+	@media (max-width: 380px) {
+		#topics-grid > :global(div) {
+			padding: 3rem;
 		}
 	}
 </style>

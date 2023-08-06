@@ -2,6 +2,7 @@ import { writable } from 'svelte/store';
 import type { PaginatorInterface, ToastInterface, TopicInterface, UserInterface } from '../types';
 
 export { topicPosts } from './posts';
+// export { isDarkMode } from './darkMode';
 
 export const userData = writable<UserInterface | null>(null);
 

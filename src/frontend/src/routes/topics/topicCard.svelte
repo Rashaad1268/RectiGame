@@ -1,28 +1,53 @@
 <script lang="ts">
-	import { truncate } from '$lib/utils';
 	import type { TopicInterface } from '$lib/types';
 
 	export let topic: TopicInterface;
 </script>
 
-<a href="/topics/{topic.slug}/posts" class="group bg-base-300 shadow-lg">
-	<div class="bg-secondary">
+<a href="/topics/{topic.slug}/posts" class="topic-card">
+	<div class="topic-image">
 		<img
-			class="w-full group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform"
+			loading="lazy"
 			src={topic.image}
-			alt="{topic.image} img"
+			alt="{topic.name} img"
 		/>
 	</div>
-	<div class="px-1 py-4">
-		<div class="font-bold text-xl mb-1">{topic.name}</div>
-		<p class="text-base">{truncate(topic.description, 60)}</p>
+	<div class="px-1 pt-1 pb-[2px]">
+		<div class="font-bold text-xl">{topic.name}</div>
+		<p class="leading-[1.2rem] text-sm text-neutral-400">{topic.member_count} member{topic.member_count !== 1 ? 's' : ''}</p>
 	</div>
-	<div class="px-1 pt-0 pb-0">
+	<div class="post-tags">
 		{#each topic.tags as tag (tag.slug)}
 			<a
-				class="inline-block bg-zinc-700 rounded-full px-1 py-[2px] text-xs font-semibold mr-1 mb-1"
 				href="/topics/tag/{tag.slug}">{tag.name}</a
 			>
 		{/each}
 	</div>
 </a>
+
+<style lang="scss">
+	.topic-card {
+		@apply shadow-2xl;
+	}
+
+	.topic-image {
+		@apply bg-green-500;
+
+		img {
+			@apply w-full transition-transform;
+
+			.topic-card:hover > & {
+				@apply translate-x-[6px] -translate-y-2;
+			}
+		}
+	}
+
+	.post-tags {
+		@apply hidden md:flex flex-wrap gap-1 px-1 mt-[2px] ;
+
+		a {
+			@apply inline-block bg-zinc-700 rounded-full font-semibold
+				   px-[6px] py-[1px] text-[11px];
+		}
+	}
+</style>

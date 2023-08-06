@@ -4,7 +4,7 @@
 	let guildData: any;
 
 	onMount(async () => {
-		let res = await fetch('https://discord.com/api/guilds/1019570280194117683/widget.json');
+		let res = await fetch('https://discord.com/api/guilds/1038761636145676298/widget.json');
 
 		if (res.ok) {
 			guildData = await res.json();
@@ -17,7 +17,7 @@
 		<span class="outer" />
 		<span class="inner" />
 	</span>
-	<span class="text-green-500">{guildData.presence_count}</span> member{guildData.presence_count != 1
+	<span class="text-green-500">{guildData.presence_count}</span> member{guildData.presence_count !== 1
 		? 's'
 		: ''} online
 {/if}

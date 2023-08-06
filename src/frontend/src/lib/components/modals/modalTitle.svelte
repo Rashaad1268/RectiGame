@@ -1,7 +1,3 @@
-<script>
-    import {DialogTitle} from "@rgossiaux/svelte-headlessui"
-</script>
-
-<DialogTitle class="text-2xl font-semibold pb-1">
+<h1 class="text-2xl font-semibold pb-1">
     <slot />
-</DialogTitle>
+</h1>

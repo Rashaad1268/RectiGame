@@ -1,0 +1,27 @@
+@font-face {
+	font-family: gamer-font;
+	src: url('/gamer_font.ttf');
+}
+
+@font-face {
+	font-family: monocraft;
+	src: url('/Monocraft.ttf');
+}
+
+.nested-green {
+	span {
+		@apply text-green-500;
+	}
+}
+
+.link {
+	@apply text-blue-600;
+
+	&:hover {
+		@apply underline;
+	}
+
+	&.link-underline {
+		@apply underline;
+	}
+}

@@ -40,7 +40,7 @@ class TopicViewSet(viewsets.ModelViewSet):
         else:
             return serializers.TopicSerializer
 
-    @action(detail=True, methods=['post'], url_path='join')
+    @action(detail=True, methods=['post'], url_path='join', permission_classes=(permissions.IsAuthenticated,))
     def join_topic(self, request, pk):
         topic = self.get_object()
 
@@ -48,6 +48,18 @@ class TopicViewSet(viewsets.ModelViewSet):
             topic.members.add(request.user)
 
         else:
+            return Response({'detail': 'User is already a member of this topic'})
+
+        return Response(status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=['post'], url_path='leave', permission_classes=(permissions.IsAuthenticated,))
+    def leave_topic(self, request, pk):
+        topic = self.get_object()
+
+        if topic.members.contains(request.user):
             topic.members.remove(request.user)
 
-        return Response(status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'User is not a member of this topic to be removed from'}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -1,16 +1,14 @@
 <script lang="ts">
 	import { toastStore } from "$lib/stores/";
-	import { faCheck, faCircleExclamation, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 	import { onMount } from "svelte";
-	import FaIcon from "svelte-fa";
 
 	let activate = false;
 	let currentToast: any;
 	let timeout: NodeJS.Timeout;
 	let defaultIcons: any = {
-		success: faCheck,
-		error: faCircleExclamation,
-		info: faCircleInfo
+		success: "✔",
+		error: "❌",
+		info: "ℹ️"
 	};
 
 	onMount(() => {
@@ -35,8 +33,9 @@
 </script>
 
 {#if currentToast}
-	<div
-		class={`toast toast-start flex-row ${typeClass}`}
+	<button
+		name="close alert button"
+		class="toast toast-start items-center flex-row {typeClass}"
 		on:click={() => toastStore.set(null)}
 		class:active={activate}
 	>
@@ -44,14 +43,14 @@
 			{#if currentToast.icon}
 				{currentToast.icon}
 			{:else}
-				<FaIcon icon={defaultIcons[currentToast.type ?? "info"]} />
+				{defaultIcons[currentToast.type ?? "info"]}
 			{/if}
 		</div>
 
 		<p class="text-white sm:p-1 md:p-3">
 			{currentToast.message}
 		</p>
-	</div>
+	</button>
 {/if}
 
 <style lang="postcss">
@@ -63,7 +62,7 @@
 	}
 
 	.toast.success {
-		@apply bg-primary;
+		@apply bg-emerald-500;
 	}
 
 	.toast.error {
@@ -71,7 +70,7 @@
 	}
 
 	.toast.info {
-		@apply bg-info;
+		@apply bg-blue-500;
 	}
 
 	.icon {

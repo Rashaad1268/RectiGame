@@ -44,7 +44,9 @@ export interface PostInterface {
 	created_at: string;
 	edited_at: string;
 	like_count: number;
+	dislike_count: number;
 	is_liked: boolean;
+	is_disliked: boolean;
 }
 
 // -------------------------------

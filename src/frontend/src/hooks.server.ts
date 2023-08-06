@@ -3,8 +3,8 @@ import type { Handle } from '@sveltejs/kit';
 import { parseCookies } from '$lib/api';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const url = event.url.pathname;
-	const authEndpoints = ['/login', '/signup', '/welcome'];
+	const url = event.url.pathname.slice();
+	const authEndpoints = ['auth/', '/auth/login', '/auth/signup', '/welcome'];
 	const sessionId = parseCookies(event.request.headers.get('cookie') || '', 'sessionid');
 
 	const isLoggedIn = sessionId !== null && sessionId !== '';
@@ -16,7 +16,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	} else {
 		if (!authEndpoints.includes(url)) {
-			event.url.pathname = '/welcome';
+			event.url = new URL(`${event.url.origin}/welcome?from=${event.url.pathname}`);
+
 			return Response.redirect(event.url);
 		}
 	}

@@ -1,7 +1,7 @@
-<script defer lang="ts">
+<script lang="ts">
+	import Button from '$lib/components/button.svelte';
+	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-
-	
 
 	onMount(() => {
 		const observer = new IntersectionObserver((entries) => {
@@ -9,7 +9,7 @@
 				if (entry.isIntersecting) {
 					entry.target.classList.add('show');
 				} else {
-					entry.target.classList.remove('show')
+					entry.target.classList.remove('show');
 				}
 			});
 		});
@@ -17,6 +17,8 @@
 		const hiddenElements = document.querySelectorAll('.hidden-elem');
 		hiddenElements.forEach((el) => observer.observe(el));
 	});
+
+	let fromEndpoint: string | null = $page.url.searchParams.get('from');
 </script>
 
 <svelte:head>
@@ -55,32 +57,32 @@
 		<img src="/people_playing_basketball.jpg" class="section-img" alt="2 people gaming" />
 	</div>
 
-<div class="section-col items-center gap-2">
-	<h1 class="text-green-500 text-6xl font-semibold text-center pt-32 pb-3">
-		So what are you waiting for?
-	</h1>
-	<a href="/signup"><button class="btn btn-primary btn-lg btn-wide">Join us</button></a>
+	<div class="section-col items-center gap-2">
+		<h1 class="text-green-500 text-6xl font-semibold text-center pt-32 pb-3">
+			So what are you waiting for?
+		</h1>
+		<a href="auth/signup{fromEndpoint ? `?next=${fromEndpoint}` : ''}"><Button aria-label="Join us button">Join us</Button></a>
+	</div>
+
+	<div class="flex flex-col items-center mt-32">
+		<h1 class="text-5xl text-center font-semibold text-green-500 mb-2">Join Our Discord server</h1>
+		<iframe
+			src="https://discord.com/widget?id=1038761636145676298&theme=dark"
+			title="Discord server widget"
+			class="h-80 w-[200px] sm:w-[450px] md:w-[600px] lg:w-[700px]"
+			allowtransparency={true}
+			frameborder="0"
+		/>
+	</div>
 </div>
 
-<div class="flex flex-col items-center mt-32">
-	<h1 class="text-5xl text-center font-semibold text-green-500 mb-2">Join Our Discord server</h1>
-	<iframe
-		src="https://discord.com/widget?id=1019570280194117683&theme=dark"
-		title="Discord server widget"
-		class="h-80 w-[200px] sm:w-[450px] md:w-[600px] lg:w-[700px]"
-		allowtransparency={true}
-		frameborder="0"
-	/>
-</div>
-</div>
+<style lang="scss">
+	// .sections {
+	// 	NOTE: maybe use a grid-like layout
+	// }
 
-
-<style lang="postcss">
-	.sections {
-		/* NOTE: maybe use a grid layout */
-	}
-
-	.section, .section-col {
+	.section,
+	.section-col {
 		@apply flex flex-col pt-10 px-4 min-h-[80vh];
 	}
 
@@ -93,16 +95,16 @@
 	}
 
 	.hover-underline-text {
-		background-image: linear-gradient(268.26deg,#097d8d,#60a654 102.45%);
+		background-image: linear-gradient(268.26deg, #097d8d, #60a654 102.45%);
 
-        background-size: 0% 3px;
-        background-repeat: no-repeat;
-        background-position: left bottom;
-        transition: background-size 400ms ease;
-	}
-	
-	.hover-underline-text:hover {
-		background-size: 100% 3px;
+		background-size: 0% 3px;
+		background-repeat: no-repeat;
+		background-position: left bottom;
+		transition: background-size 400ms ease;
+
+		&:hover {
+			background-size: 100% 3px;
+		}
 	}
 
 	.description-text {

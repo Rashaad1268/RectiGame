@@ -1,6 +1,8 @@
 from rest_framework import viewsets, pagination, status
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 
 from .serializers import PostSerializer, PostCreateSerializer
 from .models import Post
@@ -49,3 +51,57 @@ class PostsViewSet(viewsets.ModelViewSet):
             instance._prefetched_objects_cache = {}
 
         return Response(PostSerializer(instance).data)
+
+    @action(detail=True, methods=('post',), url_path='like', permission_classes=(IsAuthenticated,))
+    def like_post(self, request, pk):
+        post = self.get_object()
+
+        if not post.likes.contains(request.user):
+            if post.dislikes.contains(request.user):
+                post.dislikes.remove(request.user)
+
+            post.likes.add(request.user)
+
+        else:
+            return Response({'detail': "User has already liked the post"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=('post',), url_path='unlike', permission_classes=(IsAuthenticated,))
+    def unlike_post(self, request, pk):
+        post = self.get_object()
+
+        if post.likes.contains(request.user):
+            post.likes.remove(request.user)
+
+        else:
+            return Response({'detail': "User has not liked the post to unlike"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=True, methods=('post',), url_path='dislike', permission_classes=(IsAuthenticated,))
+    def dislike_post(self, request, pk):
+        post = self.get_object()
+
+        if not post.dislikes.contains(request.user):
+            if post.likes.contains(request.user):
+                post.likes.remove(request.user)
+
+            post.dislikes.add(request.user)
+
+        else:
+            return Response({'detail': "User has already disliked the post"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(status=status.HTTP_201_CREATED)
+ 
+    @action(detail=True, methods=('post',), url_path='undo-dislike', permission_classes=(IsAuthenticated,))
+    def undo_dislike_post(self, request, pk):
+        post = self.get_object()
+
+        if post.dislikes.contains(request.user):
+            post.dislikes.remove(request.user)
+
+        else:
+            return Response({'detail': "User has not disliked the post to undo the dislike"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -1,38 +1,51 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import '../app.css';
-
+	import { browser } from '$app/environment';
 	import { fetchApi } from '$lib/api';
 	import Footer from '$lib/components/footer.svelte';
-	import NavBar from '$lib/components/navbar.svelte';
-	import { joinedTopics, userData } from '$lib/stores/';
+	import NavBar from './navbar.svelte';
 	import Toast from '$lib/components/toast.svelte';
+	import { joinedTopics, userData } from '$lib/stores';
+	import type { LayoutData } from './$types';
 
-	export let data: any;
+	import '../styles/app.scss';
 
-	onMount(async () => {
-		if (data.isLoggedIn && !$userData) {
-			const response = await fetchApi('auth/users/me/');
-			if (response.ok) {
-				const responseData = await response.json();
-				userData.set(responseData['user']);
-				joinedTopics.set(responseData['joined_topics']);
-			} else {
-				console.error(
-					`Failed to fetch user data (status: ${response.status} ${response.statusText})`
-				);
-			}
+	export let data: LayoutData;
+
+	// function setTheme(isDarkMode: boolean) {
+	// 	if (!isDarkMode) {
+	// 		document.documentElement.classList.remove('dark');
+	// 	} else {
+	// 		document.documentElement.classList.add('dark');
+	// 	}
+	// }
+
+	$: {
+		if (!browser) {
+			break $;
 		}
-	});
+		if (data.isLoggedIn && !$userData) {
+			fetchApi('auth/users/me/', { csrfToken: data.csrfToken }).then((response) => {
+				if (response.ok) {
+					response.json().then((responseData) => {
+						userData.set(responseData['user']);
+						joinedTopics.set(responseData['joined_topics']);
+					});
+				} else {
+					console.error(
+						`Failed to fetch user data (status: ${response.status} ${response.statusText})`
+					);
+				}
+			});
+		}
+	}
 </script>
 
 <NavBar />
 
-<!-- So the navbar doesn't overlap the content -->
-<main class="min-h-screen">
+<main style="min-height: calc(100vh - var(--navbar-height));">
 	<slot />
 </main>
 
-<Footer />
+<!-- <Footer /> -->
 
 <Toast />
