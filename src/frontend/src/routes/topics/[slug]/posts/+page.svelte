@@ -4,13 +4,16 @@
 	import { joinedTopics } from '$lib/stores/';
 	import type { TopicInterface } from '$lib/types';
 	import type { PageData } from './$types';
+	import CreatePostModal from './createPostModal.svelte';
 	import TopicLeaveModal from './topicLeaveModal.svelte';
 	import TopicPostsList from './topicPostsList.svelte';
 
 	export let data: PageData;
 	let isLeavingModalOpen = false;
+	let isCreatePostModelOpen = false;
 
 	$: topic = data.topic as TopicInterface;
+	// $: alert(JSON.stringify(topic))
 
 	const dateTimeFormatter = new Intl.DateTimeFormat('en', {
 		year: 'numeric',
@@ -41,9 +44,10 @@
 	<title>{topic.name}</title>
 </svelte:head>
 
-<div class="flex flex-col">
+<div class="flex flex-col h-[30%]">
+	<img src={topic.banner} class="w-full h-[60%]" alt="banner" />
 	<div class="flex gap-4 md:gap-8 w-full pt-4">
-		<img src={topic.image} class="w-32 rounded self-start" alt="topic img" />
+		<img src={topic.image} class="w-32 h-32 rounded self-start" alt="topic img" />
 
 		<div>
 			<div class="flex items-center">
@@ -73,7 +77,7 @@
 	</div>
 </div>
 
-<div class="flex justify-evenly mt-12">
+<div class="flex justify-evenly mt-12 overflow-y-scroll h-[70%]">
 	<TopicPostsList bind:topic />
 
 	<div class="topic-info-section">
@@ -92,16 +96,18 @@
 			>
 		</div>
 
-		<!-- <hr class="my-3 bg-discordDark-360 h-[1px] border-none" /> -->
+		<hr class="my-3 bg-discordDark-360 h-[1px] border-none" />
 
-		<Button class="btn-md flex m-auto">Create Post</Button>
+		<Button class="btn-md flex m-auto" on:click={() => (isCreatePostModelOpen = !isCreatePostModelOpen)}>Create Post</Button>
 	</div>
 </div>
 
 <TopicLeaveModal bind:isModalOpen={isLeavingModalOpen} bind:topic />
 
+<CreatePostModal bind:isModalOpen={isCreatePostModelOpen} bind:topic />
+
 <style lang="scss">
 	.topic-info-section {
-		@apply bg-discordDark-760 mx-auto h-full w-[30svw] py-3 px-4 rounded-md;
+		@apply bg-discordDark-760 mx-auto h-[30%] w-[30svw] py-3 px-4 rounded-md;
 	}
 </style>
