@@ -11,7 +11,7 @@
 </div>
 
 <style lang="scss">
-	body {
-		@apply overflow-y-hidden;
+	:global(body) {
+		overflow-y: hidden;
 	}
 </style>

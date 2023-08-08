@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fetchApi } from '$lib/api';
 	// import { joinedTopics } from '$lib/stores/';
-	import { Modal, ModalActionButton, ModalActions, ModalTitle } from '$lib/components/modals';
+	import { Modal, ModalActionButton, ModalActionTextArea, ModalActionTextField, ModalActions, ModalTitle } from '$lib/components/modals';
 	import type { TopicInterface } from '$lib/types';
 
 	export let isModalOpen: boolean;
@@ -32,10 +32,10 @@
 	<ModalTitle>Create a post</ModalTitle>
 
     Title
-	<input type="text" bind:value={title} />
+	<ModalActionTextField type="text" bind:value={title} />
 
     Content
-    <textarea bind:value={content} />
+    <ModalActionTextArea bind:value={content} />
 	<ModalActions>
 		<ModalActionButton isDestructive on:click={handlePostCreate}>Submit</ModalActionButton>
 		<ModalActionButton on:click={() => (isModalOpen = false)}>Cancel</ModalActionButton>

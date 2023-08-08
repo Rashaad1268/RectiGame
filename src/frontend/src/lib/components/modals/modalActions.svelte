@@ -1,3 +1,3 @@
-<div class="flex w-full justify-around pt-3 mx-4">
+<div class="flex w-[100%] justify-end pt-3">
     <slot />
 </div>

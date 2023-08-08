@@ -28,17 +28,17 @@
 }}>Show Toast</Button> -->
 
 	<div class="flex flex-col gap-4 items-center pt-10">
-		<div>
+		<div class="flex flex-row items-center justify-center w-full">
 			<Button aria-label="test button">Button</Button>
 			<Button aria-label="test button" class="btn-error ml-4">Button</Button>
 		</div>
 		
-		<div>
+		<div class="flex flex-row items-center justify-center w-full">
 			<Button aria-label="test button" class="btn-md">Button</Button>
 			<Button aria-label="test button" class="btn-error ml-4 btn-md">Button</Button>
 		</div>
 
-		<div>
+		<div class="flex flex-row items-center justify-center w-full">
 			<Button aria-label="test button" class="btn-sm">Button</Button>
 			<Button aria-label="test button" class="btn-error ml-4 btn-sm">Button</Button>
 		</div>
