@@ -40,7 +40,9 @@
 	}
 </script>
 
+
 <main style="min-height: calc(100vh - var(--navbar-height)); height: 100%;">
+	<NavBar />
 	<slot />
 </main>
 

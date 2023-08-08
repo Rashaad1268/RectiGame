@@ -2,7 +2,6 @@
 	import Button from '$lib/components/button.svelte';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-	import Navbar from '../navbar.svelte';
 
 	onMount(() => {
 		const observer = new IntersectionObserver((entries) => {
@@ -26,7 +25,7 @@
 	<title>Welcome to Gamerz.lk</title>
 </svelte:head>
 
-<Navbar />
+<!-- <Navbar /> -->
 
 <span class="show" />
 <!-- Have an empty span with the show class so vite doesn't purge that css class -->
