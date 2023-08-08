@@ -5,7 +5,6 @@
 	import { onMount } from 'svelte';
 
 	import TopicCard from './topicCard.svelte';
-	import Navbar from '../navbar.svelte';
 
 	onMount(async () => {
 		if (!$topics) {
@@ -16,8 +15,6 @@
 		}
 	});
 </script>
-
-<Navbar />
 
 <svelte:head>
 	<title>Topics</title>

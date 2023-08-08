@@ -44,8 +44,10 @@
 	<title>{topic.name}</title>
 </svelte:head>
 
-<div class="flex flex-col h-[30%]">
-	<img src={topic.banner} class="w-full h-[60%]" alt="banner" />
+<div class="flex flex-col">
+	{#if topic.banner}
+		<img src={topic.banner} class="w-full h-[60%]" alt="banner" />
+	{/if}
 	<div class="flex gap-4 md:gap-8 w-full pt-4">
 		<img src={topic.image} class="w-32 h-32 rounded self-start" alt="topic img" />
 
@@ -77,7 +79,7 @@
 	</div>
 </div>
 
-<div class="flex justify-evenly mt-12 overflow-y-scroll h-[70%]">
+<div class="flex justify-evenly mt-12">
 	<TopicPostsList bind:topic />
 
 	<div class="topic-info-section">
