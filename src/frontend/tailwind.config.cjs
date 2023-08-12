@@ -29,7 +29,8 @@ module.exports = {
 		fontFamily: {
 			...defaultTheme.fontFamily,
 			gamer: ['gamer-font', 'sans-serif'],
-			monocraft: ['monocraft', 'sans-serif']
+			monocraft: ['monocraft', 'sans-serif'],
+			gg: ['gg sans']
 		}
 	}
 };
