@@ -1,5 +1,4 @@
 # Gamerz.lk
-# Gamerz.lk
 
 at root run `pipenv install`
 

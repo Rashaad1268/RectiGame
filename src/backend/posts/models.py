@@ -29,6 +29,10 @@ class Reply(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     edited_at = models.DateTimeField(blank=True, null=True)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='reply_likes')
+    dislikes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='reply_dislikes')
+
+    # Repies can reply to other replies
+    replying_to = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self._state.adding:

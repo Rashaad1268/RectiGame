@@ -6,6 +6,7 @@
 
 	import { fetchApi, formatApiErrors } from '$lib/api';
 	import Alert from '$lib/components/alert.svelte';
+	import { Form } from '$lib/components/forms';
 	import Button from '$lib/components/button.svelte';
 	import { fetchUserData } from '$lib/utils';
 	import BackgroundGrid from '../backgroundGrid.svelte';
@@ -60,7 +61,7 @@
 				<a href="signup{data.next ? `?next=${data.next}` : ''}" class="link">Signup</a>
 			</p>
 		</div>
-		<form class="mt-6" on:submit|preventDefault={handleLogin}>
+		<Form class="mt-6" on:submit={handleLogin}>
 			<div class="rounded-md shadow-sm">
 				<div>
 					<label for="email" class="sr-only">Email address</label>
@@ -100,7 +101,7 @@
 				>
 				Login
 			</Button>
-		</form>
+		</Form>
 
 		<div class="pt-10">
 			{#each errorMessages as errorMsg}

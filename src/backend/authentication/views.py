@@ -66,7 +66,7 @@ class UserViewSet(viewsets.ModelViewSet):
     http_method_names = ('get', 'put', 'patch', 'options')
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = serializers.UserSerializer
-    queryset = models.User.objects.all()
+    queryset = models.User.objects.all().select_related("profile")
 
     @action(methods=('GET',), detail=False, url_path='me')
     def get_current_user_data(self, request):

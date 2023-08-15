@@ -10,6 +10,7 @@ djangorestframework = "*"
 channels = "*"
 django-cors-headers = "*"
 django-filter = "*"
+drf-nested-routers = "*"
 
 [dev-packages]
 
