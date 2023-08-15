@@ -44,12 +44,12 @@
 	<title>{topic.name}</title>
 </svelte:head>
 
-<div class="flex flex-col">
+<div class="flex flex-col h-[50%]">
 	{#if topic.banner}
-		<img src={topic.banner} class="w-full h-[60%]" alt="banner" />
+		<img src={topic.banner} class="w-full h-[70%] object-cover" alt="banner" />
 	{/if}
 	<div class="flex gap-4 md:gap-8 w-full pt-4">
-		<img src={topic.image} class="w-32 h-32 rounded self-start" alt="topic img" />
+		<img src={topic.image} class="w-32 h-32 rounded self-start object-cover" alt="topic img" />
 
 		<div>
 			<div class="flex items-center">

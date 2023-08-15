@@ -9,3 +9,9 @@
 		<slot />
 	</div>
 </div>
+
+<style lang="scss">
+	:global(body) {
+		overflow-y: hidden;
+	}
+</style>
