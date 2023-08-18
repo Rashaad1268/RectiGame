@@ -18,7 +18,8 @@
 	let password: string;
 	let errorMessages: string[] = [];
 
-	const handleLogin = async () => {
+	const handleLogin = async (e: any) => {
+		e.preventDefault();
 		const response = await fetchApi('auth/login/', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -47,7 +48,7 @@
 
 <BackgroundGrid />
 
-<div class="login-form centered">
+<div class="login-form">
 	<div class="max-w-md w-full">
 		<div>
 			<h2
@@ -61,7 +62,7 @@
 				<a href="signup{data.next ? `?next=${data.next}` : ''}" class="link">Signup</a>
 			</p>
 		</div>
-		<Form class="mt-6" on:submit={handleLogin}>
+		<Form class="mt-6" on:submit={handleLogin} bind:errorMessages>
 			<div class="rounded-md shadow-sm">
 				<div>
 					<label for="email" class="sr-only">Email address</label>
@@ -92,36 +93,11 @@
 			<Button
 				aria-label="login button"
 				type="submit"
-				class="flex items-center justify-center group relative !w-full mt-4 !h-10 !p-4"
+				class="flex items-center justify-center group relative !w-full mt-4 !h-11 !p-4 py-5"
 			>
-				<svg class="h-5 w-5 mr-2 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
-					><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path
-						d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"
-					/></svg
-				>
 				Login
 			</Button>
 		</Form>
-
-		<div class="pt-10">
-			{#each errorMessages as errorMsg}
-				<Alert class="alert-error shadow-lg" inTransition={slide}>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="stroke-current flex-shrink-0 h-6 w-6"
-						fill="none"
-						viewBox="0 0 24 24"
-						><path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-						/></svg
-					>
-					<span>{errorMsg}</span>
-				</Alert>
-			{/each}
-		</div>
 	</div>
 </div>
 

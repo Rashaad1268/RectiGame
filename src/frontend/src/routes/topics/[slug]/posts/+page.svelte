@@ -65,7 +65,7 @@
 				<Button
 					aria-label="leave topic button"
 					on:click={handleTopicJoin}
-					class="btn-md {topic.is_member ? 'btn-error' : ''} ml-5"
+					class="{topic.is_member ? 'btn-destructive' : ''} ml-5"
 				>
 					{topic.is_member ? 'Leave Topic' : 'Join Topic'}
 				</Button>

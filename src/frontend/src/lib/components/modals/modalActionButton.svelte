@@ -8,7 +8,7 @@
 <Button
 	on:click
 	class="rounded-xl text-white {size} ml-2 {$$restProps?.class ?? ''}
-		{isDestructive ? 'btn-error bg-red-500 border-none' : 'btn-secondary'}
+		{isDestructive ? 'btn-destructive bg-red-500 border-none' : 'btn-secondary'}
 		"
 >
 	<slot />

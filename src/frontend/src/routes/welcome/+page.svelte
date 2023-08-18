@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Button from '$lib/components/button.svelte';
 	import { page } from '$app/stores';
+	import Button from '$lib/components/button.svelte';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
@@ -63,7 +63,9 @@
 		<h1 class="text-green-500 text-6xl font-semibold text-center pt-32 pb-3">
 			So what are you waiting for?
 		</h1>
-		<a href="auth/signup{fromEndpoint ? `?next=${fromEndpoint}` : ''}"><Button aria-label="Join us button">Join us</Button></a>
+		<a href="auth/signup{fromEndpoint ? `?next=${fromEndpoint}` : ''}"
+			><Button class="btn-lg" aria-label="Join us button">Join us</Button></a
+		>
 	</div>
 
 	<div class="flex flex-col items-center mt-32">
