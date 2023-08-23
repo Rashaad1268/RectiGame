@@ -5,6 +5,8 @@ import { topics } from '$lib/stores/';
 
 export const load: PageLoad = async function ({ fetch, params }) {
 	const topic = get(topics)?.results.filter((topic) => topic.slug === params.slug)[0];
+	console.log('t', topic)
+	console.log('tee', get(topics))
 
 	if (topic) {
 		return {

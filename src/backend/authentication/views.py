@@ -10,11 +10,10 @@ from . import models, serializers
 
 
 def get_full_data(user, request):
-    # Have the user data in a user key because we can add additional data later on
-    context = {'request': request}
+    ctx = {'request': request}
     return {
-        'user': serializers.UserSerializer(user, context=context).data,
-        'joined_topics': TopicSerializer(user.topic_set.all(), many=True, context=context).data,
+        'user': serializers.UserSerializer(user, context=ctx).data,
+        'joined_topics': TopicSerializer(user.topic_set.all(), many=True, context=ctx).data,
     }
 
 

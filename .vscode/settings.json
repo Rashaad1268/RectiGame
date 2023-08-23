@@ -5,5 +5,6 @@
   "editor.quickSuggestions": {
     "strings": true
   },
-  "scss.lint.unknownAtRules": "ignore"  
+  "scss.lint.unknownAtRules": "ignore",
+  // "svelte.language-server.runtime": "/usr/local/bin/node",
 }

@@ -28,6 +28,11 @@ class Topic(models.Model):
     members = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
 
+    @property
+    def channel_name(self):
+        """The named used for channel groups"""
+        return f"Topic-{self.slug}"
+
     def __str__(self):
         return self.name
 

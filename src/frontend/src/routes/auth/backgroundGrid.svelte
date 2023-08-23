@@ -41,9 +41,9 @@
         background: linear-gradient(
 			to bottom,
 			theme('colors.green.400'),
-			theme('colors.discordDark.860'),
-			theme('colors.discordDark.860'),
-			theme('colors.discordDark.860'),
+			theme('colors.discordDark.800'),
+			theme('colors.discordDark.800'),
+			theme('colors.discordDark.800'),
 			theme('colors.green.400')
 		);
                      /* width height*/
@@ -75,8 +75,7 @@
 		position: relative;
 
 		&:before {
-            @apply bg-discordDark-860;
-
+			background-color: var(--background-color);
 			content: '';
 			inset: 0.5px;
 			position: absolute;

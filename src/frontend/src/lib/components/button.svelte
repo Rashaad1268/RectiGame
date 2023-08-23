@@ -21,7 +21,7 @@
 	// Default button size is medium (md)
 	button {
 		@apply font-semibold font-gg capitalize
-      bg-green-600 w-auto box-border
+      bg-green-500 w-auto box-border
         text-lg rounded-md
         h-9 px-4 py-2
         flex items-center justify-center select-none;
@@ -34,11 +34,11 @@
 		}
 
 		&:hover {
-			@apply bg-green-700;
+			@apply bg-green-600;
 		}
 
 		&:active {
-			@apply bg-green-800;
+			@apply bg-green-700;
 		}
 
 		&.btn-lg {
@@ -51,24 +51,24 @@
 	}
 
 	.btn-destructive {
-		@apply bg-red-600;
+		@apply bg-red-500;
 
 		&:hover {
-			@apply bg-red-700;
+			@apply bg-red-600;
 		}
 		&:active {
-			@apply bg-red-800;
+			@apply bg-red-700;
 		}
 	}
 
 	.btn-blue {
-		@apply bg-blue-600;
+		@apply bg-blue-500;
 
 		&:hover {
-			@apply bg-blue-700;
+			@apply bg-blue-600;
 		}
 		&:active {
-			@apply bg-blue-800;
+			@apply bg-blue-700;
 		}
 	}
 </style>

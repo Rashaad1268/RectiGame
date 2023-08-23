@@ -7,10 +7,13 @@ name = "pypi"
 django = "*"
 pillow = "*"
 djangorestframework = "*"
-channels = "*"
+channels = {extras = ["daphne"], version = "*"}
 django-cors-headers = "*"
 django-filter = "*"
 drf-nested-routers = "*"
+django-environ = "*"
+psycopg2 = "*"
+channels-redis = "*"
 
 [dev-packages]
 

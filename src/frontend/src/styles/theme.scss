@@ -1,5 +1,7 @@
 html {
 	&.dark {
-		@apply bg-discordDark-830 text-gray-100;
+		@apply bg-[var(--background-color)] text-gray-100;
+
+		--background-color: theme("colors.discordDark.800");
 	}
 }

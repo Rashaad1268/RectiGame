@@ -1,29 +1,49 @@
 <script lang="ts">
-	import { fetchApi } from '$lib/api';
-	// import { joinedTopics } from '$lib/stores/';
-	import { Modal, ModalActionButton, ModalActionTextArea, ModalActionTextField, ModalActions, ModalTitle } from '$lib/components/modals';
+	import { fetchApi, formatApiErrors } from '$lib/api';
+	import { Form, TextArea, TextField } from '$lib/components/forms';
+
+	import { Modal, ModalActionButton, ModalActions, ModalTitle } from '$lib/components/modals';
+	import { topicPosts } from '$lib/stores';
 	import type { TopicInterface } from '$lib/types';
 
 	export let isModalOpen: boolean;
 	export let topic: TopicInterface;
 
-    let title: string = "";
-    let content: string = "";
+	let title: string = '';
+	let content: string = '';
+	let errorMessages: string[] = [];
 
-	function handlePostCreate() {
+	async function handlePostCreate() {
+		if (!title || !content) {
+			errorMessages = [...errorMessages, 'The title and content cannot be empty'];
+		}
+
 		isModalOpen = false;
 
 		fetchApi(`posts/`, {
 			method: 'POST',
-            body: JSON.stringify({
-                topic: topic.slug,
-                title,
-                content
-            })
+			body: JSON.stringify({
+				topic: topic.slug,
+				title,
+				content
+			})
 		}).then((response) => {
-			if (response.ok) {
-				// append to posts
-			}
+			response.json().then((newPostData) => {
+				if (response.ok) {
+					topicPosts.update((oldTopicPosts) => {
+						const newTopicPosts = { ...oldTopicPosts };
+						newTopicPosts[newPostData.topic].results = [
+							newPostData,
+							...newTopicPosts[newPostData.topic].results
+						];
+
+						return newTopicPosts;
+					});
+				} else {
+					// In this instance newPostData contains the error messages sent by the backend
+					errorMessages = formatApiErrors(newPostData);
+				}
+			});
 		});
 	}
 </script>
@@ -31,13 +51,32 @@
 <Modal bind:isOpen={isModalOpen}>
 	<ModalTitle>Create a post</ModalTitle>
 
-    Title
-	<ModalActionTextField type="text" bind:value={title} />
+	<Form bind:errorMessages>
+		<label for="title">Title</label>
+		<TextField
+			id="title"
+			bind:value={title}
+			name="title"
+			type="text"
+			placeholder="Title"
+			required
+		/>
 
-    Content
-    <ModalActionTextArea bind:value={content} />
+		<label for="content">Content</label>
+		<TextArea
+			id="content"
+			bind:value={content}
+			name="content"
+			type="text"
+			placeholder="Content"
+			required
+		/>
+	</Form>
+
 	<ModalActions>
-		<ModalActionButton isDestructive on:click={handlePostCreate}>Submit</ModalActionButton>
-		<ModalActionButton on:click={() => (isModalOpen = false)}>Cancel</ModalActionButton>
+		<ModalActionButton isDestructive on:click={() => (isModalOpen = false)}
+			>Cancel</ModalActionButton
+		>
+		<ModalActionButton on:click={handlePostCreate}>Submit</ModalActionButton>
 	</ModalActions>
 </Modal>

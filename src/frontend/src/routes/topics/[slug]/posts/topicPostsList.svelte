@@ -4,19 +4,29 @@
 	import type { PostInterface, TopicInterface } from '$lib/types';
 	import PostCard from './postCard.svelte';
 	import {browser} from "$app/environment"
+	import { userData } from '$lib/stores';
+	import { tick } from 'svelte';
 
 
 	export let topic: TopicInterface;
 
 	$: postsPaginator = $topicPosts[topic.slug];
 
+	// $: console.log(postsPaginator)
+	// $: console.log(!$userData)
+
 	$: {
+		/*
+			This code block makes the api call twice for some reson
+			Someone fix it
+		*/
 		if (browser) {
-			if (!postsPaginator && document) {
+			if (Boolean(!postsPaginator)) {
 				fetchApi(`posts/?topic=${topic.slug}`).then(async (response) => {
 					if (response.ok) {
 						const data = await response.json();
-						console.log('data', data);
+						// console.log('topic post data: ', data);
+
 						topicPosts.update((posts) => {
 							return {
 								...posts,

@@ -44,9 +44,9 @@
 	<title>{topic.name}</title>
 </svelte:head>
 
-<div class="flex flex-col h-[50%]">
+<div class="flex flex-col">
 	{#if topic.banner}
-		<img src={topic.banner} class="w-full h-[70%] object-cover" alt="banner" />
+		<img src={topic.banner} class="w-full object-cover" alt="banner" />
 	{/if}
 	<div class="flex gap-4 md:gap-8 w-full pt-4">
 		<img src={topic.image} class="w-32 h-32 rounded self-start object-cover" alt="topic img" />

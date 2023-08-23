@@ -42,17 +42,17 @@
 	</div>
 </dialog>
 
-<style lang="postcss">
+<style lang="scss">
 	dialog {
-		@apply p-0 opacity-0 rounded-lg -translate-y-3 bg-[#313338]
-				 transition-all duration-200;
+		@apply p-0 opacity-0 rounded-lg -translate-y-3 bg-discordDark-830 text-white
+			   transition-all duration-200;
 	}
 	dialog.open {
-		@apply opacity-100 translate-y-0 bg-[#313338] text-white;
+		@apply opacity-100 translate-y-0 scale-100;
 	}
 	dialog::backdrop {
-		@apply bg-gray-400 opacity-0
-				  transition-opacity duration-200;
+		@apply opacity-0 transition-opacity duration-200
+		     bg-discordDark-860; /* The actual color of the backdrop */
 	}
 	.contents {
 		@apply flex flex-col mx-8 my-3 gap-2;

@@ -1,11 +1,5 @@
 <script lang="ts">
-	import type { HTMLInputAttributes } from 'svelte/elements';
-
-	export let value: string;
-
-	interface $$Props extends HTMLInputAttributes {
-		value: string;
-	}
+	export let value: string | undefined = undefined;
 </script>
 
 <input type="text" {...$$restProps} on:change bind:value />
