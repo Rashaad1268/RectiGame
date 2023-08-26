@@ -1,6 +1,3 @@
-export const parseCookies = (cookieString: string, name: string) =>
-	cookieString.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || null;
-
 export const getCookie = (name: string) =>
 	document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || null;
 

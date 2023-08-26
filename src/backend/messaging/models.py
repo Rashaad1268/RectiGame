@@ -19,6 +19,8 @@ class TopicChatMessage(models.Model):
     edited_at = models.DateTimeField(null=True, blank=True)
     message_type = models.PositiveSmallIntegerField(default=0)
 
-    def edit(self, *args, **kwargs):
-        self.edited_at = timezone.now()
+    def save(self, *args, **kwargs):
+        if self.id:
+            self.edited_at = timezone.now()
+
         super().save(*args, **kwargs)
