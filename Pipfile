@@ -14,6 +14,7 @@ drf-nested-routers = "*"
 django-environ = "*"
 psycopg2 = "*"
 channels-redis = "*"
+typing-extensions = "*"
 
 [dev-packages]
 

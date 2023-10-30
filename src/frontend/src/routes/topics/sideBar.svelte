@@ -12,7 +12,7 @@
 				{topic.name}
 			</span>
 		</a>
-		<a href="/topics/{topic.slug}/posts" class="sidebar-icon">
+		<!-- <a href="/topics/{topic.slug}/posts" class="sidebar-icon">
 			<div class="sidebar-icon-img-wrapper">
 				<img src={topic.image} alt={topic.name} loading="lazy" class="sidebar-icon-img" />
 			</div>
@@ -43,14 +43,14 @@
 			<span class="sidebar-tooltip">
 				{topic.name}
 			</span>
-		</a>
+		</a> -->
 	{/each}
 </div>
 
 <style lang="scss">
 	.sidebar {
 		@apply sticky left-0 bottom-0 top-16 flex flex-col items-center gap-2 grow-0
-			  bg-discordDark-860 w-16 overflow-y-scroll;
+			  bg-discordDark-860 w-16 overflow-y-scroll pt-4;
 		// @apply bg-[#E3E5E8];
 		// height: calc(100% - var(--navbar-height))
 
@@ -75,7 +75,7 @@
 
 			.sidebar-icon-img {
 				// @apply inline rounded-[100%] my-[-10%] h-full w-full;
-				@apply rounded-3xl
+				@apply rounded-3xl object-cover
 					transition-all duration-100 ease-linear w-12 h-12;
 			}
 		}
@@ -83,7 +83,7 @@
 		&:hover {
 			.sidebar-icon-img {
 				// @apply inline rounded-[100%] my-[-10%] h-full w-full;
-				@apply rounded-xl
+				@apply rounded-2xl
 					transition-all duration-100 ease-linear w-12 h-12;
 			}
 		}

@@ -7,6 +7,7 @@
 	import TopicCard from './topicCard.svelte';
 
 	onMount(async () => {
+		console.log("okok yes yes scibiddi")
 		if (!$topics) {
 			const response = await fetchApi('topics/');
 			if (response.ok) {
@@ -14,6 +15,7 @@
 			}
 		}
 	});
+
 </script>
 
 <svelte:head>
@@ -21,15 +23,20 @@
 </svelte:head>
 
 <div id="topics-grid">
-	{#each $topics?.results || [] as topic (topic.slug)}
-		<TopicCard {topic} />
-		<TopicCard {topic} />
-		<TopicCard {topic} />
-		<TopicCard {topic} />
-		<TopicCard {topic} />
+	{#if !!($topics?.results) && $topics?.results.length !== 0}
+		{#each $topics?.results as topic (topic.slug)}
+			<TopicCard {topic} />
+			<!-- <TopicCard {topic} />
+			<TopicCard {topic} />
+			<TopicCard {topic} />
+			<TopicCard {topic} /> -->
+		{:else}
+			<Button aria-label="loading indicator button">Loading topics</Button>
+		{/each}
+
 	{:else}
-		<Button aria-label="loading indicator button">Loading topics</Button>
-	{/each}
+		<p class="text-2xl font-semibold text-center">No topics...for now</p>
+	{/if}
 </div>
 
 <style lang="scss">

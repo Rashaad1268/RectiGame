@@ -100,9 +100,9 @@
 		</div>
 
 		<a href="posts/{post.id}">
-			<span class="text-sm text-gray-300">Posted by {post.author.username}</span>
-			<h2 class="text-4xl">{post.title}</h2>
-			<p>{post.content}</p>
+			<span class="text-xs sm:text-sm text-gray-300">Posted by {post.author.username}</span>
+			<h2 class="text-2xl sm:text-3xl font-semibold">{post.title}</h2>
+			<p class="text-sm sm:text-base">{post.content}</p>
 		</a>
 	</div>
 

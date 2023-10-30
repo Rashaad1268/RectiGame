@@ -71,4 +71,6 @@
 			@apply bg-blue-700;
 		}
 	}
+	
+
 </style>

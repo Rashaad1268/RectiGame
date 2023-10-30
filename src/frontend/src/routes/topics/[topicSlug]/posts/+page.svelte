@@ -49,7 +49,7 @@
 		<img src={topic.banner} class="w-full object-cover" alt="banner" />
 	{/if}
 	<div class="flex gap-4 md:gap-8 w-full pt-4">
-		<img src={topic.image} class="w-32 h-32 rounded self-start object-cover" alt="topic img" />
+		<img src={topic.image} class="w-32 h-32 rounded self-start object-contain" alt="topic img" />
 
 		<div>
 			<div class="flex items-center">
@@ -110,6 +110,7 @@
 
 <style lang="scss">
 	.topic-info-section {
-		@apply bg-discordDark-760 mx-auto h-[30%] w-[30svw] py-3 px-4 rounded-md;
+		@apply bg-discordDark-760 mx-auto h-[30%] w-[28svw] py-3 px-4 rounded-md
+				hidden lg:block sm:end-3;
 	}
 </style>

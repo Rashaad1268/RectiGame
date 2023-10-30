@@ -4,16 +4,11 @@
 	import type { PostInterface, TopicInterface } from '$lib/types';
 	import PostCard from './postCard.svelte';
 	import {browser} from "$app/environment"
-	import { userData } from '$lib/stores';
-	import { tick } from 'svelte';
 
 
 	export let topic: TopicInterface;
 
 	$: postsPaginator = $topicPosts[topic.slug];
-
-	// $: console.log(postsPaginator)
-	// $: console.log(!$userData)
 
 	$: {
 		/*
@@ -50,6 +45,6 @@
 
 <style lang="scss">
 	.posts-list {
-		@apply w-[55svw] flex gap-8 flex-col;
+		@apply mr-5 md:mr-0 md:w-[80svw] lg:w-[60svw] flex gap-8 flex-col;
 	}
 </style>
