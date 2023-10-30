@@ -2,7 +2,6 @@ import { get } from 'svelte/store';
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from '../$types';
 import { topics } from '$lib/stores/';
-import { browser } from '$app/environment';
 
 export const load: PageLoad = async function ({ fetch, params }) {
 	// Check if the topic data is already cached in the topics store
