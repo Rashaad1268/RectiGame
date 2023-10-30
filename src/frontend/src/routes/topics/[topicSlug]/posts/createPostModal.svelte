@@ -18,8 +18,6 @@
 			errorMessages = [...errorMessages, 'The title and content cannot be empty'];
 		}
 
-		isModalOpen = false;
-
 		fetchApi(`posts/`, {
 			method: 'POST',
 			body: JSON.stringify({
@@ -39,8 +37,14 @@
 
 						return newTopicPosts;
 					});
+
+					isModalOpen = false;
+					// Clear all the related state when a post is successfully created
+					title = '';
+					content = '';
+					errorMessages = [];
 				} else {
-					// In this instance newPostData contains the error messages sent by the backend
+					// If the creation failed, show the errors returned from the api
 					errorMessages = formatApiErrors(newPostData);
 				}
 			});

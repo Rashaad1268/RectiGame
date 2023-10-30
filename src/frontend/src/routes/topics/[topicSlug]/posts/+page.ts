@@ -6,7 +6,7 @@ import { browser } from '$app/environment';
 
 export const load: PageLoad = async function ({ fetch, params }) {
 	// Check if the topic data is already cached in the topics store
-	const cached_topic = get(topics)?.results.filter((topic) => topic.slug === params.slug)[0];
+	const cached_topic = get(topics)?.results.filter((topic) => topic.slug === params.topicSlug)[0];
 	
 	if (cached_topic) {
 		return {
@@ -14,7 +14,7 @@ export const load: PageLoad = async function ({ fetch, params }) {
 		};
 	}
 
-	const response = await fetch(`/api/topics/${params.slug}/`);
+	const response = await fetch(`/api/topics/${params.topicSlug}/`);
 	if (response.ok) {
 		return {
 			topic: await response.json()
