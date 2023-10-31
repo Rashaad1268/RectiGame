@@ -2,6 +2,6 @@ html {
 	&.dark {
 		@apply bg-[var(--background-color)] text-gray-100;
 
-		--background-color: theme("colors.discordDark.800");
+		--background-color: theme("colors.discordDark.830");
 	}
 }

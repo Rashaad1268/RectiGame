@@ -17,7 +17,7 @@ def create_topic_chat_channel(sender, instance, created, **kwargs):
             name="main",
             description=f"The main channel for {instance.name}",
             topic=instance,
-        )
+        ).save()
 
 
 @receiver(post_save, sender=models.TopicChatMessage)

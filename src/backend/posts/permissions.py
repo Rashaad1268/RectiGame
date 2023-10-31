@@ -9,7 +9,8 @@ class PostViewSetPermissions(IsAuthenticatedOrReadOnly):
 
             if not serializer.validated_data['topic'].members.contains(request.user) \
                and not request.user.is_staff:
-                raise PermissionDenied("You are not a member of this topic")
+                raise PermissionDenied("You are not a member of this topic. "
+                                       "You have to join this topic in order to create posts")
 
         return super().has_permission(request, view)
 

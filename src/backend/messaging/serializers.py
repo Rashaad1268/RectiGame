@@ -18,7 +18,8 @@ class TopicChatChannelSerializer(TopicChatChannelCreateSerializer):
 class TopicChatMessageCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = TopicChatMessage
-        fields = ("author", "content")
+        fields = ("author", "content", "channel")
+        extra_kwargs = {"author": {"allow_null": False}} 
 
 
 class TopicChatMessageSerializer(TopicChatMessageCreateSerializer):
@@ -26,3 +27,4 @@ class TopicChatMessageSerializer(TopicChatMessageCreateSerializer):
 
     class Meta(TopicChatMessageCreateSerializer.Meta):
         fields = ("id", "author", "channel", "content", "created_at", "edited_at")
+        extra_kwargs = {"author": {"allow_null": True}} 

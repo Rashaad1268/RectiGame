@@ -49,8 +49,26 @@ export interface PostInterface {
 	is_disliked: boolean;
 }
 
+export interface TopicChatChannelInterface {
+	id: number;
+	topic: TopicInterface;
+	name: string;
+	description: string;
+	created_at: string;
+}
+
+export interface TopicChatMessageInterface {
+	id: number;
+	author: UserInterface;
+	channel: TopicChatChannelInterface;
+	content: string;
+	created_at: string;
+	edited_at: string;
+	message_type: number;
+}
+
 // -------------------------------
-// | Non API related types below |
+// |    Non API related types    |
 // -------------------------------
 export interface ToastInterface {
 	message: string;

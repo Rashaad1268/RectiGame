@@ -13,7 +13,7 @@ class CustomViewSet(viewsets.ModelViewSet):
             or self.fetch_serializer is None
         ):
             raise NotImplementedError(
-                "Specify create_or_update_serializer and fetch_serializer or"
+                "Specify create_or_update_serializer and fetch_serializer or "
                 "override the get_serializer_class() method"
             )
 

@@ -9,12 +9,12 @@
 		<img
 			loading="lazy"
 			src={topic.image}
-			alt="{topic.name} img"
+			alt="{topic.name}"
 		/>
 	</div>
 	<div class="px-1 pt-1 pb-[2px]">
-		<div class="font-bold text-xl">{topic.name}</div>
-		<p class="leading-[1.2rem] text-sm text-neutral-400">{topic.member_count} member{topic.member_count !== 1 ? 's' : ''}</p>
+		<div class="font-bold text-base max-w-full">{topic.name}</div>
+		<p class="leading-[1rem] text-xs text-neutral-400">{topic.member_count} Member{topic.member_count !== 1 ? 's' : ''}</p>
 	</div>
 	<div class="post-tags">
 		{#each topic.tags as tag (tag.slug)}
@@ -26,10 +26,6 @@
 </a>
 
 <style lang="scss">
-	.topic-card {
-		@apply shadow-2xl;
-	}
-
 	.topic-image {
 		@apply bg-green-500;
 
@@ -47,7 +43,7 @@
 
 		a {
 			@apply inline-block bg-zinc-700 rounded-full font-semibold
-				   px-[6px] py-[1px] text-[11px];
+				   px-[6px] py-[1px] text-[10px];
 		}
 	}
 </style>
