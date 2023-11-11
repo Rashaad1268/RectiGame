@@ -2,10 +2,10 @@
 	import SideBar from './sideBar.svelte';
 </script>
 
-<div class="flex gap-4 h-[100%]">
+<div class="flex h-[100%]" id="sidebar-container">
 	<SideBar />
 	
-	<div class="w-full h-full overflow-y-scroll">
+	<div class="w-full">
 		<slot />
 	</div>
 </div>

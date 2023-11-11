@@ -3,15 +3,15 @@ import type { TopicChatChannelInterface, TopicChatMessageInterface } from '../ty
 
 
 interface ChannelStoreInterface {
-    // topic_id: Array<channels>
-	[key: number]: Array<TopicChatChannelInterface>;
+    // topic_slug: Array<channels>
+	[key: string]: Array<TopicChatChannelInterface>  | undefined;
 }
 
 interface MessageStoreInterface {
     // channel_id: Array<messages>
-	[key: number]: Array<TopicChatMessageInterface>;
+	[key: number]: Array<TopicChatMessageInterface> | undefined;
 }
 
-export const channels = writable<ChannelStoreInterface>({});
+export const channelStore = writable<ChannelStoreInterface>({});
 
-export const messages = writable<MessageStoreInterface>({});
+export const messageStore = writable<MessageStoreInterface>({});

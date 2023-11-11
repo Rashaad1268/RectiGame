@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fetchApi } from '$lib/api';
 	import { topicPosts } from '$lib/stores/posts';
-	import type { PostInterface, TopicInterface } from '$lib/types';
+	import type { TopicInterface } from '$lib/types';
 	import PostCard from './postCard.svelte';
 	import {browser} from "$app/environment"
 

@@ -8,6 +8,7 @@
 	import type { LayoutData } from './$types';
 
 	import '../styles/app.scss';
+	import { fetchUserData } from '$lib/utils';
 
 	export let data: LayoutData;
 
@@ -24,24 +25,13 @@
 			break $;
 		}
 		if (data.isLoggedIn && !$userData) {
-			fetchApi('auth/users/me/', { csrfToken: data.csrfToken }).then((response) => {
-				if (response.ok) {
-					response.json().then((responseData) => {
-						userData.set(responseData['user']);
-						joinedTopics.set(responseData['joined_topics']);
-					});
-				} else {
-					console.error(
-						`Failed to fetch user data (status: ${response.status} ${response.statusText})`
-					);
-				}
-			});
+			fetchUserData();
 		}
 	}
 </script>
 
 
-<main style="min-height: calc(100vh - var(--navbar-height)); height: 100%;">
+<main style="height: calc(100vh - var(--navbar-height));">
 	<NavBar />
 	<slot />
 </main>

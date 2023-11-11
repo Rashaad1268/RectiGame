@@ -20,7 +20,7 @@
 <style lang="scss">
 	// Default button size is medium (md)
 	button {
-		@apply font-semibold font-gg capitalize
+		@apply font-medium capitalize
       bg-green-500 w-auto box-border
         text-lg rounded-md
         h-9 px-4 py-2

@@ -29,7 +29,7 @@ class TopicChatMessageViewSet(CustomViewSet):
     def get_queryset(self):
         # Order by id instead
         return TopicChatMessage.objects.filter(
-                    channel__id=int(self.kwargs["channel_pk"])).order_by('-id').limit(50)
+                    channel__id=int(self.kwargs["channel_pk"])).order_by('-id')[:50]
 
     def perform_create(self, serializer):
         return serializer.save(channel_id=int(self.kwargs["channel_pk"]))
@@ -41,5 +41,5 @@ class TopicChatMessageViewSet(CustomViewSet):
         return Response(
                 TopicChatMessageSerializer(
                     TopicChatMessage.objects.filter(channel__id=int(channel_pk),
-                    id__lt=self.get_object().id).order_by('-id').limit(50),
+                    id__lt=self.get_object().id).order_by('-id')[:50],
                     many=True, context={"request": request}).data)

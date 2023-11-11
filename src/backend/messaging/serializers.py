@@ -12,7 +12,7 @@ class TopicChatChannelCreateSerializer(serializers.ModelSerializer):
 
 class TopicChatChannelSerializer(TopicChatChannelCreateSerializer):
     class Meta(TopicChatChannelCreateSerializer.Meta):
-        fields = ("id", "topic", "name", "description", "created_at")
+        fields = ("id", "name", "description", "created_at")
 
 
 class TopicChatMessageCreateSerializer(serializers.ModelSerializer):

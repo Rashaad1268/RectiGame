@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { toastStore } from "$lib/stores/";
+	import { toastStore } from "$lib/stores";
 	import { onMount } from "svelte";
 
 	let activate = false;
 	let currentToast: any;
-	let timeout: NodeJS.Timeout;
+	let timeout: number;
 	let defaultIcons: any = {
 		success: "✔",
 		error: "❌",

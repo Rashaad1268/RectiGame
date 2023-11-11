@@ -1,5 +1,8 @@
 from rest_framework import serializers
 
+from messaging.models import TopicChatChannel
+from messaging.serializers import TopicChatChannelSerializer
+
 from .models import Topic, TopicTag
 
 
@@ -24,9 +27,13 @@ class TopicSerializer(TopicCreateSerializer):
     tags = TopicTagSerializer(many=True)
     member_count = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
+    channels = serializers.SerializerMethodField()
 
     def get_member_count(self, topic):
         return topic.members.count()
+    
+    def get_channels(self, topic):
+        return TopicChatChannelSerializer(TopicChatChannel.objects.filter(topic=topic), many=True).data
 
     def get_is_member(self, topic):
         request = self.context.get('request')
@@ -36,4 +43,4 @@ class TopicSerializer(TopicCreateSerializer):
 
     class Meta(TopicCreateSerializer.Meta):
         fields = ('name', 'slug', 'description', 'image', 'banner',
-                  'created_at', 'tags', 'member_count', 'is_member')
+                  'created_at', 'tags', 'member_count', 'is_member', 'channels')

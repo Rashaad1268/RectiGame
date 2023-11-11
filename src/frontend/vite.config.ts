@@ -11,7 +11,7 @@ const config: UserConfig = {
 				changeOrigin: true
 			},
 			'/static/': {
-				// Staticfiles Proxy
+				// Static files Proxy
 				target: 'http://127.0.0.1:8000/',
 				changeOrigin: true
 			}

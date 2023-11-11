@@ -4,7 +4,7 @@
 	export let topic: TopicInterface;
 </script>
 
-<a href="/topics/{topic.slug}/posts" class="topic-card">
+<a href="/topics/{topic.slug}" class="topic-card">
 	<div class="topic-image">
 		<img
 			loading="lazy"
@@ -27,10 +27,10 @@
 
 <style lang="scss">
 	.topic-image {
-		@apply bg-green-500;
+		@apply bg-green-500 rounded-sm;
 
 		img {
-			@apply w-full transition-transform;
+			@apply w-full transition-transform rounded-sm;
 
 			.topic-card:hover > & {
 				@apply translate-x-[6px] -translate-y-2;
@@ -39,7 +39,7 @@
 	}
 
 	.post-tags {
-		@apply hidden md:flex flex-wrap gap-1 px-1 mt-[2px] ;
+		@apply hidden md:flex overflow-hidden gap-1 px-1 mt-[2px] ;
 
 		a {
 			@apply inline-block bg-zinc-700 rounded-full font-semibold

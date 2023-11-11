@@ -33,6 +33,7 @@ export interface TopicInterface {
 	tags: Array<TopicTagInterface>;
 	member_count: number;
 	is_member: boolean;
+	channels: Array<TopicChatChannelInterface>;
 }
 
 export interface PostInterface {

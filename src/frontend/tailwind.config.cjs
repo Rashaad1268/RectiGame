@@ -5,7 +5,7 @@ const colors = require('tailwindcss/colors');
 module.exports = {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	darkMode: 'class',
-	plugins: [require('@tailwindcss/typography')],
+	plugins: [],
 
 	theme: {
 		colors: {
@@ -18,7 +18,10 @@ module.exports = {
 				600: 'hsl(223, 6.7%, 20.6%)',
 				630: 'hsl(220, 6.5%, 18%)',
 				645: 'hsl(220, 7%, 16.9%)',
+				630: 'hsl(220, 6.5%, 18%)',
 				660: 'hsl(228, 6.7%, 14.7%)',
+				700: 'hsl(225, 6.3%, 12.5%)',
+				730: 'hsl(225, 7.1% 11%)',
 				760: 'hsl(216, 8.5%, 11.6%)',
 				800: 'hsl(225, 7.7%, 10.2%)',
 				830: '#121315',
@@ -30,7 +33,6 @@ module.exports = {
 			...defaultTheme.fontFamily,
 			gamer: ['gamer-font', 'sans-serif'],
 			monocraft: ['monocraft', 'sans-serif'],
-			gg: ['gg sans']
 		}
 	}
 };
