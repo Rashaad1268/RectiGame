@@ -2,7 +2,7 @@ import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
-from .models import TopicChatChannel
+
 from topics.models import Topic
 # from .serializers import UserSerializer, ChatGroupSerializer
 
@@ -42,7 +42,7 @@ class ChatConsumer(WebsocketConsumer):
 
     def dispatch_named_event(self, event_name, payload, extra_params={}):
         """A helper function to dispatch an event with a name specified"""
-
+        print(self.scope)
         data = {
             "e": event_name.upper(),
             "d": payload,

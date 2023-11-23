@@ -30,9 +30,9 @@
 	}
 </script>
 
+<NavBar />
 
-<main style="height: calc(100vh - var(--navbar-height));">
-	<NavBar />
+<main style="height: 100%; max-height: calc(100vh - var(--navbar-height));">
 	<slot />
 </main>
 

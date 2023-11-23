@@ -38,7 +38,7 @@
 
 <style lang="scss">
 	.channel-sidebar {
-		@apply flex flex-col min-w-[260px] p-4 gap-[2px] bg-discordDark-800;
+		@apply flex flex-col w-[260px] p-4 gap-[2px] bg-discordDark-800;
 
 		height: calc(100vh - var(--navbar-height));
 	}

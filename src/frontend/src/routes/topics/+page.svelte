@@ -25,10 +25,6 @@
 	{#if !!($topics?.results) && $topics?.results.length !== 0}
 		{#each $topics?.results as topic (topic.slug)}
 			<TopicCard {topic} />
-			<!-- <TopicCard {topic} />
-			<TopicCard {topic} />
-			<TopicCard {topic} />
-			<TopicCard {topic} /> -->
 		{:else}
 			<Button aria-label="loading indicator button">Loading topics</Button>
 		{/each}

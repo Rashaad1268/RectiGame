@@ -32,7 +32,7 @@ def dispatch_message_create_and_edit(sender, instance, created, **kwargs):
 
 
 @receiver(pre_delete, sender=models.TopicChatMessage)
-def dispatch_mesage_delete(sender, instance, **kwargs):
+def dispatch_message_delete(sender, instance, **kwargs):
     async_to_sync(channel_layer.group_send)(
         instance.channel.topic.channel_name,
         {"type": "message_delete", "data": {"id": instance.id, "channel_id": instance.channel.id}},

@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { fetchApi } from '$lib/api.js';
+	import TextField from '$lib/components/forms/textField.svelte';
 	import { channelStore, messageStore } from '$lib/stores/';
 	import type { TopicChatChannelInterface, TopicChatMessageInterface } from '$lib/types';
+	import { tick } from 'svelte';
+	import Message from './message.svelte';
 
 	const timeFormatter = new Intl.DateTimeFormat('en', {
 		year: 'numeric',
@@ -11,9 +14,12 @@
 	});
 
 	export let data;
+	let messagesContainer: HTMLDivElement;
 
 	$: selectedTopicSlug = $page.params.topicSlug as string;
 	$: selectedChannelId = $page.params.channel_id;
+
+	$: messages = $messageStore[channel?.id ?? -1];
 
 	// Initialize it to undefined to specify that its loading
 	let channel: TopicChatChannelInterface | undefined | null = undefined;
@@ -33,29 +39,72 @@
 				) || null;
 
 			if (!!channel) {
+				canFetchMoreMessages = true;
 			}
 		}
 	}
 
-	async function fetchMessages(): Promise<Array<TopicChatMessageInterface>> {
-		const cachedMessages = $messageStore[channel!.id];
+	$: {
+		if (channel && messages === undefined) {
+			// const cachedMessages = $messageStore[channel!.id];
 
-		if (!!cachedMessages) {
-			return cachedMessages;
+			// if (cachedMessages) {
+			// 	messages = cachedMessages;
+
+			// 	break $;
+			// } else {
+			fetchApi(`channels/${channel!.id}/messages/`).then((response) => {
+				response.json().then((fetchedMessages) => {
+					messageStore.update((msgs) => {
+						msgs[channel!.id] = fetchedMessages.reverse();
+						return msgs;
+					});
+				});
+			});
+			// }
 		}
-
-		const messages = await (await fetchApi(`channels/${channel!.id}/messages/`)).json();
-
-		messageStore.update((msgs) => {
-			msgs[channel!.id] = messages;
-			return msgs;
-		});
-
-		return messages;
 	}
+
+	let canFetchMoreMessages = true;
+	let isFetchingNewMessages = false;
+
+	function loadMessages(event: Event) {
+		// todo: implement...
+		if (event.target.scrollTop < 150) {
+			if (!isFetchingNewMessages) {
+				fetchApi("")
+				isFetchingNewMessages = true;
+			}
+		}
+	}
+
+	messageStore.subscribe(async () => {
+		await tick(); // Wait until the ui is updated
+
+		if (messagesContainer) {
+			messagesContainer.scrollTop = messagesContainer.scrollHeight;
+		}
+	});
 
 	function getPrevMessage(idx: number): TopicChatMessageInterface | undefined {
 		return ($messageStore[channel!.id] ?? [])[idx - 1];
+	}
+
+	let messageContent = '';
+
+	async function sendMessage(event: Event) {
+		event.preventDefault(); // If this is not called the input will lose focus
+
+		if (!!channel) {
+			const response = await fetchApi(`channels/${channel.id}/messages/`, {
+				method: 'POST',
+				body: JSON.stringify({ content: messageContent })
+			});
+
+			if (response.ok) {
+				messageContent = '';
+			}
+		}
 	}
 </script>
 
@@ -66,9 +115,12 @@
 {:else if channel === null}
 	404 channel not found
 {:else}
-	<div class="flex flex-col bg-discordDark-730 h-[calc(100vh-var(--navbar-height))]">
+	<div
+		class="flex flex-col justify-end bg-discordDark-730 max-h-[calc(100vh-var(--navbar-height))] h-full scroll-smooth pb-1"
+	>
 		<div
-			class="flex border-b border-discordDark-600 items-center gap-2 text-lg font-medium pl-8 py-3"
+			class="flex border-b border-discordDark-600 items-center gap-2 text-lg font-medium
+				   pl-8 py-3 mb-auto"
 		>
 			<span>
 				{data.topic.name}
@@ -87,58 +139,21 @@
 			</span>
 		</div>
 
-		<div class="channel-messages">
-			{#await fetchMessages()}
-				<h1>Loading...</h1>
-			{:then messages}
-				{#each messages || [] as message, idx (message.id)}
-					<div class="message">
-						{#if !!message.author}
-							{@const prevMsgIsFromMe = getPrevMessage(idx)?.author?.id === message.author.id}
-							<div class="profile-picture-wrapper">
-								{#if !!message.author.profile.profile_picture && !prevMsgIsFromMe}
-									<img
-										src={message.author.profile.profile_picture}
-										alt="{message.author.username} profile"
-									/>
-								{/if}
-							</div>
-
-							<div class="flex flex-col">
-								{#if !prevMsgIsFromMe}
-									<div>
-										<span class="font-semibold">{message.author.username}</span>
-										<!-- <span>{timeFormatter.format(new Date(message.created_at))}</span> -->
-									</div>
-								{/if}
-								<span>{message.content}</span>
-							</div>
-						{/if}
-					</div>
-				{/each}
-			{/await}
+		<div class="channel-messages" bind:this={messagesContainer} on:scroll={loadMessages}>
+			{#each messages || [] as message, idx (message.id)}
+				{@const isInlineMsg = getPrevMessage(idx)?.author?.id === message.author.id}
+				<Message {message} isInline={isInlineMsg} />
+			{/each}
 		</div>
+
+		<form on:submit={sendMessage}>
+			<TextField type="text" class="mt-2" bind:value={messageContent} autofocus />
+		</form>
 	</div>
 {/if}
 
 <style lang="scss">
 	.channel-messages {
-		@apply overflow-y-scroll h-full p-2;
-	}
-
-	.message {
-		@apply flex;
-
-		.profile-picture-wrapper {
-			@apply h-10 w-10 mr-3;
-
-			img {
-				@apply h-10 w-10 object-cover rounded-full mt-[4px];
-			}
-		}
-
-		&:hover {
-			@apply bg-discordDark-760;
-		}
+		@apply overflow-y-scroll p-2;
 	}
 </style>
