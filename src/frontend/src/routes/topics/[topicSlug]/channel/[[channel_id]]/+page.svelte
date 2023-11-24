@@ -19,7 +19,7 @@
 	$: selectedTopicSlug = $page.params.topicSlug as string;
 	$: selectedChannelId = $page.params.channel_id;
 
-	$: messages = $messageStore[channel?.id ?? -1];
+	$: messages = ($messageStore[channel?.id ?? -1] ?? {}).results;
 
 	// Initialize it to undefined to specify that its loading
 	let channel: TopicChatChannelInterface | undefined | null = undefined;
@@ -56,7 +56,7 @@
 			fetchApi(`channels/${channel!.id}/messages/`).then((response) => {
 				response.json().then((fetchedMessages) => {
 					messageStore.update((msgs) => {
-						msgs[channel!.id] = fetchedMessages.reverse();
+						msgs[channel!.id] = { ...fetchedMessages, results: fetchedMessages.results };
 						return msgs;
 					});
 				});
@@ -69,25 +69,34 @@
 	let isFetchingNewMessages = false;
 
 	function loadMessages(event: Event) {
-		// todo: implement...
-		if (event.target.scrollTop < 150) {
-			if (!isFetchingNewMessages) {
-				fetchApi("")
+		if (!channel || !messages) {
+			return;
+		}
+
+		const element = event.target as HTMLDivElement;
+
+		if (element.scrollHeight + element.scrollTop < 750) {
+			if (!isFetchingNewMessages && messages.length !== $messageStore[channel!.id].count) {
 				isFetchingNewMessages = true;
+				fetchApi(
+					`channels/${channel!.id}/messages/?before=${messages[messages.length - 1].id}`
+				).then((response) => {
+					if (response.ok) {
+						response.json().then((data) => {
+							messageStore.update((existingMessages) => {
+								existingMessages[channel!.id].results?.push(...data.results);
+								return existingMessages;
+							});
+							isFetchingNewMessages = false;
+						});
+					}
+				});
 			}
 		}
 	}
 
-	messageStore.subscribe(async () => {
-		await tick(); // Wait until the ui is updated
-
-		if (messagesContainer) {
-			messagesContainer.scrollTop = messagesContainer.scrollHeight;
-		}
-	});
-
 	function getPrevMessage(idx: number): TopicChatMessageInterface | undefined {
-		return ($messageStore[channel!.id] ?? [])[idx - 1];
+		return ($messageStore[channel!.id]?.results ?? [])[idx + 1];
 	}
 
 	let messageContent = '';
@@ -95,10 +104,12 @@
 	async function sendMessage(event: Event) {
 		event.preventDefault(); // If this is not called the input will lose focus
 
-		if (!!channel) {
+		const finalMessageContent = messageContent.trim();
+
+		if (!!channel && finalMessageContent) {
 			const response = await fetchApi(`channels/${channel.id}/messages/`, {
 				method: 'POST',
-				body: JSON.stringify({ content: messageContent })
+				body: JSON.stringify({ content: finalMessageContent })
 			});
 
 			if (response.ok) {
@@ -154,6 +165,6 @@
 
 <style lang="scss">
 	.channel-messages {
-		@apply overflow-y-scroll p-2;
+		@apply overflow-y-scroll p-2 flex flex-col-reverse;
 	}
 </style>

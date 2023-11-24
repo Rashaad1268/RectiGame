@@ -177,7 +177,7 @@ AUTH_USER_MODEL = 'authentication.User' # Set custom user model
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
-    ]
+    ],
 }
 
 # CORS

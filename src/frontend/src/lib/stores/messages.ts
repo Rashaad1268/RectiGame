@@ -9,7 +9,7 @@ interface ChannelStoreInterface {
 
 interface MessageStoreInterface {
     // channel_id: Array<messages>
-	[key: number]: Array<TopicChatMessageInterface> | undefined;
+	[key: number]: {count: number, results: Array<TopicChatMessageInterface> | undefined};
 }
 
 export const channelStore = writable<ChannelStoreInterface>({});

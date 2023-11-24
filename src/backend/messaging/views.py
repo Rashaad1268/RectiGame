@@ -1,6 +1,7 @@
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework as filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework import pagination
 
 from backend.viewsets import CustomViewSet
 
@@ -19,26 +20,47 @@ class TopicChatChannelViewSet(CustomViewSet):
     permission_classes = (permissions.TopicChatChannelViewSetPermissions,)
 
 
-# TODO: implement proper pagination for messages
-# {count: int,
-# next: string?,
-# results: [....]
-# }
+
+class MessagePaginator(pagination.BasePagination):
+    page_size = 50
+    count: int
+
+    def paginate_queryset(self, queryset, request, view=None):
+        # Get the total count
+        self.count = queryset.count()
+
+        return list(queryset[:self.page_size])
+
+    def get_paginated_response(self, data):
+        # We don't need `previous` and `next` links
+        # since we have the `before` url parameter
+        return Response({
+            "count": self.count, # the count will be used to display the message count when searching messages
+            "results": data
+        })
+
+
+class ChatMessageFilter(filters.FilterSet):
+    # Get the messages sent before a certain message
+    before = filters.NumberFilter(field_name="id", lookup_expr="lt")
+
+    class Meta:
+        model = TopicChatMessage
+        fields = ("content", "author", "created_at", "edited_at")
+
+
 class TopicChatMessageViewSet(CustomViewSet):
     create_or_update_serializer = TopicChatMessageCreateSerializer
     fetch_serializer = TopicChatMessageSerializer
     permission_classes = (permissions.TopicChatMessageViewSetPermissions,)
-    filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ("id", "content", "author", "created_at", "edited_at")
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = ChatMessageFilter
+    pagination_class = MessagePaginator
 
     def filter_queryset(self, queryset):
         return super().filter_queryset(queryset)
+
     def get_queryset(self):
-        # Order by id
-        # if self.action == "list":
-        #     return TopicChatMessage.objects.filter(
-        #                 channel__id=int(self.kwargs["channel_pk"])).order_by('-id')[:50]
-    
         return TopicChatMessage.objects.filter(
                 channel__id=int(self.kwargs["channel_pk"])).order_by('-id')
 
@@ -47,13 +69,3 @@ class TopicChatMessageViewSet(CustomViewSet):
 
     def perform_create(self, serializer):
         return serializer.save(author=self.request.user, channel_id=int(self.kwargs["channel_pk"]))
-
-    @action(detail=True, url_path="before", methods=("GET",))
-    def get_messages_before(self, request, pk, channel_pk):
-        """Returns the messages sent before a given message"""
-        # Just do the filtering by id instead of created_at
-        return Response(
-                TopicChatMessageSerializer(
-                    TopicChatMessage.objects.filter(channel__id=int(channel_pk),
-                    id__lt=self.get_object().id).order_by('-id')[:50],
-                    many=True, context={"request": request}).data)
