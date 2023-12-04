@@ -42,7 +42,6 @@ class ChatConsumer(WebsocketConsumer):
 
     def dispatch_named_event(self, event_name, payload, extra_params={}):
         """A helper function to dispatch an event with a name specified"""
-        print(self.scope)
         data = {
             "e": event_name.upper(),
             "d": payload,

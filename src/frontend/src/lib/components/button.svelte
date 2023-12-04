@@ -22,11 +22,11 @@
 	button {
 		@apply font-medium capitalize
       bg-green-500 w-auto box-border
-        text-lg rounded-md
-        h-9 px-4 py-2
+        text-base rounded-md
+        h-9 px-4 py-2 text-stone-50
         flex items-center justify-center select-none;
 
-		color: hsl(0 calc(1 * 0%) 100% /1);
+		// color: hsl(0 calc(1 * 0%) 100% / 1);
 		transition: background-color 0.17s ease, color 0.17s ease;
 
 		.contents {
@@ -62,13 +62,13 @@
 	}
 
 	.btn-blue {
-		@apply bg-blue-500;
+		@apply bg-blue-600;
 
 		&:hover {
-			@apply bg-blue-600;
+			@apply bg-blue-700;
 		}
 		&:active {
-			@apply bg-blue-700;
+			@apply bg-blue-800;
 		}
 	}
 	

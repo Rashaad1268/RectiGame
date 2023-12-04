@@ -1,20 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { fetchApi } from '$lib/api.js';
-	import TextField from '$lib/components/forms/textField.svelte';
 	import { channelStore, messageStore } from '$lib/stores/';
-	import type { TopicChatChannelInterface, TopicChatMessageInterface } from '$lib/types';
-	import { tick } from 'svelte';
 	import Message from './message.svelte';
-
-	const timeFormatter = new Intl.DateTimeFormat('en', {
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric'
-	});
+	import type { TopicChatChannelInterface, TopicChatMessageInterface } from '$lib/types';
+	import MessageInput from './messageInput.svelte';
 
 	export let data;
-	let messagesContainer: HTMLDivElement;
 
 	$: selectedTopicSlug = $page.params.topicSlug as string;
 	$: selectedChannelId = $page.params.channel_id;
@@ -37,35 +29,22 @@
 				($channelStore[selectedTopicSlug] || []).find(
 					(channel: TopicChatChannelInterface) => channel.id === parseInt(selectedChannelId)
 				) || null;
-
-			if (!!channel) {
-				canFetchMoreMessages = true;
-			}
 		}
 	}
 
 	$: {
 		if (channel && messages === undefined) {
-			// const cachedMessages = $messageStore[channel!.id];
-
-			// if (cachedMessages) {
-			// 	messages = cachedMessages;
-
-			// 	break $;
-			// } else {
 			fetchApi(`channels/${channel!.id}/messages/`).then((response) => {
 				response.json().then((fetchedMessages) => {
 					messageStore.update((msgs) => {
-						msgs[channel!.id] = { ...fetchedMessages, results: fetchedMessages.results };
+						msgs[channel!.id] = fetchedMessages;
 						return msgs;
 					});
 				});
 			});
-			// }
 		}
 	}
 
-	let canFetchMoreMessages = true;
 	let isFetchingNewMessages = false;
 
 	function loadMessages(event: Event) {
@@ -127,7 +106,7 @@
 	404 channel not found
 {:else}
 	<div
-		class="flex flex-col justify-end bg-discordDark-730 max-h-[calc(100vh-var(--navbar-height))] h-full scroll-smooth pb-1"
+		class="flex flex-col justify-end bg-discordDark-730 max-h-[calc(100vh-var(--navbar-height))] h-full scroll-smooth pb-1 w-full"
 	>
 		<div
 			class="flex border-b border-discordDark-600 items-center gap-2 text-lg font-medium
@@ -150,15 +129,15 @@
 			</span>
 		</div>
 
-		<div class="channel-messages" bind:this={messagesContainer} on:scroll={loadMessages}>
+		<div class="channel-messages" on:scroll={loadMessages}>
 			{#each messages || [] as message, idx (message.id)}
 				{@const isInlineMsg = getPrevMessage(idx)?.author?.id === message.author.id}
 				<Message {message} isInline={isInlineMsg} />
 			{/each}
 		</div>
 
-		<form on:submit={sendMessage}>
-			<TextField type="text" class="mt-2" bind:value={messageContent} autofocus />
+		<form on:submit={sendMessage} class="px-4">
+			<MessageInput bind:value={messageContent} />
 		</form>
 	</div>
 {/if}

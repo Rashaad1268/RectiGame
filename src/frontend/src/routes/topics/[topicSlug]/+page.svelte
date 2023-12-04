@@ -35,10 +35,10 @@
 					});
 
 					// Update the channels cache when the user joins a topic
-					channelStore.update(channels => {
+					channelStore.update((channels) => {
 						channels[topic.slug] = topic.channels;
 						return channels;
-					})
+					});
 				}
 			});
 		}
@@ -74,8 +74,14 @@
 				</div>
 
 				<p class="mt-3">{topic.description}</p>
-				<div class="mt-3">
-					<a href="/topics/{topic.slug}/channel" class="link link-hover">View topic chat</a>
+				<div class="mt-3 flex gap-5 items-center">
+					{#if topic.is_member}
+						<Button
+							class="btn-sm btn-blue flex !rounded-3xl"
+							on:click={() => (isCreatePostModelOpen = !isCreatePostModelOpen)}>Create Post</Button
+						>
+						<a href="/topics/{topic.slug}/channel" class="link link-hover">View topic chat</a>
+					{/if}
 				</div>
 			</div>
 		</div>
@@ -104,11 +110,6 @@
 			</div>
 
 			<hr class="my-3 bg-discordDark-360 h-[1px] border-none" />
-
-			<Button
-				class="btn-md flex m-auto"
-				on:click={() => (isCreatePostModelOpen = !isCreatePostModelOpen)}>Create Post</Button
-			>
 		</div>
 	</div>
 </div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { channelStore, joinedTopics } from '$lib/stores/';
 	import type { TopicChatChannelInterface, TopicInterface } from '$lib/types';
@@ -8,6 +9,14 @@
 	$: topic = $joinedTopics.find((topic) => topic.slug === selectedTopicSlug) as TopicInterface;
 
 	$: channels = $channelStore[selectedTopicSlug] as Array<TopicChatChannelInterface>;
+
+
+	$: {
+		console.log("EEEE", !!topic);
+		if ($joinedTopics.length > 0 && !topic) {
+			goto(`/topics/${selectedTopicSlug}`);
+		}
+	}
 </script>
 
 <div class="channel-sidebar">
@@ -38,7 +47,7 @@
 
 <style lang="scss">
 	.channel-sidebar {
-		@apply flex flex-col w-[260px] p-4 gap-[2px] bg-discordDark-800;
+		@apply flex flex-col w-[165px] md:w-[260px] p-4 gap-[2px] bg-discordDark-800;
 
 		height: calc(100vh - var(--navbar-height));
 	}
