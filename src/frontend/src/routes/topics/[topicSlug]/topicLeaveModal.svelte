@@ -32,7 +32,11 @@
 	</p>
 
 	<ModalActions>
-		<ModalActionButton size="btn-lg" isDestructive on:click={handleTopicLeave}>Leave</ModalActionButton>
-		<ModalActionButton size="btn-lg" on:click={() => (isModalOpen = false)}>Cancel</ModalActionButton>
+		<ModalActionButton size="btn-lg" isDestructive on:click={handleTopicLeave}
+			>Leave</ModalActionButton
+		>
+		<ModalActionButton size="btn-lg" on:click={() => (isModalOpen = false)}
+			>Cancel</ModalActionButton
+		>
 	</ModalActions>
 </Modal>

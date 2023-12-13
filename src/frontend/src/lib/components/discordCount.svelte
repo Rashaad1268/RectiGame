@@ -17,7 +17,8 @@
 		<span class="outer" />
 		<span class="inner" />
 	</span>
-	<span class="text-green-500">{guildData.presence_count}</span> member{guildData.presence_count !== 1
+	<span class="text-green-500">{guildData.presence_count}</span> member{guildData.presence_count !==
+	1
 		? 's'
 		: ''} online
 {/if}

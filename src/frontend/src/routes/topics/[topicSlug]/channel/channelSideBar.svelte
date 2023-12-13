@@ -10,9 +10,8 @@
 
 	$: channels = $channelStore[selectedTopicSlug] as Array<TopicChatChannelInterface>;
 
-
 	$: {
-		console.log("EEEE", !!topic);
+		console.log('EEEE', !!topic);
 		if ($joinedTopics.length > 0 && !topic) {
 			goto(`/topics/${selectedTopicSlug}`);
 		}
@@ -58,7 +57,7 @@
 		&:hover {
 			@apply bg-discordDark-660 text-discordDark-300;
 		}
-		
+
 		&:not(.selected):active {
 			// The effect when a tab which is not selected is :active
 			@apply bg-discordDark-630 text-gray-200 brightness-90;

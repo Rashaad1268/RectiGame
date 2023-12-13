@@ -1,57 +1,47 @@
 <script lang="ts">
+	import { fetchApi } from '$lib/api';
 	import Button from '$lib/components/button.svelte';
-	import { toastStore, userData } from '$lib/stores/';
+	import { topics } from '$lib/stores/';
+	import { onMount } from 'svelte';
+
+	import TopicCard from './topicCard.svelte';
+
+	onMount(async () => {
+		if (!$topics) {
+			const response = await fetchApi('topics/');
+			if (response.ok) {
+				topics.set(await response.json());
+			}
+		}
+	});
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>Topics</title>
 </svelte:head>
 
-<div class="pt-5">
-	{#if !$userData}
-		<div class="flex justify-center">
-			<Button aria-label="loading indicator button" isLoading>Loading</Button>
-		</div>
+<div id="topics-grid">
+	{#if !!$topics?.results && $topics?.results.length !== 0}
+		{#each $topics?.results as topic (topic.slug)}
+			<TopicCard {topic} />
+		{:else}
+			<Button aria-label="loading indicator button">Loading topics</Button>
+		{/each}
 	{:else}
-		<h1 class="text-center text-xl font-semibold">Hello {$userData?.username}</h1>
-		<ul class="text-center text-lg">
-			<li><a href="/topics" class="link link-hover">View topics</a></li>
-		</ul>
+		<p class="text-2xl font-semibold text-center">No topics...for now</p>
 	{/if}
-
-	<!-- <Button on:click={() => {
-	toastStore.set({
-		message: "Hello world",
-		type: "error",
-		delay: 25000
-	});
-}}>Show Toast</Button> -->
-
-	<div class="flex flex-col gap-4 items-center pt-10">
-		<div class="flex flex-row items-center justify-center gap-4 w-full">
-			<Button aria-label="test button" class="btn-lg">Button</Button>
-			<Button aria-label="test button">Button</Button>
-			<Button aria-label="test button" class="btn-sm">Button</Button>
-		</div>
-
-		<div class="flex flex-row items-center justify-center gap-4 w-full">
-			<Button aria-label="test button" class="btn-destructive btn-lg">Button</Button>
-			<Button aria-label="test button" class="btn-destructive">Button</Button>
-			<Button aria-label="test button" class="btn-destructive btn-sm">Button</Button>
-		</div>		
-
-		<div class="flex flex-row items-center justify-center gap-4 w-full">
-			<Button aria-label="test button" class="btn-blue btn-lg">Button</Button>
-			<Button aria-label="test button" class="btn-blue">Button</Button>
-			<Button aria-label="test button" class="btn-blue btn-sm">Button</Button>
-		</div>
-	</div>
 </div>
 
-<Button aria-label="test button" on:click={() => {
-	toastStore.set({
-		message: "Hello world",
-		type: "error",
-		delay: 25000
-	});
-}}>Open toast</Button>
+<style lang="scss">
+	#topics-grid {
+		@apply grid gap-3 gap-y-4 pt-4 pr-4 h-full ml-4;
+		max-width: 100%; /* DON'T TOUCH THIS!, WITHOUT THIS THE auto-fit DOESN'T WORK FOR SOME REASON */
+		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+	}
+
+	@media (max-width: 380px) {
+		#topics-grid > :global(div) {
+			padding: 3rem;
+		}
+	}
+</style>

@@ -8,8 +8,8 @@
 
 	function handleMouseDown(e: Event) {
 		if (!menuToggleButton?.contains(e.target as HTMLElement)) {
-            userMenuExpanded = false;
-        }
+			userMenuExpanded = false;
+		}
 	}
 
 	async function logoutUser() {
@@ -33,7 +33,12 @@
 
 <svelte:window on:mouseup={handleMouseDown} />
 
-<button aria-label="profile menu button" class="profile-btn" on:click={() => (userMenuExpanded = !userMenuExpanded)} bind:this={menuToggleButton}>
+<button
+	aria-label="profile menu button"
+	class="profile-btn"
+	on:click={() => (userMenuExpanded = !userMenuExpanded)}
+	bind:this={menuToggleButton}
+>
 	{#if $userData?.profile.profile_picture}
 		<img src={$userData?.profile.profile_picture} class="profile-pic-img" alt="Profile pic" />
 	{:else}

@@ -1,29 +1,52 @@
 <script lang="ts">
+	import UserProfilePreview from '$lib/components/userProfilePreview.svelte';
 	import type { TopicChatMessageInterface } from '$lib/types';
+	import { createPopperActions } from 'svelte-popperjs';
+	import { fade } from 'svelte/transition';
+
+	const [popperRef, popperContent] = createPopperActions({
+		placement: 'right',
+		strategy: 'fixed'
+	});
+	const extraOpts = {
+		modifiers: [{ name: 'offset', options: { offset: [0, 8] } }]
+	};
 
 	export let message: TopicChatMessageInterface;
 	export let isInline: boolean;
 
 	const timeFormatter = new Intl.DateTimeFormat('en');
+
+	let showUserProfilePreview = false;
 </script>
+
+{#if showUserProfilePreview}
+	<div class="bg-discordDark-860" use:popperContent={extraOpts} in:fade>
+		My tooltip
+		<div id="arrow" data-popper-arrow />
+		<UserProfilePreview user={message.author} />
+	</div>
+{/if}
 
 <div class="message" class:inline-msg={isInline}>
 	{#if !!message.author}
 		<!-- {@debug isInline} -->
-		<div class="profile-picture-wrapper">
-			{#if !isInline}
-				{#if !message.author.profile.profile_picture}
-					<div class="bg-discordDark-600 flex items-center justify-center">
-						<span>{message.author.username.slice(0, 1)}</span>
-					</div>
-				{:else}
-					<img
-						src={message.author.profile.profile_picture}
-						alt="{message.author.username} profile"
-					/>
+		<button use:popperRef on:click={() => (showUserProfilePreview = !showUserProfilePreview)}>
+			<div class="profile-picture-wrapper">
+				{#if !isInline}
+					{#if !message.author.profile.profile_picture}
+						<div class="bg-discordDark-600 flex items-center justify-center">
+							<span>{message.author.username.slice(0, 1)}</span>
+						</div>
+					{:else}
+						<img
+							src={message.author.profile.profile_picture}
+							alt="{message.author.username} profile"
+						/>
+					{/if}
 				{/if}
-			{/if}
-		</div>
+			</div>
+		</button>
 
 		<div class="flex flex-col">
 			{#if !isInline}

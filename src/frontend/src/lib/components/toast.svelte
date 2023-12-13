@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { toastStore } from "$lib/stores";
-	import { onMount } from "svelte";
+	import { toastStore } from '$lib/stores';
+	import { onMount } from 'svelte';
 
 	let activate = false;
 	let currentToast: any;
 	let timeout: number;
 	let defaultIcons: any = {
-		success: "✔",
-		error: "❌",
-		info: "ℹ️"
+		success: '✔',
+		error: '❌',
+		info: 'ℹ️'
 	};
 
 	onMount(() => {
@@ -29,7 +29,7 @@
 		});
 	});
 
-	$: typeClass = currentToast?.type || "info";
+	$: typeClass = currentToast?.type || 'info';
 </script>
 
 {#if currentToast}
@@ -43,7 +43,7 @@
 			{#if currentToast.icon}
 				{currentToast.icon}
 			{:else}
-				{defaultIcons[currentToast.type ?? "info"]}
+				{defaultIcons[currentToast.type ?? 'info']}
 			{/if}
 		</div>
 

@@ -16,16 +16,14 @@ export async function fetchUserData() {
 		joinedTopics.set(data['joined_topics']);
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const _channels: any = {}
+		const _channels: any = {};
 
 		data['joined_topics'].forEach((topic: TopicInterface) => {
-			_channels[topic.slug] = topic.channels
+			_channels[topic.slug] = topic.channels;
 		});
 
 		channelStore.set(_channels);
 	} else {
-		console.error(
-			`Failed to fetch user data (status: ${response.status} ${response.statusText})`
-		);
+		console.error(`Failed to fetch user data (status: ${response.status} ${response.statusText})`);
 	}
 }

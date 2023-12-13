@@ -9,7 +9,7 @@
 </script>
 
 <div class="sidebar">
-	<a href="/topics" class="sidebar-icon">
+	<a href="/" class="sidebar-icon">
 		<div class="bg-discordDark-760 square-on-hover">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +47,7 @@
 <style lang="scss">
 	.sidebar {
 		@apply sticky left-0 bottom-0 top-16 flex flex-col items-center gap-2 grow-0
-			  bg-discordDark-860 w-16 overflow-y-scroll pt-4;
+			  bg-discordDark-860 overflow-y-scroll pt-4 px-4;
 
 		// Remove the scrollbar
 		-ms-overflow-style: none; /* IE and Edge */
@@ -59,7 +59,7 @@
 	}
 
 	.sidebar-icon {
-		@apply relative flex items-center justify-center shadow-sm;
+		@apply relative flex items-center justify-center shadow-sm ;
 
 		img {
 			@apply object-cover transition-all duration-100

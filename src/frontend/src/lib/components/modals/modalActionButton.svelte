@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Button from "$lib/components/button.svelte";
+	import Button from '$lib/components/button.svelte';
 	export let isDestructive: boolean = false;
-	type size_t = "btn-sm" | "btn-md" | "btn-lg";
-	export let size: size_t = "btn-sm";
+	type size_t = 'btn-sm' | 'btn-md' | 'btn-lg';
+	export let size: size_t = 'btn-sm';
 </script>
 
 <Button

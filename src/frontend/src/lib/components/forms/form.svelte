@@ -1,21 +1,18 @@
 <script lang="ts">
-	import type { HTMLFormAttributes } from "svelte/elements";
-    import FormErrorMessages from "./errorMessages.svelte";
+	import type { HTMLFormAttributes } from 'svelte/elements';
+	import FormErrorMessages from './errorMessages.svelte';
 
+	export let errorMessages: string[] = [];
 
-    export let errorMessages: string[] = [];
-
-    interface $$Props extends HTMLFormAttributes {
-        errorMessages?: string[];
-    }
+	interface $$Props extends HTMLFormAttributes {
+		errorMessages?: string[];
+	}
 </script>
 
-
 <form {...$$restProps} on:submit>
-    <slot />
+	<slot />
 
-    <FormErrorMessages bind:errorMessages />
-</form> 
-
+	<FormErrorMessages bind:errorMessages />
+</form>
 
 <style></style>

@@ -4,7 +4,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const url = event.url.pathname.slice();
 	const authEndpoints = ['auth/', '/auth/login', '/auth/signup', '/welcome'];
 
-	const isLoggedIn = !!event.cookies.get('sessionid');  // Check if it is truthy
+	const isLoggedIn = !!event.cookies.get('sessionid'); // Check if it is truthy
 
 	if (isLoggedIn) {
 		// If the user is logged in and he visits the authentication pages, redirect him to the home page

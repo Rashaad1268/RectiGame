@@ -23,7 +23,7 @@
 		@apply font-medium capitalize
       bg-green-500 w-auto box-border
         text-base rounded-md
-        h-9 px-4 py-2 text-stone-50
+        h-9 px-4 py-2 text-white
         flex items-center justify-center select-none;
 
 		// color: hsl(0 calc(1 * 0%) 100% / 1);
@@ -71,6 +71,4 @@
 			@apply bg-blue-800;
 		}
 	}
-	
-
 </style>

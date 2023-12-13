@@ -3,8 +3,7 @@
 	import { topicPosts } from '$lib/stores/posts';
 	import type { TopicInterface } from '$lib/types';
 	import PostCard from './postCard.svelte';
-	import {browser} from "$app/environment"
-
+	import { browser } from '$app/environment';
 
 	export let topic: TopicInterface;
 

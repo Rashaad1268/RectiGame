@@ -7,13 +7,13 @@
 </script>
 
 {#if $menuData.isOpen}
-    <div class="menu-content">
-        <slot />
-    </div>
+	<div class="menu-content">
+		<slot />
+	</div>
 {/if}
 
 <style lang="scss">
-    .menu-content {
-        @apply absolute z-30 bottom-10;
-    }
+	.menu-content {
+		@apply absolute z-30 bottom-10;
+	}
 </style>

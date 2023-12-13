@@ -21,7 +21,7 @@
 	$: console.log(data.next);
 
 	const handleSignup = async (e: any) => {
-		e.preventDefault()
+		e.preventDefault();
 
 		if (password !== password2) {
 			errorMessages = ['Passwords do not match', ...errorMessages];
