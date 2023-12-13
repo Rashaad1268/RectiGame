@@ -38,7 +38,10 @@
 		<SideBar />
 	{/if}
 
-	<main style="height: 100%; max-height: calc(100vh - var(--navbar-height));" class="w-full">
+	<main
+		style="height: 100%; max-height: calc(100vh - var(--navbar-height));"
+		class="w-full overflow-y-auto"
+	>
 		<slot />
 	</main>
 </div>
