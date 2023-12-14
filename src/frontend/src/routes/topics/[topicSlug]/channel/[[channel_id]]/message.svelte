@@ -33,7 +33,7 @@
 		<!-- {@debug isInline} -->
 		<div class="profile-picture-wrapper">
 			{#if !isInline}
-			<button use:popperRef on:click={() => (showUserProfilePreview = !showUserProfilePreview)}>
+				<button use:popperRef on:click={() => (showUserProfilePreview = !showUserProfilePreview)}>
 					{#if !message.author.profile.profile_picture}
 						<div class="bg-discordDark-600 flex items-center justify-center">
 							<span>{message.author.username.slice(0, 1)}</span>
@@ -45,7 +45,7 @@
 						/>
 					{/if}
 				</button>
-				{/if}
+			{/if}
 		</div>
 
 		<div class="flex flex-col">

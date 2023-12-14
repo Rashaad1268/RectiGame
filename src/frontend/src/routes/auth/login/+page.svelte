@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { slide } from 'svelte/transition';
 
 	import { TextField } from '$lib/components/forms';
 
 	import { fetchApi, formatApiErrors } from '$lib/api';
-	import Alert from '$lib/components/alert.svelte';
 	import { Form } from '$lib/components/forms';
 	import Button from '$lib/components/button.svelte';
 	import { fetchUserData } from '$lib/utils';

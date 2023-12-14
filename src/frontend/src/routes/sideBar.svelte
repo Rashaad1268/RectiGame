@@ -59,7 +59,7 @@
 	}
 
 	.sidebar-icon {
-		@apply relative flex items-center justify-center shadow-sm ;
+		@apply relative flex items-center justify-center shadow-sm;
 
 		img {
 			@apply object-cover transition-all duration-100

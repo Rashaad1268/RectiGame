@@ -3,15 +3,13 @@
 
 	// export let isLoading: boolean | undefined = false;
 	export const isLoading: boolean | undefined = false;
-	export const isDestructive: boolean | undefined = false;
 
 	interface $$Props extends HTMLButtonAttributes {
 		isLoading?: boolean;
-		isDestructive?: boolean;
 	}
 </script>
 
-<button on:click on:dblclick class={isDestructive ? 'btn-destructive' : ''} {...$$restProps}>
+<button on:click on:dblclick {...$$restProps}>
 	<slot />
 </button>
 
