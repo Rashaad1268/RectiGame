@@ -49,3 +49,9 @@ class CustomViewSet(viewsets.ModelViewSet):
         return Response(
             self.fetch_serializer(instance, context={"request": request}).data
         )
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    def perform_update(self, serializer):
+        return serializer.save()

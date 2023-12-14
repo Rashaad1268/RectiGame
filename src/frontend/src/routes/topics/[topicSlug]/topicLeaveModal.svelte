@@ -1,8 +1,9 @@
 <script lang="ts">
     import { fetchApi } from "$lib/api";
     import { joinedTopics } from "$lib/stores/";
-    import { Modal, ModalActionButton, ModalActions, ModalTitle } from "$lib/components/modals";
+    import { Modal, ModalActions, ModalTitle } from "$lib/components/modals";
     import type { TopicInterface } from "$lib/types";
+    import Button from "$lib/components/button.svelte";
 
     export let isModalOpen: boolean;
     export let topic: TopicInterface;
@@ -32,11 +33,7 @@
     </p>
 
     <ModalActions>
-        <ModalActionButton size="btn-lg" isDestructive on:click={handleTopicLeave}
-            >Leave</ModalActionButton
-        >
-        <ModalActionButton size="btn-lg" on:click={() => (isModalOpen = false)}
-            >Cancel</ModalActionButton
-        >
+        <Button class="btn-lg btn-destructive" on:click={handleTopicLeave}>Leave</Button>
+        <Button class="btn-lg" on:click={() => (isModalOpen = false)}>Cancel</Button>
     </ModalActions>
 </Modal>

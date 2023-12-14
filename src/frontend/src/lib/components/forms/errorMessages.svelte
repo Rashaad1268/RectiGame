@@ -6,7 +6,7 @@
 </script>
 
 <div class="pt-10">
-    {#each errorMessages as errorMsg}
+    {#each errorMessages as errorMsg (errorMsg)}
         <Alert class="alert-error shadow-lg" inTransition={slide}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"

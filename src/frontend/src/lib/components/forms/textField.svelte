@@ -12,7 +12,13 @@
 
         &:focus {
             outline: none;
-            box-shadow: 0px 2px 0px theme("colors.green.400");
+        }
+
+        &.outline-active {
+            &:focus {
+                outline: none;
+                box-shadow: 0px 2px 0px var(--outline-color, theme("colors.green.400"));
+            }
         }
     }
 </style>

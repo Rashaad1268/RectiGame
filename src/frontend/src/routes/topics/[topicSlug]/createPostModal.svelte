@@ -1,8 +1,9 @@
 <script lang="ts">
     import { fetchApi, formatApiErrors } from "$lib/api";
+    import Button from "$lib/components/button.svelte";
     import { Form, TextArea, TextField } from "$lib/components/forms";
 
-    import { Modal, ModalActionButton, ModalActions, ModalTitle } from "$lib/components/modals";
+    import { Modal, ModalActions, ModalTitle } from "$lib/components/modals";
     import { topicPosts } from "$lib/stores";
     import type { TopicInterface } from "$lib/types";
 
@@ -78,9 +79,9 @@
     </Form>
 
     <ModalActions>
-        <ModalActionButton isDestructive on:click={() => (isModalOpen = false)}
-            >Cancel</ModalActionButton
+        <Button class="btn-destructive" on:click={() => (isModalOpen = false)}
+            >Cancel</Button
         >
-        <ModalActionButton on:click={handlePostCreate}>Submit</ModalActionButton>
+        <Button on:click={handlePostCreate}>Submit</Button>
     </ModalActions>
 </Modal>

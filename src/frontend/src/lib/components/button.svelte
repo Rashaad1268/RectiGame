@@ -61,13 +61,13 @@
     }
 
     .btn-blue {
-        @apply bg-blue-600;
+        @apply bg-blue-500;
 
         &:hover {
-            @apply bg-blue-700;
+            @apply bg-blue-600;
         }
         &:active {
-            @apply bg-blue-800;
+            @apply bg-blue-700;
         }
     }
 

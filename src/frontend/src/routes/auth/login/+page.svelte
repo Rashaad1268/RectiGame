@@ -8,9 +8,9 @@
     import Button from "$lib/components/button.svelte";
     import { fetchUserData } from "$lib/utils";
     import BackgroundGrid from "../backgroundGrid.svelte";
-    import type { LayoutData } from "./$types";
+    import type { PageData } from "./$types";
 
-    export let data: LayoutData;
+    export let data: PageData;
 
     let email: string;
     let password: string;
@@ -70,6 +70,7 @@
                         name="email"
                         type="email"
                         autocomplete="email"
+                        class="outline-active"
                         placeholder="Email"
                         required
                     />
@@ -82,6 +83,7 @@
                         type="password"
                         bind:value={password}
                         autocomplete="current-password"
+                        class="outline-active"
                         placeholder="Password"
                         required
                     />
@@ -91,7 +93,7 @@
             <Button
                 aria-label="login button"
                 type="submit"
-                class="flex items-center justify-center group relative !w-full mt-4 !h-11 !p-4 py-5"
+                class="flex items-center justify-center group relative !w-full mt-4 !h-12 !p-4 py-5"
             >
                 Login
             </Button>

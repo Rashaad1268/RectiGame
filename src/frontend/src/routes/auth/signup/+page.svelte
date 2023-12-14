@@ -7,10 +7,10 @@
     import { fetchUserData } from "$lib/utils";
     import { slide } from "svelte/transition";
     import BackgroundGrid from "../backgroundGrid.svelte";
-    import type { LayoutData } from "./$types";
+    import type { PageData } from "./$types";
     import Form from "$lib/components/forms/form.svelte";
 
-    export let data: LayoutData;
+    export let data: PageData;
     let username: string;
     let email: string;
     let password: string;
@@ -71,7 +71,7 @@
                 <a href="login{data.next ? `?next=${data.next}` : ''}" class="link">Login</a>
             </p>
         </div>
-        <Form class="mt-6" on:submit={handleSignup}>
+        <Form class="mt-6" on:submit={handleSignup} {errorMessages}>
             <div class="rounded-md shadow-sm">
                 <div>
                     <label for="username" class="sr-only">Username</label>
@@ -81,6 +81,7 @@
                         name="username"
                         autocomplete="username"
                         placeholder="Username"
+                        class="outline-active"
                         required
                     />
                 </div>
@@ -92,31 +93,34 @@
                         name="email"
                         type="email"
                         autocomplete="email"
+                        class="outline-active"
                         placeholder="Email"
                         required
                     />
                 </div>
                 <div>
-                    <label for="password" class="sr-only">Password 1</label>
+                    <label for="password" class="sr-only">Password</label>
                     <TextField
                         id="password"
                         name="password"
                         type="password"
                         bind:value={password}
                         autocomplete="new-password"
-                        placeholder="Password 1"
+                        class="outline-active"
+                        placeholder="Password"
                         required
                     />
                 </div>
                 <div>
-                    <label for="password2" class="sr-only">Password 2</label>
+                    <label for="password2" class="sr-only">Password (again)</label>
                     <TextField
                         id="password2"
                         name="password2"
                         bind:value={password2}
                         type="password"
                         autocomplete="new-password"
-                        placeholder="Password 2"
+                        class="outline-active"
+                        placeholder="Password (again)"
                         required
                     />
                 </div>
@@ -125,31 +129,11 @@
             <Button
                 aria-label="Signup button"
                 type="submit"
-                class="flex items-center justify-center group relative !w-full mt-4 !h-11 !p-4"
+                class="flex items-center justify-center group relative !w-full mt-4 !h-12 !p-4"
             >
                 Signup
             </Button>
         </Form>
-
-        <div class="pt-10">
-            {#each errorMessages as errorMsg}
-                <Alert class="alert-error shadow-lg mb-1" inTransition={slide}>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="stroke-current flex-shrink-0 h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        ><path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                        /></svg
-                    >
-                    <span>{errorMsg}</span>
-                </Alert>
-            {/each}
-        </div>
     </div>
 </div>
 

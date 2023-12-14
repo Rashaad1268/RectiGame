@@ -5,7 +5,7 @@
     let dialogContent: HTMLDivElement | undefined;
 
     function handleClick(event: MouseEvent) {
-        // First check that the dialog content does not contiain the click
+        // First check that the dialog content does not contain the click
         if (!dialogContent?.contains(event.target as HTMLElement)) {
             // Then check if the dialog is open AND if closeOnOutsideClick is true
             if (isOpen && closeOnOutsideClick) {
@@ -35,29 +35,30 @@
 </script>
 
 <svelte:window on:click={handleClick} />
-<dialog bind:this={dialog} class:open={isOpen} on:cancel|preventDefault={() => (isOpen = false)}>
+
+<dialog bind:this={dialog} class:open={isOpen} on:close|preventDefault={() => (isOpen = false)}>
     <!-- Have an inner div so outside clicks can be detected -->
-    <div bind:this={dialogContent} class="contents">
+    <div bind:this={dialogContent} class="content">
         <slot />
     </div>
 </dialog>
 
 <style lang="scss">
     dialog {
-        @apply p-0 opacity-0 rounded-lg -translate-y-3 bg-discordDark-830 text-white
-			   transition-all duration-200;
+        @apply p-8 opacity-0 rounded-lg -translate-y-3 bg-discordDark-800 text-white
+			   transition-all duration-200 min-w-[43%];
     }
     dialog.open {
         @apply opacity-100 translate-y-0 scale-100;
     }
     dialog::backdrop {
         @apply opacity-0 transition-opacity duration-200
-		     bg-discordDark-860; /* The actual color of the backdrop */
+		     bg-discordDark-900; /* The actual color of the backdrop */
     }
-    .contents {
-        @apply flex flex-col mx-8 my-3 gap-2;
+    .content {
+        @apply flex flex-col gap-2 h-full w-full;
     }
     dialog.open::backdrop {
-        @apply opacity-40;
+        @apply opacity-60;
     }
 </style>

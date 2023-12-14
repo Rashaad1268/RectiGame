@@ -4,12 +4,15 @@
     import Button from "$lib/components/button.svelte";
     import { channelStore, joinedTopics, userData } from "$lib/stores/";
     import type { TopicChatChannelInterface, TopicInterface } from "$lib/types";
+    import ChannelCreateModal from "./channelCreateModal.svelte";
 
     $: selectedTopicSlug = $page.params.topicSlug as string;
 
     $: topic = $joinedTopics.find((topic) => topic.slug === selectedTopicSlug) as TopicInterface;
 
     $: channels = $channelStore[selectedTopicSlug] as Array<TopicChatChannelInterface>;
+
+    let isChannelCreateModalOpen = false;
 
     $: {
         if ($joinedTopics.length > 0 && !topic) {
@@ -34,13 +37,16 @@
             <a href="/topics/{topic.slug}" class="block my-1 link">View posts</a>
 
             {#if $userData?.is_staff}
-                <Button class="btn-xs btn-dark mt-4">+ Create channel</Button>
+                <Button
+                    class="btn-xs btn-dark mt-4"
+                    on:click={() => (isChannelCreateModalOpen = true)}>+ Create channel</Button
+                >
             {/if}
         </header>
 
         <div class="w-full h-[1px] bg-discordDark-630 mb-2" />
 
-        <div class="flex flex-col gap-[2px] overflow-y-auto">
+        <div class="channels-container">
             {#each channels || [] as channel (channel.id)}
                 <a
                     href="/topics/{topic.slug}/channel/{channel.id}"
@@ -59,6 +65,8 @@
     {/if}
 </div>
 
+<ChannelCreateModal bind:isOpen={isChannelCreateModalOpen} bind:topic={topic} />
+
 <style lang="scss">
     .channel-sidebar {
         @apply flex flex-col w-[165px] md:w-[260px] p-4 gap-[2px] bg-discordDark-800;
@@ -66,9 +74,14 @@
         // Setting height to 100% won't work in this case, so calculate it
         height: calc(100vh - var(--navbar-height));
     }
+
+    .channels-container {
+        @apply flex flex-col gap-[2px] overflow-y-auto;
+    }
+
     .channel-tab {
         @apply flex text-discordDark-360 fill-discordDark-360
-			   pl-6 py-1 rounded-md items-center;
+			   pl-6 py-1 rounded-md items-center gap-2;
 
         &:hover {
             @apply bg-discordDark-660 text-discordDark-300;
