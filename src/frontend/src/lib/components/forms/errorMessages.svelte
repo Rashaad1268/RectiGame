@@ -5,7 +5,7 @@
     export let errorMessages: string[] = [];
 </script>
 
-<div class="pt-10">
+<div class="my-5 flex flex-col gap-2">
     {#each errorMessages as errorMsg (errorMsg)}
         <Alert class="alert-error shadow-lg" inTransition={slide}>
             <svg
