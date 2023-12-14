@@ -2,7 +2,7 @@
 	import { browser } from '$app/environment';
 	import NavBar from './navbar.svelte';
 	import Toast from '$lib/components/toast.svelte';
-	import { userData } from '$lib/stores';
+	import { joinedTopics, userData } from '$lib/stores';
 	import type { LayoutData } from './$types';
 	import { socket } from '$lib/stores';
 	import SideBar from './sideBar.svelte';
@@ -34,7 +34,7 @@
 <NavBar />
 
 <div class="flex h-[100%]">
-	{#if data.isLoggedIn}
+	{#if $joinedTopics.length > 0}
 		<SideBar />
 	{/if}
 

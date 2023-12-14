@@ -34,7 +34,6 @@
 
 {#if currentToast}
 	<button
-		name="close alert button"
 		class="toast toast-start items-center flex-row {typeClass}"
 		on:click={() => toastStore.set(null)}
 		class:active={activate}

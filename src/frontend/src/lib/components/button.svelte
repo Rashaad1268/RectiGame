@@ -12,26 +12,19 @@
 </script>
 
 <button on:click on:dblclick class={isDestructive ? 'btn-destructive' : ''} {...$$restProps}>
-	<div class="contents">
-		<slot />
-	</div>
+	<slot />
 </button>
 
 <style lang="scss">
 	// Default button size is medium (md)
 	button {
 		@apply font-medium capitalize
-      bg-green-500 w-auto box-border
-        text-base rounded-md
-        h-9 px-4 py-2 text-white
+      bg-green-500 w-auto box-border text-base rounded-md
+        h-9 px-3 py-2 text-white whitespace-nowrap text-ellipsis overflow-hidden
         flex items-center justify-center select-none;
 
 		// color: hsl(0 calc(1 * 0%) 100% / 1);
 		transition: background-color 0.17s ease, color 0.17s ease;
-
-		.contents {
-			@apply my-0 mx-auto whitespace-nowrap text-ellipsis overflow-hidden;
-		}
 
 		&:hover {
 			@apply bg-green-600;
@@ -42,11 +35,15 @@
 		}
 
 		&.btn-lg {
-			@apply h-10 rounded-md px-8 text-xl;
+			@apply h-10 px-6 text-xl;
+		}
+
+		&.btn-xl {
+			@apply h-12 px-8 text-2xl;
 		}
 
 		&.btn-sm {
-			@apply h-8 rounded-md px-3 text-sm;
+			@apply h-8 px-2 text-sm;
 		}
 	}
 

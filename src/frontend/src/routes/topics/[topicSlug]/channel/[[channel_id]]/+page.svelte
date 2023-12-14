@@ -74,8 +74,25 @@
 		}
 	}
 
-	function getPrevMessage(idx: number): TopicChatMessageInterface | undefined {
-		return ($messageStore[channel!.id]?.results ?? [])[idx + 1];
+	function getIsInlineMsg(idx: number, message: TopicChatMessageInterface): boolean {
+		const msg = ($messageStore[channel!.id]?.results ?? [])[idx + 1];
+
+		if (msg?.author?.id === message?.author.id) {
+			const prevMsgCreatedAt = Date.parse(msg.created_at);
+			const currentMsgCreatedAt = Date.parse(message.created_at);
+
+			// Calculate the time gap between the 3 messages in seconds
+			const diffInSeconds = Math.floor((currentMsgCreatedAt - prevMsgCreatedAt) / 1000);
+
+			// if the time gap between the 2 messages is more than 5 minutes, it is not an inline message
+			if (diffInSeconds > 300) {
+				return false;
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 	let messageContent = '';
@@ -131,7 +148,7 @@
 
 		<div class="channel-messages" on:scroll={loadMessages}>
 			{#each messages || [] as message, idx (message.id)}
-				{@const isInlineMsg = getPrevMessage(idx)?.author?.id === message.author.id}
+				{@const isInlineMsg = getIsInlineMsg(idx, message)}
 				<Message {message} isInline={isInlineMsg} />
 			{/each}
 		</div>

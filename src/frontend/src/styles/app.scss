@@ -11,28 +11,14 @@
 
 html {
 	display: block;
-	font-size: 13px;
+	font-size: 14px;
 	height: 100%;
-	// overflow: hidden;
+
 	@media (min-width: 1024px) {
 		font-size: 16px;
 	}
 }
 
 body {
-	// min-height: 100vh;
-	// overflow: hidden;
-	// min-height: 100%;
-
 	height: 100%;
-	// overflow-y: hidden;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	@apply font-normal;
 }
