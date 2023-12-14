@@ -1,31 +1,31 @@
 @font-face {
-	font-family: gamer-font;
-	src: url('/gamer_font.ttf');
-	font-style: normal;
-	font-weight: normal;
+    font-family: gamer-font;
+    src: url("/gamer_font.ttf");
+    font-style: normal;
+    font-weight: normal;
 }
 
 @font-face {
-	font-family: monocraft;
-	src: url('/Monocraft.ttf');
-	font-style: normal;
-	font-weight: normal;
+    font-family: monocraft;
+    src: url("/Monocraft.ttf");
+    font-style: normal;
+    font-weight: normal;
 }
 
 .nested-green {
-	span {
-		@apply text-green-500;
-	}
+    span {
+        @apply text-green-500;
+    }
 }
 
 .link {
-	@apply text-blue-600;
+    @apply text-blue-600;
 
-	&:hover {
-		@apply underline;
-	}
+    &:hover {
+        @apply underline;
+    }
 
-	&.link-underline {
-		@apply underline;
-	}
+    &.link-underline {
+        @apply underline;
+    }
 }

@@ -2,23 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-@import './theme.scss';
-@import './text.scss';
+@import "./theme.scss";
+@import "./text.scss";
 
 :root {
-	--navbar-height: 64px;
+    --navbar-height: 64px;
 }
 
 html {
-	display: block;
-	font-size: 14px;
-	height: 100%;
+    display: block;
+    font-size: 14px;
+    height: 100%;
 
-	@media (min-width: 1024px) {
-		font-size: 16px;
-	}
+    @media (min-width: 1024px) {
+        font-size: 16px;
+    }
 }
 
 body {
-	height: 100%;
+    height: 100%;
 }

@@ -1,9 +1,9 @@
 html {
-	@apply overflow-hidden;
+    @apply overflow-hidden;
 
-	&.dark {
-		@apply bg-[var(--background-color)] text-gray-100;
+    &.dark {
+        @apply bg-[var(--background-color)] text-gray-100;
 
-		--background-color: theme('colors.discordDark.830');
-	}
+        --background-color: theme("colors.discordDark.830");
+    }
 }

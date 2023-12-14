@@ -1,11 +1,11 @@
 <script>
-	import ChannelSideBar from './channelSideBar.svelte';
+    import ChannelSideBar from "./channelSideBar.svelte";
 </script>
 
 <div class="flex">
-	<ChannelSideBar />
+    <ChannelSideBar />
 
-	<div class="w-full">
-		<slot />
-	</div>
+    <div class="w-full">
+        <slot />
+    </div>
 </div>

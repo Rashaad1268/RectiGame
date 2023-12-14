@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { UserInterface } from '$lib/types';
+    import type { UserInterface } from "$lib/types";
 
-	export let user: UserInterface;
+    export let user: UserInterface;
 </script>
 
 <div>
-	{user.username}
-	{user.profile.about_me}
+    {user.username}
+    {user.profile.about_me}
 </div>
