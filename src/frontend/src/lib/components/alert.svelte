@@ -26,7 +26,7 @@
     }
 </script>
 
-<div in:inTransition out:outTransition {...$$restProps} class="alert {$$restProps.class ?? ''}">
+<div in:inTransition|global out:outTransition|global {...$$restProps} class="alert {$$restProps.class ?? ''}">
     <slot />
 </div>
 

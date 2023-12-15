@@ -19,6 +19,6 @@ export const load: LayoutLoad = async function ({ fetch, params }) {
             topic: await response.json()
         };
     } else {
-        throw error(response.status, response.statusText);
+        error(response.status, response.statusText);
     }
 };

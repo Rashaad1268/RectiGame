@@ -21,7 +21,7 @@
 </script>
 
 {#if showUserProfilePreview}
-    <div class="bg-discordDark-860" use:popperContent={extraOpts} in:fade>
+    <div class="bg-discordDark-860" use:popperContent={extraOpts} in:fade|global>
         My tooltip
         <div id="arrow" data-popper-arrow />
         <UserProfilePreview user={message.author} />
