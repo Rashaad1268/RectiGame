@@ -24,7 +24,7 @@
 
     $: {
         if (browser) {
-            while (!$socket && data.isLoggedIn) {
+            while (!$socket && !!$userData) {
                 initWebSocket();
             }
         }
