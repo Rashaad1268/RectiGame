@@ -36,7 +36,11 @@
 
 <svelte:window on:click={handleClick} />
 
-<dialog bind:this={dialog} class:open={isOpen} on:close|preventDefault={() => (isOpen = false)}>
+<dialog
+    bind:this={dialog}
+    class:open={isOpen}
+    on:close|preventDefault={() => isOpen = false}
+>
     <!-- Have an inner div so outside clicks can be detected -->
     <div bind:this={dialogContent} class="content">
         <slot />
@@ -46,7 +50,7 @@
 <style lang="scss">
     dialog {
         @apply p-8 opacity-0 rounded-lg -translate-y-3 bg-discordDark-800 text-white
-			   transition-all duration-200 min-w-[43%];
+			   transition-all duration-200 min-w-[43%] max-w-[60%] select-none;
     }
     dialog.open {
         @apply opacity-100 translate-y-0 scale-100;

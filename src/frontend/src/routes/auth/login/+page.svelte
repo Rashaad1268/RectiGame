@@ -29,7 +29,7 @@
         if (response.ok) {
             fetchUserData()
                 .then(() => {
-                    goto(data.next ?? "/topics");
+                    goto(data.next ?? "/");
                 })
                 .catch((err) => {
                     errorMessages = [err, ...errorMessages];

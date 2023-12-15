@@ -64,7 +64,7 @@
             So what are you waiting for?
         </h1>
         <a href="auth/signup{fromEndpoint ? `?next=${fromEndpoint}` : ''}"
-            ><Button class="btn-lg" aria-label="Join us button">Join us</Button></a
+            ><Button class="btn-xl" aria-label="Join us button">Join us</Button></a
         >
     </div>
 
