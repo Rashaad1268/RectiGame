@@ -13,19 +13,17 @@ export function initWebSocket() {
     wsUrl += window.location.host + "/api/ws/";
 
     
-    let websocket = new WebSocket(wsUrl);
+    const websocket = new WebSocket(wsUrl);
     
     const reConnect = () => {
+        console.log("Trying to reconnect...")
         if (websocket.readyState !== WebSocket.OPEN) {
             socket.set(null);
-            websocket = new WebSocket(wsUrl);
-            return;
+            initWebSocket()
         }
     }
 
-    websocket.onerror = reConnect;
-    websocket.onclose = reConnect;
-
+    websocket.onclose = () => reConnect();
     websocket.onmessage = handleWsMessage;
 
     socket.set(websocket);

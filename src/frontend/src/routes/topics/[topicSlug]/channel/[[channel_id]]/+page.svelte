@@ -143,7 +143,7 @@
                 /></svg
             >
             <span>
-                {channel.name} ({$socket?.readyState})
+                {channel.name}
             </span>
         </div>
 

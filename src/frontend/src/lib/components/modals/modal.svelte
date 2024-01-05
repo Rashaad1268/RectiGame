@@ -36,7 +36,12 @@
 
 <svelte:window on:click={handleClick} />
 
-<dialog bind:this={dialog} class:open={isOpen} on:close|preventDefault={() => (isOpen = false)}>
+<dialog
+    bind:this={dialog}
+    class:open={isOpen}
+    on:close|preventDefault={() => isOpen = false}
+    on:keydown|preventDefault={() => isOpen = false}
+>
     <!-- Have an inner div so outside clicks can be detected -->
     <div bind:this={dialogContent} class="content">
         <slot />
