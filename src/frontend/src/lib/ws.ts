@@ -12,12 +12,25 @@ export function initWebSocket() {
 
     wsUrl += window.location.host + "/api/ws/";
 
-    const websocket = new WebSocket(wsUrl);
+    
+    let websocket = new WebSocket(wsUrl);
+    
+    const reConnect = () => {
+        if (websocket.readyState !== WebSocket.OPEN) {
+            socket.set(null);
+            websocket = new WebSocket(wsUrl);
+            return;
+        }
+    }
+
+    websocket.onerror = reConnect;
+    websocket.onclose = reConnect;
 
     websocket.onmessage = handleWsMessage;
-    websocket.onclose = () => socket.set(null);
 
     socket.set(websocket);
+
+    return websocket;
 }
 
 function handleWsMessage(event: MessageEvent) {

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import { fetchApi } from "$lib/api.js";
-    import { channelStore, messageStore } from "$lib/stores/";
+    import { channelStore, messageStore, socket } from "$lib/stores/";
     import Message from "./message.svelte";
     import type { TopicChatChannelInterface, TopicChatMessageInterface } from "$lib/types";
     import MessageInput from "./messageInput.svelte";
@@ -143,7 +143,7 @@
                 /></svg
             >
             <span>
-                {channel.name}
+                {channel.name} ({$socket?.readyState})
             </span>
         </div>
 

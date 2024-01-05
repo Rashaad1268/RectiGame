@@ -72,7 +72,7 @@
                     >
                 </div>
             {/if}
-            <span>{message.content}</span>
+            <span>{message.content} ({message.id})</span>
         </div>
     {/if}
 </div>

@@ -44,6 +44,6 @@
 
 <style lang="scss">
     .posts-list {
-        @apply mr-5 md:mr-0 md:w-[80svw] lg:w-[60svw] flex gap-8 flex-col;
+        @apply mr-5 md:mr-0 ml-4 w-[80svw] lg:w-[60svw] flex gap-8 flex-col;
     }
 </style>

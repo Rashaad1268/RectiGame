@@ -1,13 +1,27 @@
 @font-face {
     font-family: gamer-font;
-    src: url("/gamer_font.ttf");
+    src: url("/fonts/gamer_font.ttf");
     font-style: normal;
     font-weight: normal;
 }
 
 @font-face {
     font-family: monocraft;
-    src: url("/Monocraft.ttf");
+    src: url("/fonts/Monocraft.ttf");
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: cod;
+    src: url("/fonts/ModernWarfare-font.ttf");
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: doodle;
+    src: url("/fonts/RubikDoodleShadow-Regular.ttf");
     font-style: normal;
     font-weight: normal;
 }
@@ -27,5 +41,26 @@
 
     &.link-underline {
         @apply underline;
+    }
+}
+
+.hover-underline {
+    /* display: inline-block; */
+    background-image: linear-gradient(
+        to right,
+        theme("colors.green.500"),
+        theme("colors.green.500"),
+        theme("colors.emerald.500")
+    );
+    background-size: 0% 3px;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+
+    transition: background-size 400ms ease;
+
+    @media (hover: hover) {
+        &:hover {
+            background-size: 100% 3px;
+        }
     }
 }

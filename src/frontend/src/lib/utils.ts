@@ -28,4 +28,5 @@ export async function fetchUserData() {
             `Failed to fetch user data (status: ${response.status} ${response.statusText})`
         );
     }
+
 }

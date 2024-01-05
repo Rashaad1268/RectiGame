@@ -1,46 +1,36 @@
 <script lang="ts">
+    import { page } from "$app/stores";
     /*
 	Only use the navbar for some endpoints such as /, /welcome, /auth/login, /auth/signup
-
-	Don't use the navbar for endpoints such as /topics because it'll look weird
 	*/
     import { userData } from "$lib/stores";
     import ProfileMenu from "./profileMenu.svelte";
-    // import { isDarkMode } from '$lib/stores';
 
     $: isLoggedIn = $userData !== null;
     $: homepageUrl = isLoggedIn ? "/" : "/welcome";
 
-    // Right now we don't have any links but we might need it in the future
-    let navLinks: Array<{
-        name: string;
-        href?: string;
-        sublinks?: Array<{ name: string; href: string }> | undefined;
-    }> = [];
-    /*
-	Example:
-		[{name: 'About', href='/about', sublinks: {name: 'Why Not?', href='/why_not'}}]
-	*/
-
-    $: {
-        if (!isLoggedIn) {
-            navLinks = [
-                { name: "Signup", href: "signup/" },
-                { name: "Login", href: "login/" },
-                ...navLinks
-            ];
-        } else {
-            navLinks = navLinks.filter(
-                (item) => !["login", "signup"].includes(item.name.toLowerCase())
-            );
-        }
-    }
+    $: fromEndpoint = $page.url.searchParams.get("from");
 </script>
 
 <nav>
     <a class="nav-title nested-green" href={homepageUrl}><span class="text-4xl">G</span>amerz.lk</a>
 
-    <ProfileMenu />
+    <div class="ml-auto">
+        {#if isLoggedIn}
+            <ProfileMenu />
+        {:else}
+            <div class="flex gap-3 md:gap-8 font-monocraft">
+                <a
+                    href="/auth/login{fromEndpoint ? `?next=${fromEndpoint}` : ''}"
+                    class="hover-underline">Login</a
+                >
+                <a
+                    href="/auth/signup{fromEndpoint ? `?next=${fromEndpoint}` : ''}"
+                    class="hover-underline">Signup</a
+                >
+            </div>
+        {/if}
+    </div>
 </nav>
 
 <style lang="scss">

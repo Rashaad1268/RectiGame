@@ -1,138 +1,161 @@
 <script lang="ts">
     import { page } from "$app/stores";
+
     import Button from "$lib/components/button.svelte";
     import { onMount } from "svelte";
-
-    onMount(() => {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("show");
-                } else {
-                    entry.target.classList.remove("show");
-                }
-            });
-        });
-
-        const hiddenElements = document.querySelectorAll(".hidden-elem");
-        hiddenElements.forEach((el) => observer.observe(el));
-    });
+    import BackgroundGrid from "../auth/backgroundGrid.svelte";
 
     let fromEndpoint: string | null = $page.url.searchParams.get("from");
+
+    let nearScrollEnd = false;
+
+    onMount(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        console.log(entry);
+                        entry.target.classList.add("element-visible");
+                    }
+                });
+            },
+            { threshold: 0.4 }
+        );
+
+        const hiddenElements = document.querySelectorAll(".content");
+
+        hiddenElements.forEach((e) => observer.observe(e));
+    });
 </script>
 
 <svelte:head>
     <title>Welcome to Gamerz.lk</title>
 </svelte:head>
 
-<!-- <Navbar /> -->
+<!-- Keep this empty element with the faded-in class
+so that the compiler doesn't purge the faded-in class -->
+<span class="element-visible" />
 
-<span class="show" />
-<!-- Have an empty span with the show class so vite doesn't purge that css class -->
-
-<div class="sections">
-    <div class="section hidden-elem" style="--delay: 2;">
-        <div class="ml-8">
-            <div class="title-text hover-underline-text">
-                <h1>From gamers</h1>
-                <h1>To gamers</h1>
-            </div>
-            <div class="description-text">
-                <p>Gamerz.lk is a website made for Sri Lankan gamers</p>
-                <p>to connect with each other</p>
-            </div>
-        </div>
-        <img src="/2_people_gaming.jpg" class="section-img" alt="2 people gaming" />
+<section class="w-full relative mb-2">
+    <div id="tiles-overlay">
+        <BackgroundGrid />
     </div>
 
-    <div class="section hidden-elem" style="--delay: 4;">
-        <div class="ml-8">
-            <div class="title-text hover-underline-text">
-                <h1>Not a gamer?</h1>
-                <h1>No problem</h1>
-            </div>
-            <div class="description-text">
-                <p>Gamerz.lk can also be used by sports players</p>
-                <p>to connect with each other and organize matches</p>
-            </div>
-        </div>
-        <img src="/people_playing_basketball.jpg" class="section-img" alt="2 people gaming" />
-    </div>
-
-    <div class="section-col items-center gap-2">
-        <h1 class="text-green-500 text-6xl font-semibold text-center pt-32 pb-3">
-            So what are you waiting for?
+    <div class="absolute mt-44 text-center">
+        <h1 class="font-gamer nested-green text-4xl lg:text-6xl">
+            <span class="text-5xl lg:text-7xl">G</span>amerz.lk
         </h1>
-        <a href="auth/signup{fromEndpoint ? `?next=${fromEndpoint}` : ''}"
-            ><Button class="btn-xl" aria-label="Join us button">Join us</Button></a
+
+        <h3 class="lg:text-lg font-cod">The game is on</h3>
+
+        <h6 class="nested-green text-lg font-medium mt-6">
+            A place for like minded gamers to collaborate and forge their path to <span
+                class="font-doodle">victory</span
+            >
+        </h6>
+    </div>
+</section>
+
+<section class="text-center">
+    <div class="content max-w-4xl">
+        <div class="text-3xl nested-green">
+            <p>Today's world of sports and e-sports is highly competitive.</p>
+            <p>
+                If you don't step up your game, you will <span class="font-doodle">fall behind</span
+                >
+            </p>
+        </div>
+
+        <div class="text-2xl mt-4 mb-8 nested-green">
+            <p>
+                Ditch the randoms and find your team. Forge epic bonds, conquer pixels, and <span
+                    class="font-doodle">level up</span
+                >
+                your game
+            </p>
+        </div>
+
+        <a href="auth/signup{fromEndpoint ? `?next=${fromEndpoint}` : ''}" class="inline-block"
+            ><Button class="btn-xl font-monocraft" aria-label="Sign up button"
+                >Join the adventure</Button
+            ></a
         >
     </div>
 
-    <div class="flex flex-col items-center mt-32">
-        <h1 class="text-5xl text-center font-semibold text-green-500 mb-2">
-            Join Our Discord server
-        </h1>
-        <iframe
-            src="https://discord.com/widget?id=1038761636145676298&theme=dark"
-            title="Discord server widget"
-            class="h-80 w-[200px] sm:w-[450px] md:w-[600px] lg:w-[700px]"
-            allowtransparency={true}
-            frameborder="0"
+    <div class="content flex items-center justify-around w-full mt-52">
+        <img
+            width="600px"
+            class=""
+            src="/images/welcome-page/screenshot_1.png"
+            alt="A conversation between 2 people in Gamerz.lk"
         />
+
+        <div class="max-w-lg">
+            <h1 class="text-4xl font-doodle text-green-500">Collaboration done easy</h1>
+            <p>
+                With Gamerz.lk you can find the perfect squad for you. Whether it is basketball,
+                Fortnite or chess that you're playing Gamerz.lk got you covered
+            </p>
+        </div>
     </div>
-</div>
+</section>
 
-<style lang="scss">
-    // .sections {
-    // 	NOTE: maybe use a grid-like layout
-    // }
+<button
+    class="rounded-full bg-discordDark-700 p-4 fill-gray-100
+           absolute bottom-4 right-8 animate-bounce"
+    on:click={() => {
+        document.querySelector("main")?.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth"
+        });
+    }}
+    ><svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20px"
+        height="20px"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="feather feather-arrow-down"
+        ><line x1="12" y1="5" x2="12" y2="19" /><polyline points="19 12 12 19 5 12" /></svg
+    ></button
+>
 
-    .section,
-    .section-col {
-        @apply flex flex-col pt-10 px-4 min-h-[80vh];
+<style lang="postcss">
+    section {
+        @apply flex flex-col items-center;
     }
 
-    .section {
-        @apply md:flex-row;
+    section:last-of-type {
+        @apply mb-20;
     }
 
-    .title-text {
-        @apply text-green-500 text-6xl font-semibold md:pt-[15%];
+    :global(#tiles) {
+        background: linear-gradient(to bottom, transparent, var(--background-color) 92%);
     }
 
-    .hover-underline-text {
-        background-image: linear-gradient(268.26deg, #097d8d, #60a654 102.45%);
-
-        background-size: 0% 3px;
-        background-repeat: no-repeat;
-        background-position: left bottom;
-        transition: background-size 400ms ease;
-
-        &:hover {
-            background-size: 100% 3px;
-        }
+    :global(#tiles-wrapper) {
+        filter: blur(0.5px);
+        opacity: 0.9;
     }
 
-    .description-text {
-        @apply text-lg font-medium pt-3;
+    #tiles-overlay {
+        @apply max-h-full overflow-hidden;
     }
 
-    .section-img {
-        @apply rounded object-contain self-start px-5 pt-1 pl-8 md:w-[55%] md:pt-0 lg:ml-16;
+    .content {
+        @apply opacity-0;
+        text-wrap: balance;
+        transform: translate(0px, 40px);
+
+        transition: opacity ease-in-out 0.5s, transform ease-in-out 0.5s;
     }
 
-    /* Do not use the animations for now because it looks bad */
-    .hidden-elem {
-        opacity: 0.2;
-        filter: blur(3px);
-        transform: translateY(-10px);
-        transition: all calc(300ms * var(--delay));
-    }
-
-    .show {
-        /* z-index: -10; */
+    .element-visible {
         opacity: 1;
-        filter: blur(0);
-        transform: translateY(0);
+        transform: translate(0px, 0px);
     }
 </style>

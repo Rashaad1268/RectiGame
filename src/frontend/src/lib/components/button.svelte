@@ -17,7 +17,7 @@
     // Default button size is medium (md)
     button {
         @apply font-medium capitalize
-      bg-green-500 w-auto box-border text-base rounded-md
+      bg-green-600  w-auto box-border text-base rounded-md
         h-9 px-3 py-2 text-white whitespace-nowrap text-ellipsis overflow-hidden
         flex items-center justify-center select-none;
 
@@ -25,11 +25,11 @@
         transition: background-color 0.17s ease, color 0.17s ease;
 
         &:hover {
-            @apply bg-green-600;
+            @apply bg-green-700;
         }
 
         &:active {
-            @apply bg-green-700;
+            @apply bg-green-800;
         }
 
         &.btn-lg {

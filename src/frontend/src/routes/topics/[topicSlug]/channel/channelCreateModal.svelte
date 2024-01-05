@@ -22,7 +22,10 @@
         channelName = channelName.trim();
         channelDescription = channelDescription.trim();
 
-        if (!channelName) return;
+        if (!channelName) {
+            isOpen = false;
+            return;
+        }
 
         const resp = await fetchApi("channels/", {
             method: "POST",
@@ -70,7 +73,7 @@
         <label for="channel-description" class="text-lg">Channel description</label>
         <TextArea
             id="channel-description"
-            placeholder="description?"
+            placeholder="description (optional)"
             bind:value={channelDescription}
         />
     </Form>

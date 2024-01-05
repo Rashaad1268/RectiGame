@@ -17,16 +17,16 @@
         if (!browser) {
             break $;
         }
-        if (data.isLoggedIn && !$userData) {
-            fetchUserData();
-        }
-    }
 
-    $: {
-        if (browser) {
-            while (!$socket && !!$userData) {
-                initWebSocket();
-            }
+
+        if (data.isLoggedIn && !$userData) {
+            const ws = initWebSocket();
+            // ws.on
+            
+            ws.addEventListener("open", () => {
+                fetchUserData();
+            });
+            console.log("connecting ws", !$userData);
         }
     }
 </script>
@@ -39,7 +39,8 @@
     {/if}
 
     <main
-        style="height: 100%; max-height: calc(100vh - var(--navbar-height));"
+        style="--max-h: calc(100vh - var(--navbar-height));
+        height: var(--max-h); max-height: var(--max-h);"
         class="w-full overflow-y-auto"
     >
         <slot />

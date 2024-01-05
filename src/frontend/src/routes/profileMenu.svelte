@@ -70,7 +70,7 @@
 
 <style lang="scss">
     .profile-btn {
-        @apply ml-auto transition-transform;
+        @apply transition-transform;
 
         &:active {
             @apply scale-90;

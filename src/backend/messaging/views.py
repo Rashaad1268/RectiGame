@@ -1,7 +1,7 @@
 from django_filters import rest_framework as filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework import pagination
+from rest_framework import pagination, status
 
 from backend.viewsets import CustomViewSet
 
@@ -35,7 +35,7 @@ class MessagePaginator(pagination.BasePagination):
         # We don't need `previous` and `next` links
         # since we have the `before` url parameter
         return Response({
-            "count": self.count, # the count will be used to display the message count when searching messages
+            "count": self.count,
             "results": data
         })
 
@@ -64,8 +64,12 @@ class TopicChatMessageViewSet(CustomViewSet):
         return TopicChatMessage.objects.filter(
                 channel__id=int(self.kwargs["channel_pk"])).order_by('-id')
 
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-
     def perform_create(self, serializer):
         return serializer.save(author=self.request.user, channel_id=int(self.kwargs["channel_pk"]))
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        return Response(status=status.HTTP_201_CREATED)

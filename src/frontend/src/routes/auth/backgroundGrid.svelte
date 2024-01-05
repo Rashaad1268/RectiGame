@@ -1,14 +1,19 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
+    // export let tileFixed;
+
+    let size = 0;
     let columns = 0;
     let rows = 0;
 
     const createGrid = () => {
-        const size = document.body.clientWidth > 800 ? 100 : 50;
+        size = document.body.clientWidth > 800 ? 100 : 50;
 
         columns = Math.floor((document.body.clientWidth - 64) / size); // subtract the height of the navbar (64px)
-        rows = Math.floor((document.body.clientHeight - 64) / size);
+        rows = Math.floor(document.body.clientHeight / size);
+
+        // rows = ;
     };
 
     onMount(createGrid);
@@ -16,7 +21,7 @@
 
 <svelte:window on:resize={createGrid} />
 
-<!-- Only show the grid when everything is initialized -->
+<!-- Only show the grid when the rows and columns are calculated -->
 {#if columns > 0 && rows > 0}
     <div id="tiles-wrapper" style="--columns: {columns}; --rows: {rows}">
         <div id="tiles">
@@ -32,6 +37,7 @@
         height: calc(100vh - var(--navbar-height));
         overflow: hidden;
         width: 100vw;
+        // z-index: -1;
         filter: blur(0.45px);
 
         animation: background-pan 9s infinite;
@@ -40,9 +46,9 @@
         background: linear-gradient(
             to bottom,
             theme("colors.green.400"),
-            theme("colors.discordDark.800"),
-            theme("colors.discordDark.800"),
-            theme("colors.discordDark.800"),
+            var(--background-color),
+            var(--background-color),
+            var(--background-color),
             theme("colors.green.400")
         );
         /* width height*/
@@ -59,11 +65,10 @@
     }
 
     #tiles {
-        height: calc(100vh - 1px);
-        width: calc(100vw - 1px);
+        height: 100%;
+        width: 100%;
 
         position: relative;
-        z-index: 2;
 
         display: grid;
         grid-template-columns: repeat(var(--columns), 1fr);

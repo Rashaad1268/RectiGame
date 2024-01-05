@@ -65,7 +65,7 @@
     {/if}
 </div>
 
-<ChannelCreateModal bind:isOpen={isChannelCreateModalOpen} bind:topic={topic} />
+<ChannelCreateModal bind:isOpen={isChannelCreateModalOpen} bind:topic />
 
 <style lang="scss">
     .channel-sidebar {

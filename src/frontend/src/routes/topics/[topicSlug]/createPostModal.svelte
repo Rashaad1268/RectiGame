@@ -79,9 +79,7 @@
     </Form>
 
     <ModalActions>
-        <Button class="btn-destructive" on:click={() => (isModalOpen = false)}
-            >Cancel</Button
-        >
+        <Button class="btn-destructive" on:click={() => (isModalOpen = false)}>Cancel</Button>
         <Button on:click={handlePostCreate}>Submit</Button>
     </ModalActions>
 </Modal>
