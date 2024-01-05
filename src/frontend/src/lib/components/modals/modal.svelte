@@ -39,8 +39,13 @@
 <dialog
     bind:this={dialog}
     class:open={isOpen}
-    on:close|preventDefault={() => isOpen = false}
-    on:keydown|preventDefault={() => isOpen = false}
+    on:close|preventDefault={() => (isOpen = false)}
+    on:keydown={(event) => {
+        if (event.code === "Escape") {
+            event.preventDefault();
+            isOpen = false;
+        }
+    }}
 >
     <!-- Have an inner div so outside clicks can be detected -->
     <div bind:this={dialogContent} class="content">
