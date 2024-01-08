@@ -5,9 +5,7 @@
     import Button from "$lib/components/button.svelte";
     import { TextField } from "$lib/components/forms";
     import { fetchUserData } from "$lib/utils";
-    import { slide } from "svelte/transition";
     import BackgroundGrid from "../backgroundGrid.svelte";
-    import type { PageData } from "./$types";
     import Form from "$lib/components/forms/form.svelte";
     import { page } from "$app/stores";
 
