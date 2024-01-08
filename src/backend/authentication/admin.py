@@ -31,3 +31,8 @@ class CustomUserAdmin(UserAdmin):
 @admin.register(models.Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user',)
+
+
+@admin.register(models.Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'notification_content')

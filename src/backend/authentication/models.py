@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.validators import UnicodeUsernameValidator
+
+from messaging.models import TopicChatMessage
 
 
 class UsernameValidator(UnicodeUsernameValidator):
@@ -39,3 +42,15 @@ class Profile(models.Model):
     about_me = models.TextField(max_length=500, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='users/profile_pictures', null=True, blank=True)
     banner_image = models.ImageField(upload_to='users/banner_images', null=True, blank=True)
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    type = models.IntegerField(choices=[
+        (1, "Mention"),
+        (2, "Warning"),
+        (3, "System message"),
+    ])
+    notification_content = models.TextField(max_length=2000, null=True, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    referenced_message = models.ForeignKey(TopicChatMessage, on_delete=models.CASCADE, null=True, blank=True)

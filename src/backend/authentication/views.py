@@ -6,6 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from topics.serializers import TopicSerializer
+from messaging.serializers import NotificationSerializer
 from . import models, serializers
 
 
@@ -14,6 +15,10 @@ def get_full_data(user, request):
     return {
         'user': serializers.UserSerializer(user, context=ctx).data,
         'joined_topics': TopicSerializer(user.topic_set.all(), many=True, context=ctx).data,
+        'notifications': NotificationSerializer(
+                            models.Notification.objects.filter(user=user).order_by('-id'),
+                            many=True
+                         ).data
     }
 
 
