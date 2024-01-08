@@ -7,6 +7,7 @@ from rest_framework.response import Response
 
 from topics.serializers import TopicSerializer
 from messaging.serializers import NotificationSerializer
+from .permissions import UserViewSetPermissions
 from . import models, serializers
 
 
@@ -44,9 +45,8 @@ class LoginView(views.APIView):
             return Response({'detail': 'User is not active'}, status=status.HTTP_401_UNAUTHORIZED)
 
         login(request, user)
-        response = Response(get_full_data(user, request))
 
-        return response
+        return Response(status=status.HTTP_200_OK)
 
 
 class SignupView(views.APIView):
@@ -57,18 +57,18 @@ class SignupView(views.APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         login(request, user)
-        return Response(get_full_data(user, request))
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class LogoutView(views.APIView):
     def post(self, request):
         logout(request)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_200_OK)
 
 
 class UserViewSet(viewsets.ModelViewSet):
     http_method_names = ('get', 'put', 'patch', 'options')
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (UserViewSetPermissions,)
     serializer_class = serializers.UserSerializer
     queryset = models.User.objects.all().select_related("profile")
 

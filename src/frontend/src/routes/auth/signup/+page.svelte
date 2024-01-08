@@ -9,16 +9,16 @@
     import BackgroundGrid from "../backgroundGrid.svelte";
     import type { PageData } from "./$types";
     import Form from "$lib/components/forms/form.svelte";
+    import { page } from "$app/stores";
 
-    export let data: PageData;
+    $: nextEndpoint = $page.url.searchParams.get("next");
+
     let username: string;
     let email: string;
     let password: string;
     let password2: string;
 
     let errorMessages: string[] = [];
-
-    $: console.log(data.next);
 
     const handleSignup = async (e: any) => {
         e.preventDefault();
@@ -40,7 +40,7 @@
         if (response.ok) {
             fetchUserData()
                 .then(() => {
-                    goto(data.next ?? "/");
+                    goto(nextEndpoint ?? "/");
                 })
                 .catch((err) => {
                     errorMessages = [err, ...errorMessages];
@@ -68,7 +68,7 @@
             </h2>
             <p class="mt-2 text-center font-monocraft text-sm">
                 Already have an account?
-                <a href="login{data.next ? `?next=${data.next}` : ''}" class="link">Login</a>
+                <a href="login{nextEndpoint ? `?next=${nextEndpoint}` : ''}" class="link">Login</a>
             </p>
         </div>
         <Form class="mt-6" on:submit={handleSignup} {errorMessages}>

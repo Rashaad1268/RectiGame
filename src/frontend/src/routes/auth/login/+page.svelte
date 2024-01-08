@@ -8,9 +8,9 @@
     import Button from "$lib/components/button.svelte";
     import { fetchUserData } from "$lib/utils";
     import BackgroundGrid from "../backgroundGrid.svelte";
-    import type { PageData } from "./$types";
+    import { page } from "$app/stores";
 
-    export let data: PageData;
+    $: nextEndpoint = $page.url.searchParams.get("next");
 
     let email: string;
     let password: string;
@@ -29,7 +29,7 @@
         if (response.ok) {
             fetchUserData()
                 .then(() => {
-                    goto(data.next ?? "/");
+                    goto(nextEndpoint ?? "/");
                 })
                 .catch((err) => {
                     errorMessages = [err, ...errorMessages];
@@ -57,7 +57,7 @@
             </h2>
             <p class="mt-2 text-center font-monocraft text-sm">
                 Don't have an account?
-                <a href="signup{data.next ? `?next=${data.next}` : ''}" class="link">Signup</a>
+                <a href="signup{nextEndpoint ? `?next=${nextEndpoint}` : ''}" class="link">Signup</a>
             </p>
         </div>
         <Form class="mt-6" on:submit={handleLogin} bind:errorMessages>

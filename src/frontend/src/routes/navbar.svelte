@@ -3,10 +3,9 @@
     /*
 	Only use the navbar for some endpoints such as /, /welcome, /auth/login, /auth/signup
 	*/
-    import { userData } from "$lib/stores";
     import ProfileMenu from "./profileMenu.svelte";
 
-    $: isLoggedIn = $userData !== null;
+    export let isLoggedIn: boolean;
     $: homepageUrl = isLoggedIn ? "/" : "/welcome";
 
     $: fromEndpoint = $page.url.searchParams.get("from");
