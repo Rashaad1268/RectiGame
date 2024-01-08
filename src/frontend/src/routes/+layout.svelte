@@ -20,12 +20,10 @@
 
         if (data.isLoggedIn && !$userData) {
             const ws = initWebSocket();
-            // ws.on
             
             ws.addEventListener("open", () => {
                 fetchUserData();
             });
-            console.log("connecting ws", !$userData);
         }
     }
 </script>
