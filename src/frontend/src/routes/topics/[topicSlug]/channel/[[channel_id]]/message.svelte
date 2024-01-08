@@ -1,9 +1,11 @@
 <script lang="ts">
-    import UserProfilePreview from "$lib/components/userProfilePreview.svelte";
+    import { marked } from "marked";
     import type { TopicChatMessageInterface } from "$lib/types";
     import { createPopperActions } from "svelte-popperjs";
     import { fade } from "svelte/transition";
-
+    
+    import UserProfilePreview from "$lib/components/userProfilePreview.svelte";
+  
     const [popperRef, popperContent] = createPopperActions({
         placement: "right",
         strategy: "fixed"
@@ -72,7 +74,7 @@
                     >
                 </div>
             {/if}
-            <span>{message.content} ({message.id})</span>
+            <div class="message-content">{@html marked(message.content)}</div>
         </div>
     {/if}
 </div>
@@ -92,6 +94,10 @@
 
         &:hover {
             @apply bg-discordDark-760;
+        }
+
+        .message-content {
+            @apply prose prose-invert;
         }
     }
 </style>

@@ -5,7 +5,9 @@ const colors = require("tailwindcss/colors");
 module.exports = {
     content: ["./src/**/*.{html,js,svelte,ts}"],
     darkMode: "class",
-    plugins: [],
+    plugins: [
+        require('@tailwindcss/typography'),
+    ],
 
     theme: {
         colors: {
