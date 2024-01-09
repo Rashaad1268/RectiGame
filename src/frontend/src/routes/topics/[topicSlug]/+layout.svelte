@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-    <title>{data.topic.name}</title>
+    <title>Topic • {data.topic.name}</title>
 </svelte:head>
 
 <slot />

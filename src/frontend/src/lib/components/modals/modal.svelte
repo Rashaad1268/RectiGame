@@ -25,7 +25,7 @@
         closeAnimation?.addEventListener("finish", () => dialog?.close());
         closeAnimation?.addEventListener("cancel", () => dialog?.close());
     }
-    
+
     $: {
         if (isOpen) {
             dialog?.showModal();
