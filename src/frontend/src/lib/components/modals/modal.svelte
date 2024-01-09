@@ -25,6 +25,7 @@
         closeAnimation?.addEventListener("finish", () => dialog?.close());
         closeAnimation?.addEventListener("cancel", () => dialog?.close());
     }
+    
     $: {
         if (isOpen) {
             dialog?.showModal();
@@ -36,6 +37,7 @@
 
 <svelte:window on:click={handleClick} />
 
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <dialog
     bind:this={dialog}
     class:open={isOpen}

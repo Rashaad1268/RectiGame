@@ -36,8 +36,8 @@
     {/if}
 
     <main
-        style="--max-h: calc(100vh - var(--navbar-height));
-        height: var(--max-h); max-height: var(--max-h);"
+        style="--max-content-h: calc(100vh - var(--navbar-height));
+        height: var(--max-content-h); max-height: var(--max-content-h);"
         class="w-full overflow-y-auto"
     >
         <slot />
