@@ -9,6 +9,7 @@
     import { fetchUserData } from "$lib/utils";
     import BackgroundGrid from "../backgroundGrid.svelte";
     import { page } from "$app/stores";
+    import { initWebSocket } from "$lib/ws";
 
     $: nextEndpoint = $page.url.searchParams.get("next");
 
@@ -27,13 +28,17 @@
         });
 
         if (response.ok) {
-            fetchUserData()
-                .then(() => {
-                    goto(nextEndpoint ?? "/");
-                })
-                .catch((err) => {
-                    errorMessages = [err, ...errorMessages];
+            try {
+                const ws = initWebSocket();
+
+                ws.addEventListener("open", () => {
+                    fetchUserData().then(() => {
+                        goto(nextEndpoint ?? "/");
+                    });
                 });
+            } catch (err) {
+                errorMessages = [String(err), ...errorMessages];
+            }
         } else {
             errorMessages = formatApiErrors(await response.json());
         }
@@ -57,7 +62,8 @@
             </h2>
             <p class="mt-2 text-center font-monocraft text-sm">
                 Don't have an account?
-                <a href="signup{nextEndpoint ? `?next=${nextEndpoint}` : ''}" class="link">Signup</a>
+                <a href="signup{nextEndpoint ? `?next=${nextEndpoint}` : ''}" class="link">Signup</a
+                >
             </p>
         </div>
         <Form class="mt-6" on:submit={handleLogin} bind:errorMessages>

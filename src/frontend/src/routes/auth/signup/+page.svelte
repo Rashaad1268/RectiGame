@@ -8,6 +8,7 @@
     import BackgroundGrid from "../backgroundGrid.svelte";
     import Form from "$lib/components/forms/form.svelte";
     import { page } from "$app/stores";
+    import { initWebSocket } from "$lib/ws";
 
     $: nextEndpoint = $page.url.searchParams.get("next");
 
@@ -36,13 +37,17 @@
         });
 
         if (response.ok) {
-            fetchUserData()
-                .then(() => {
-                    goto(nextEndpoint ?? "/");
-                })
-                .catch((err) => {
-                    errorMessages = [err, ...errorMessages];
+            try {
+                const ws = initWebSocket();
+
+                ws.addEventListener("open", () => {
+                    fetchUserData().then(() => {
+                        goto(nextEndpoint ?? "/");
+                    });
                 });
+            } catch (err) {
+                errorMessages = [String(err), ...errorMessages];
+            }
         } else {
             errorMessages = formatApiErrors(await response.json());
         }
