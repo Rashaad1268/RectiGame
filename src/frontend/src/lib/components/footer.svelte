@@ -6,7 +6,7 @@
     <div>
         <span class="footer-title">Links</span>
         <a
-            href="https://github.com/Rashaad1268/Gamerz.lk"
+            href="https://github.com/Rashaad1268/RectiGame"
             target="_blank"
             rel="noreferrer"
             class="flex items-center gap-1 link-hover"

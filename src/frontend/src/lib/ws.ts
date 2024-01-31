@@ -1,5 +1,6 @@
-import { messageStore, socket } from "$lib/stores";
-import { get } from "svelte/store";
+import { messageStore, socket, type WS } from "$lib/stores";
+
+let queue: (string | ArrayBufferLike | Blob | ArrayBufferView)[] = [];
 
 export function initWebSocket() {
     let wsUrl = "";
@@ -12,26 +13,38 @@ export function initWebSocket() {
 
     wsUrl += window.location.host + "/api/ws/";
 
-    
-    const websocket = new WebSocket(wsUrl);
-    
+    const websocket = new WebSocket(wsUrl) as WS;
+
+    websocket.sendQueued = (data: string | ArrayBufferLike | Blob | ArrayBufferView) => {
+        if (websocket.readyState === 1) {
+            websocket.send(data);
+        } else {
+            queue.push(data);
+        }
+    };
+
+    websocket.onopen = () => {
+        queue.forEach((data) => websocket.send(data));
+        queue = []
+    }
+
     const reConnect = () => {
-        console.log("Trying to reconnect...")
         if (websocket.readyState !== WebSocket.OPEN) {
             socket.set(null);
-            initWebSocket()
+            initWebSocket();
         }
-    }
+    };
 
     websocket.onclose = () => reConnect();
     websocket.onmessage = handleWsMessage;
 
-    socket.set(websocket);
+    socket.set(websocket as WS);
 
     return websocket;
 }
 
 function handleWsMessage(event: MessageEvent) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const payload: { e: string; d: any } = JSON.parse(event.data);
 
     switch (payload.e) {

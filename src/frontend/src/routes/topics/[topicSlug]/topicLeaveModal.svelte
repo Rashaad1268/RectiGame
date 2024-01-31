@@ -1,6 +1,6 @@
 <script lang="ts">
     import { fetchApi } from "$lib/api";
-    import { joinedTopics } from "$lib/stores/";
+    import { joinedTopics, socket } from "$lib/stores/";
     import { Modal, ModalActions, ModalTitle } from "$lib/components/modals";
     import type { TopicInterface } from "$lib/types";
     import Button from "$lib/components/button.svelte";
@@ -19,6 +19,10 @@
                 joinedTopics.update((topics) => {
                     return topics.filter((t) => t.slug !== topic.slug);
                 });
+
+                $socket?.sendQueued(
+                    JSON.stringify({ a: "UNSUBSCRIBE_FROM_TOPIC", d: { topic_slug: topic.slug } })
+                );
             }
         });
     }

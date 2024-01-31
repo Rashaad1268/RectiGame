@@ -52,7 +52,6 @@ export interface PostInterface {
 
 export interface TopicChatChannelInterface {
     id: number;
-    topic: TopicInterface;
     name: string;
     description: string;
     created_at: string;
@@ -72,6 +71,7 @@ export interface TopicChatMessageInterface {
 // |    Non API related types    |
 // -------------------------------
 export interface ToastInterface {
+    id: string;
     message: string;
     type?: "success" | "error" | "info";
     icon?: string;

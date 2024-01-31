@@ -28,7 +28,7 @@ class UserSerializer(UserCreateSerializer):
 
     class Meta(UserCreateSerializer.Meta):
         fields = ('id', 'username', 'is_staff', 'profile',
-                  'is_online', 'last_online')
+                  'is_online', 'last_online', 'date_joined')
 
 
 class LoginSerializer(serializers.Serializer):

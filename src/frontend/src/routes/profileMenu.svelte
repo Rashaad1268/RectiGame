@@ -1,7 +1,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { fetchApi } from "$lib/api";
-    import { clearUserData, toastStore, userData } from "$lib/stores";
+    import { addToast, clearData, toastStore, userData } from "$lib/stores";
 
     let menuToggleButton: HTMLButtonElement | undefined;
     let userMenuExpanded = false;
@@ -16,14 +16,15 @@
         const response = await fetchApi("auth/logout/", { method: "POST" });
 
         if (response.ok) {
-            clearUserData();
-            toastStore.set({
+            clearData();
+            addToast({
                 message: "Logged Out",
                 delay: 3000
             });
+            console.log("ok");
             goto("/welcome");
         } else {
-            toastStore.set({
+            addToast({
                 message: "Failed to logout",
                 type: "error"
             });

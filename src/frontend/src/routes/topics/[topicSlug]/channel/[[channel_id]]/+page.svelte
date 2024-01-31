@@ -11,34 +11,34 @@
     $: selectedTopicSlug = $page.params.topicSlug as string;
     $: selectedChannelId = $page.params.channel_id;
 
-    $: messages = ($messageStore[channel?.id ?? -1] ?? {}).results;
+    $: messages = ($messageStore[data.channel?.id ?? -1] ?? {}).results;
 
     // Initialize it to undefined to specify that its loading
-    let channel: TopicChatChannelInterface | undefined | null = undefined;
+    // let channel: TopicChatChannelInterface | undefined | null = undefined;
 
     $: {
         if (!selectedChannelId) {
             // This means that the user has not selected a channel to view
-            channel = null;
+            // channel = null;
             break $;
         }
 
         if (selectedTopicSlug && Object.keys($channelStore).length > 0) {
             // channel = null means that the channel is not found
-            channel =
-                ($channelStore[selectedTopicSlug] || []).find(
-                    (channel: TopicChatChannelInterface) =>
-                        channel.id === parseInt(selectedChannelId)
-                ) || null;
+            // channel =
+            //     ($channelStore[selectedTopicSlug] || []).find(
+            //         (channel: TopicChatChannelInterface) =>
+            //             channel.id === parseInt(selectedChannelId)
+            //     ) || null;
         }
     }
 
     $: {
-        if (channel && messages === undefined) {
-            fetchApi(`channels/${channel!.id}/messages/`).then((response) => {
+        if (data.channel && messages === undefined) {
+            fetchApi(`channels/${data.channel!.id}/messages/`).then((response) => {
                 response.json().then((fetchedMessages) => {
                     messageStore.update((msgs) => {
-                        msgs[channel!.id] = fetchedMessages;
+                        msgs[data.channel!.id] = fetchedMessages;
                         return msgs;
                     });
                 });
@@ -49,22 +49,27 @@
     let isFetchingNewMessages = false;
 
     function loadMessages(event: Event) {
-        if (!channel || !messages) {
+        if (!data.channel || !messages) {
             return;
         }
 
         const element = event.target as HTMLDivElement;
 
         if (element.scrollHeight + element.scrollTop < 750) {
-            if (!isFetchingNewMessages && messages.length !== $messageStore[channel!.id].count) {
+            if (
+                !isFetchingNewMessages &&
+                messages.length !== $messageStore[data.channel!.id].count
+            ) {
                 isFetchingNewMessages = true;
                 fetchApi(
-                    `channels/${channel!.id}/messages/?before=${messages[messages.length - 1].id}`
+                    `channels/${data.channel!.id}/messages/?before=${
+                        messages[messages.length - 1].id
+                    }`
                 ).then((response) => {
                     if (response.ok) {
                         response.json().then((data) => {
                             messageStore.update((existingMessages) => {
-                                existingMessages[channel!.id].results?.push(...data.results);
+                                existingMessages[data.channel!.id].results?.push(...data.results);
                                 return existingMessages;
                             });
                             isFetchingNewMessages = false;
@@ -76,7 +81,7 @@
     }
 
     function getIsInlineMsg(idx: number, message: TopicChatMessageInterface): boolean {
-        const msg = ($messageStore[channel!.id]?.results ?? [])[idx + 1];
+        const msg = ($messageStore[data.channel!.id]?.results ?? [])[idx + 1];
 
         if (msg?.author?.id === message?.author.id) {
             const prevMsgCreatedAt = Date.parse(msg.created_at);
@@ -103,8 +108,8 @@
 
         const finalMessageContent = messageContent.trim();
 
-        if (!!channel && finalMessageContent) {
-            const response = await fetchApi(`channels/${channel.id}/messages/`, {
+        if (!!data.channel && finalMessageContent) {
+            const response = await fetchApi(`channels/${data.channel.id}/messages/`, {
                 method: "POST",
                 body: JSON.stringify({ content: finalMessageContent })
             });
@@ -118,9 +123,9 @@
 
 {#if !selectedChannelId}
     <h1 class="text-3xl text-center font-semibold mt-[20dvh]">Select a channel to view</h1>
-{:else if channel === undefined}
+{:else if data.channel === undefined}
     Loading...
-{:else if channel === null}
+{:else if data.channel === null}
     404 channel not found
 {:else}
     <div
@@ -128,7 +133,7 @@
     >
         <div
             class="flex border-b border-discordDark-600 items-center gap-2 text-lg font-medium
-				   pl-8 py-3 mb-auto"
+				   pl-8 py-3"
         >
             <span>
                 {data.topic.name}
@@ -143,7 +148,7 @@
                 /></svg
             >
             <span>
-                {channel.name}
+                {data.channel.name}
             </span>
         </div>
 
@@ -162,6 +167,6 @@
 
 <style lang="scss">
     .channel-messages {
-        @apply overflow-y-scroll p-2 flex flex-col-reverse;
+        @apply overflow-y-auto h-full p-2 flex flex-col-reverse;
     }
 </style>

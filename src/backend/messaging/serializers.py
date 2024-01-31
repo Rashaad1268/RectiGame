@@ -37,3 +37,8 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = ('id', 'type', 'created_at', 'notification_content', 'referenced_message')
+
+
+class WebSocketActionSerializer(serializers.Serializer):
+    a = serializers.CharField()  # a: action
+    d = serializers.JSONField(required=False)  # d: data

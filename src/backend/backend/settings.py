@@ -182,5 +182,5 @@ REST_FRAMEWORK = {
 
 # CORS
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = ['https://*', 'http://192.168.8.198:5173', 'http://localhost:5173']
+CSRF_TRUSTED_ORIGINS = ['https://*', 'http://192.168.8.198:5173', 'http://localhost:5173', 'http://localhost:4173']
 CORS_ALLOWED_ORIGINS = CSRF_TRUSTED_ORIGINS

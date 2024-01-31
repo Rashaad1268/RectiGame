@@ -32,6 +32,7 @@ class User(AbstractUser):
     is_online = models.BooleanField(default=False)
     last_online = models.DateTimeField(auto_now_add=True)
     disabled_until = models.DateTimeField(null=True, blank=True)
+    channel_name = models.CharField(max_length=255, blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ('username',)

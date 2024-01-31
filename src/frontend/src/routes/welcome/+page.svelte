@@ -28,7 +28,7 @@
 </script>
 
 <svelte:head>
-    <title>Welcome to Gamerz.lk</title>
+    <title>Welcome to RectiGame</title>
 </svelte:head>
 
 <!-- Keep this empty element with the faded-in class
@@ -41,11 +41,11 @@ so that the compiler doesn't purge the faded-in class -->
     </div>
 
     <div class="absolute mt-44 text-center">
-        <h1 class="font-gamer nested-green text-4xl lg:text-6xl">
-            <span class="text-5xl lg:text-7xl">G</span>amerz.lk
+        <h1 class="font-cod nested-green text-4xl lg:text-6xl">
+            <span>Recti</span>Game
         </h1>
 
-        <h3 class="lg:text-lg font-cod">The game is on</h3>
+        <h3 class="lg:text-lg font-gamer">The game is on</h3>
 
         <h6 class="nested-green text-lg font-medium mt-6">
             A place for like minded gamers to collaborate and forge their path to <span
@@ -84,16 +84,15 @@ so that the compiler doesn't purge the faded-in class -->
     <div class="content flex items-center justify-around w-full mt-52">
         <img
             width="600px"
-            class=""
             src="/images/welcome-page/screenshot_1.png"
-            alt="A conversation between 2 people in Gamerz.lk"
+            alt="A conversation between 2 people on RectiGame"
         />
 
         <div class="max-w-lg">
             <h1 class="text-4xl font-doodle text-green-500">Collaboration done easy</h1>
             <p>
-                With Gamerz.lk you can find the perfect squad for you. Whether it is basketball,
-                Fortnite or chess that you're playing Gamerz.lk got you covered
+                With RectiGame you can find the perfect squad for you. Whether it is basketball,
+                Fortnite or chess that you're playing RectiGame got you covered
             </p>
         </div>
     </div>
@@ -142,7 +141,7 @@ so that the compiler doesn't purge the faded-in class -->
     }
 
     #tiles-overlay {
-        @apply max-h-full overflow-hidden;
+        @apply max-h-full overflow-hidden max-w-full;
     }
 
     .content {
@@ -150,7 +149,7 @@ so that the compiler doesn't purge the faded-in class -->
         text-wrap: balance;
         transform: translate(0px, 40px);
 
-        transition: opacity ease-in-out 0.5s, transform ease-in-out 0.5s;
+        transition: opacity ease-in-out 0.5s, transform ease-in-out 0.4s;
     }
 
     .element-visible {

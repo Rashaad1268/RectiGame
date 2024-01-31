@@ -31,7 +31,10 @@
 </script>
 
 <nav>
-    <a class="nav-title nested-green" href={homepageUrl}><span class="text-4xl">G</span>amerz.lk</a>
+    <a class="nav-title size-8 flex items-center gap-4" href={homepageUrl}
+        ><img src="/logo.png" alt="Logo" />
+        <h1 class="nested-green" /></a
+    >
 
     <div class="ml-auto">
         {#if isActuallyLoggedIn}
@@ -53,7 +56,7 @@
 
 <style lang="scss">
     nav {
-        @apply flex items-center bg-discordDark-830 z-[10000]
+        @apply flex items-center bg-discordDark-860 z-[10000]
 			 shadow-neutral-800 shadow-sm sticky top-0 px-8
 			   h-[var(--navbar-height)] max-h-[var(--navbar-height)];
     }

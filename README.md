@@ -1,4 +1,4 @@
-# Gamerz.lk
+# Recti Game
 
 at root run `pipenv install`
 
@@ -12,4 +12,4 @@ Apply migrations using `python manage.py migrate`
 
 then `python manage.py runserver`
 
-Backend will be running now.
+Backend will be running now

@@ -5,6 +5,7 @@
     import { channelStore, joinedTopics, userData } from "$lib/stores/";
     import type { TopicChatChannelInterface, TopicInterface } from "$lib/types";
     import ChannelCreateModal from "./channelCreateModal.svelte";
+    import ChannelDeleteModal from "./channelDeleteModal.svelte";
 
     $: selectedTopicSlug = $page.params.topicSlug as string;
 
@@ -14,13 +15,15 @@
 
     let isChannelCreateModalOpen = false;
 
+    let channelToDelete: TopicChatChannelInterface | null = null;
+
     $: {
         if ($joinedTopics.length > 0 && !topic) {
             /*
                 Current date of writing: 2023/12/14 9 PM IST
 
-                I completely forgot what this block of code does...
-                but since I trust past me so much I believe that this code probably has some purpose
+                I have completely forgotten what this block of code does...
+                but since I trust past me so much, I believe that this code probably has some purpose
                 so don't remove this
 
                 - Yours truly
@@ -58,14 +61,27 @@
                             d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"
                         /></svg
                     >
-                    {channel.name}</a
-                >
+                    <span>{channel.name}</span>
+
+                    {#if $userData?.is_staff}
+                        <button
+                            class="channel-delete-btn"
+                            on:click={() => (channelToDelete = channel)}
+                            ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                                ><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path
+                                    d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"
+                                /></svg
+                            ></button
+                        >
+                    {/if}
+                </a>
             {/each}
         </div>
     {/if}
 </div>
 
 <ChannelCreateModal bind:isOpen={isChannelCreateModalOpen} bind:topic />
+<ChannelDeleteModal bind:channelToDelete bind:topic />
 
 <style lang="scss">
     .channel-sidebar {
@@ -81,7 +97,7 @@
 
     .channel-tab {
         @apply flex text-discordDark-360 fill-discordDark-360
-			   pl-6 py-1 rounded-md items-center gap-2;
+			   pl-6 py-1 rounded-md items-center gap-2 overflow-hidden whitespace-nowrap;
 
         &:hover {
             @apply bg-discordDark-660 text-discordDark-300;
@@ -94,6 +110,14 @@
 
         &.selected {
             @apply bg-discordDark-630 text-gray-200;
+        }
+
+        .channel-delete-btn {
+            @apply ml-auto mr-4 opacity-0 size-3 fill-red-500;
+        }
+
+        &:hover > .channel-delete-btn {
+            @apply opacity-100;
         }
     }
 </style>

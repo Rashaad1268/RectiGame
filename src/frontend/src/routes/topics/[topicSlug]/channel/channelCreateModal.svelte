@@ -37,8 +37,6 @@
         });
 
         if (resp.ok) {
-            channelName = "";
-            channelDescription = "";
             isOpen = false;
 
             const newChannel = await resp.json();
@@ -50,6 +48,14 @@
             });
         } else {
             errorMessages = formatApiErrors(await resp.json());
+        }
+    }
+
+    $: {
+        if (!isOpen) {
+            // Clear up the inputs
+            channelName = "";
+            channelDescription = "";
         }
     }
 </script>
@@ -76,10 +82,10 @@
             placeholder="description (optional)"
             bind:value={channelDescription}
         />
-    </Form>
 
-    <ModalActions class="">
-        <Button class="btn-dark" on:click={() => (isOpen = false)}>Cancel</Button>
-        <Button type="submit" class="btn-blue">Create channel</Button>
-    </ModalActions>
+        <ModalActions class="pt-3">
+            <Button class="btn-dark" type="button" on:click={() => (isOpen = false)}>Cancel</Button>
+            <Button type="submit" class="btn-blue">Create channel</Button>
+        </ModalActions>
+    </Form>
 </Modal>

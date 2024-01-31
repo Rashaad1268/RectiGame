@@ -37,6 +37,7 @@
         height: calc(100vh - var(--navbar-height));
         overflow: hidden;
         width: 100vw;
+        max-width: 100%;
         // z-index: -1;
         filter: blur(0.45px);
 
@@ -67,6 +68,7 @@
     #tiles {
         height: 100%;
         width: 100%;
+        max-width: 100%;
 
         position: relative;
 

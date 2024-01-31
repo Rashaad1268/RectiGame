@@ -1,5 +1,6 @@
 import { writable } from "svelte/store";
-import type { PaginatorInterface, ToastInterface, TopicInterface, UserInterface } from "../types";
+import type { PaginatorInterface, TopicInterface, UserInterface } from "../types";
+export { toastStore, addToast, removeToast } from "./toast";
 
 export { topicPosts } from "./posts";
 export { channelStore, messageStore } from "./messages";
@@ -10,11 +11,13 @@ export const topics = writable<PaginatorInterface<TopicInterface> | null>(null);
 
 export const joinedTopics = writable<Array<TopicInterface>>([]);
 
-export const toastStore = writable<ToastInterface | null>(null);
+export interface WS extends WebSocket {
+    sendQueued: (data: string | ArrayBufferLike | Blob | ArrayBufferView) => void;
+}
 
-export const socket = writable<WebSocket | null>(null);
+export const socket = writable<WS | null>(null);
 
-export function clearUserData() {
+export function clearData() {
     userData.set(null);
     joinedTopics.set([]);
     topics.set(null);

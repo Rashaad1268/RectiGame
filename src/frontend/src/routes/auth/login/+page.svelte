@@ -10,6 +10,7 @@
     import BackgroundGrid from "../backgroundGrid.svelte";
     import { page } from "$app/stores";
     import { initWebSocket } from "$lib/ws";
+    import { addToast } from "$lib/stores";
 
     $: nextEndpoint = $page.url.searchParams.get("next");
 
@@ -40,7 +41,13 @@
                 errorMessages = [String(err), ...errorMessages];
             }
         } else {
-            errorMessages = formatApiErrors(await response.json());
+            const responseData = await response.json();
+
+            if (responseData) {
+                errorMessages = formatApiErrors(await response.json());
+            } else {
+                addToast({ message: await response.text(), type: "error", delay: 5000 });
+            }
         }
     };
 </script>

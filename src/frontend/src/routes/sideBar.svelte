@@ -1,9 +1,14 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
+    import { page } from "$app/stores";
     import { joinedTopics } from "$lib/stores/";
     import type { TopicInterface } from "$lib/types";
 
     function visitTopicChat(topic: TopicInterface) {
+        if (topic.slug === $page.params.topicSlug) {
+            return;
+        }
+
         goto(`/topics/${topic.slug}/channel/${!!topic.channels[0] ? topic.channels[0].id : ""}`);
     }
 </script>

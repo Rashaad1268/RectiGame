@@ -1,10 +1,10 @@
 <script lang="ts">
     import Button from "$lib/components/button.svelte";
-    import { toastStore, userData } from "$lib/stores/";
+    import { addToast, userData } from "$lib/stores/";
 </script>
 
 <svelte:head>
-    <title>Home</title>
+    <title>Test Page</title>
 </svelte:head>
 
 <div class="pt-5">
@@ -46,7 +46,7 @@
 <Button
     aria-label="test button"
     on:click={() => {
-        toastStore.set({
+        addToast({
             message: "Hello world",
             type: "error",
             delay: 25000

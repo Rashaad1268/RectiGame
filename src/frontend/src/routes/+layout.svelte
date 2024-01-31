@@ -1,7 +1,7 @@
 <script lang="ts">
     import { browser } from "$app/environment";
     import NavBar from "./navbar.svelte";
-    import Toast from "$lib/components/toast.svelte";
+    import ToastGroup from "$lib/components/toast/toastGroup.svelte";
     import { joinedTopics, userData } from "$lib/stores";
     import type { LayoutData } from "./$types";
     import SideBar from "./sideBar.svelte";
@@ -17,10 +17,9 @@
             break $;
         }
 
-
         if (data.isLoggedIn && !$userData) {
             const ws = initWebSocket();
-            
+
             ws.addEventListener("open", () => {
                 fetchUserData();
             });
@@ -46,4 +45,4 @@
 
 <!-- <Footer /> -->
 
-<Toast />
+<ToastGroup />

@@ -15,7 +15,7 @@
             <h1 class="title">Page not found ¯\_(ツ)_/¯</h1>
             <p>
                 If you were expecting to find something here raise an issue on
-                <a href="https://github.com/Rashaad1268/Gamerz.lk" class="link">GitHub</a>
+                <a href="https://github.com/Rashaad1268/RectiGame" class="link">GitHub</a>
             </p>
         {:else}
             <h1 class="title">Oops...something went wrong</h1>
@@ -33,7 +33,7 @@
             <p class="text-lg">Please try reloading the page.</p>
             <p class="text-lg">
                 If the error persists, please raise an issue on
-                <a href="https://github.com/Rashaad1268/Gamerz.lk">GitHub</a>
+                <a href="https://github.com/Rashaad1268/RectiGame">GitHub</a>
             </p>
         {/if}
     {:else}

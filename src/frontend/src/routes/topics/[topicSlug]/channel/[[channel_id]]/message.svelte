@@ -3,9 +3,9 @@
     import type { TopicChatMessageInterface } from "$lib/types";
     import { createPopperActions } from "svelte-popperjs";
     import { fade } from "svelte/transition";
-    
+
     import UserProfilePreview from "$lib/components/userProfilePreview.svelte";
-  
+
     const [popperRef, popperContent] = createPopperActions({
         placement: "right",
         strategy: "fixed"
@@ -97,7 +97,9 @@
         }
 
         .message-content {
-            @apply prose prose-invert;
+            @apply prose prose-invert
+                   prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl
+                   prose-h4:text-xl prose-h5:text-lg prose-h6:text-sm;
         }
     }
 </style>

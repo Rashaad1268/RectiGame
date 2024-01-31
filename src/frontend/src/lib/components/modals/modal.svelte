@@ -57,8 +57,8 @@
 
 <style lang="scss">
     dialog {
-        @apply p-8 opacity-0 rounded-lg -translate-y-3 bg-discordDark-800 text-white
-			   transition-all duration-200 min-w-[43%] max-w-[60%] select-none;
+        @apply px-7 py-5 opacity-0 rounded-lg -translate-y-3 bg-discordDark-800 text-white
+			   transition-all duration-200 min-w-[35%] max-w-[60%] select-none;
     }
     dialog.open {
         @apply opacity-100 translate-y-0 scale-100;
@@ -68,7 +68,7 @@
 		     bg-discordDark-900; /* The actual color of the backdrop */
     }
     .content {
-        @apply flex flex-col gap-2 h-full w-full;
+        @apply flex flex-col gap-2 h-full w-full min-h-[23dvh];
     }
     dialog.open::backdrop {
         @apply opacity-60;
