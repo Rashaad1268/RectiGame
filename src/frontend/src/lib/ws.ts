@@ -25,8 +25,8 @@ export function initWebSocket() {
 
     websocket.onopen = () => {
         queue.forEach((data) => websocket.send(data));
-        queue = []
-    }
+        queue = [];
+    };
 
     const reConnect = () => {
         if (websocket.readyState !== WebSocket.OPEN) {

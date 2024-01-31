@@ -7,7 +7,10 @@
 
 <div class="flex flex-col gap-2">
     {#each errorMessages as errorMsg (errorMsg)}
-        <Alert class="alert-error shadow-lg first-of-type:mt-5 last-of-type:mb-5" inTransition={slide}>
+        <Alert
+            class="alert-error shadow-lg first-of-type:mt-5 last-of-type:mb-5"
+            inTransition={slide}
+        >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="stroke-current flex-shrink-0 h-6 w-6"

@@ -10,8 +10,8 @@
     export let channelToDelete: TopicChatChannelInterface | null;
 
     async function deleteChannel() {
-        console.log(channelToDelete)
-        console.log(topic)
+        console.log(channelToDelete);
+        console.log(topic);
         if (!channelToDelete || !topic) return;
 
         const response = await fetchApi(`channels/${channelToDelete.id}/`, { method: "DELETE" });
