@@ -3,6 +3,7 @@ import { get } from "svelte/store";
 import type { PageLoad } from "./$types";
 import { channelStore } from "$lib/stores";
 import type { TopicChatChannelInterface } from "$lib/types";
+import { error, type NumericRange } from "@sveltejs/kit";
 
 export const load: PageLoad = async (event) => {
     const topicSlug = event.params.topicSlug;
@@ -21,11 +22,21 @@ export const load: PageLoad = async (event) => {
         if (channel) {
             return { channel: channel };
         } else {
-            console.log("sent req");
-            return { channel: await (await event.fetch(`/api/channels/${channel_id}/`)).json() };
+            const response = await event.fetch(`/api/channels/${channel_id}/`);
+
+            if (response.ok) {
+                return { channel: await response.json() };
+            } else {
+                error(response.status as NumericRange<400, 599>, response.statusText);
+            }
         }
     } else {
-        console.log("sent req");
-        return { channel: await (await event.fetch(`/api/channels/${channel_id}/`)).json() };
+        const response = await event.fetch(`/api/channels/${channel_id}/`);
+
+        if (response.ok) {
+            return { channel: await response.json() };
+        } else {
+            error(response.status as NumericRange<400, 599>, response.statusText);
+        }
     }
 };
