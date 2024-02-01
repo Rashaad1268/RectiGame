@@ -12,14 +12,16 @@ from . import models, serializers
 
 
 def get_full_data(user, request):
-    ctx = {'request': request}
+    ctx = {"request": request}
     return {
-        'user': serializers.UserSerializer(user, context=ctx).data,
-        'joined_topics': TopicSerializer(user.topic_set.all(), many=True, context=ctx).data,
-        'notifications': NotificationSerializer(
-                            models.Notification.objects.filter(user=user).order_by('-id'),
-                            many=True
-                         ).data
+        "user": serializers.UserSerializer(user, context=ctx).data,
+        "joined_topics": {
+            topic.slug: TopicSerializer(topic, context=ctx).data
+            for topic in user.topic_set.all()
+        },
+        "notifications": NotificationSerializer(
+            models.Notification.objects.filter(user=user).order_by("-id"), many=True
+        ).data,
     }
 
 
@@ -33,16 +35,24 @@ class LoginView(views.APIView):
         user = authenticate(request, **login_serializer.data)
 
         if user is None:
-            return Response({'detail': 'Account with the given credentials does not exist'},
-                            status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            return Response(
+                {"detail": "Account with the given credentials does not exist"},
+                status=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            )
 
         if user.disabled_until is not None:
             if user.disabled_until > timezone.now():
-                return Response({'detail': f'Account is disabled until {user.disabled_until.strftime("%Y-%m-%d %H:%M:%S")}'},
-                                status=status.HTTP_403_FORBIDDEN)
+                return Response(
+                    {
+                        "detail": f'Account is disabled until {user.disabled_until.strftime("%Y-%m-%d %H:%M:%S")}'
+                    },
+                    status=status.HTTP_403_FORBIDDEN,
+                )
 
         if not user.is_active:
-            return Response({'detail': 'User is not active'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(
+                {"detail": "User is not active"}, status=status.HTTP_401_UNAUTHORIZED
+            )
 
         login(request, user)
 
@@ -67,12 +77,12 @@ class LogoutView(views.APIView):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    http_method_names = ('get', 'put', 'patch', 'options')
+    http_method_names = ("get", "put", "patch", "options")
     permission_classes = (UserViewSetPermissions,)
     serializer_class = serializers.UserSerializer
     queryset = models.User.objects.all().select_related("profile")
 
-    @action(methods=('GET',), detail=False, url_path='me')
+    @action(methods=("GET",), detail=False, url_path="me")
     def get_current_user_data(self, request):
         return Response(get_full_data(request.user, request))
 

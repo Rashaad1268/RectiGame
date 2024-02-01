@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 import { get } from "svelte/store";
 import type { PageLoad } from "./$types";
-import { channelStore } from "$lib/stores";
+import { joinedTopics } from "$lib/stores";
 import { error, type NumericRange } from "@sveltejs/kit";
 
 export const load: PageLoad = async (event) => {
@@ -14,9 +14,10 @@ export const load: PageLoad = async (event) => {
 
     if (browser) {
         // first check if the channel is cached in the channelStore
-        const channel = (get(channelStore)[topicSlug] || []).find(
-            (channel) => channel.id === parseInt(channel_id)
-        );
+        // const channel = (get(channelStore)[topicSlug] || []).find(
+        //     (channel) => channel.id === parseInt(channel_id)
+        // );
+        const channel = (get(joinedTopics)[topicSlug])?.channels?.find(c => c.id === parseInt(channel_id))
 
         if (channel) {
             return { channel: channel };

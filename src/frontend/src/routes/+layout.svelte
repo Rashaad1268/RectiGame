@@ -8,7 +8,7 @@
     import { initWebSocket } from "$lib/ws";
 
     import "../styles/app.scss";
-    import { fetchUserData } from "$lib/utils";
+    import { fetchUserData, objIsEmpty } from "$lib/utils";
 
     export let data: LayoutData;
 
@@ -30,7 +30,7 @@
 <NavBar isLoggedIn={data.isLoggedIn} />
 
 <div class="flex h-[100%]">
-    {#if $joinedTopics.length > 0}
+    {#if !objIsEmpty($joinedTopics)}
         <SideBar />
     {/if}
 

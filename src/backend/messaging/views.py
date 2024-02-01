@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
 from rest_framework.decorators import action
@@ -7,19 +8,23 @@ from rest_framework import pagination, status
 from backend.viewsets import CustomViewSet
 
 from .models import TopicChatMessage, TopicChatChannel
-from .serializers import (TopicChatMessageSerializer,
-                          TopicChatMessageCreateSerializer,
-                          TopicChatChannelSerializer,
-                          TopicChatChannelCreateSerializer)
+from .serializers import (
+    TopicChatMessageSerializer,
+    TopicChatMessageCreateSerializer,
+    TopicChatChannelSerializer,
+    TopicChatChannelCreateSerializer,
+)
 from . import permissions
 
 
 class TopicChatChannelViewSet(CustomViewSet):
     queryset = TopicChatChannel.objects.all()
     create_or_update_serializer = TopicChatChannelCreateSerializer
-    fetch_serializer  = TopicChatChannelSerializer
+    fetch_serializer = TopicChatChannelSerializer
     permission_classes = (permissions.TopicChatChannelViewSetPermissions,)
 
+    def list(self, request, *args, **kwargs):
+        raise Http404()
 
 
 class MessagePaginator(pagination.BasePagination):
@@ -30,15 +35,12 @@ class MessagePaginator(pagination.BasePagination):
         # Get the total count
         self.count = queryset.count()
 
-        return list(queryset[:self.page_size])
+        return list(queryset[: self.page_size])
 
     def get_paginated_response(self, data):
         # We don't need `previous` and `next` links
         # since we have the `before` url parameter
-        return Response({
-            "count": self.count,
-            "results": data
-        })
+        return Response({"count": self.count, "results": data})
 
 
 class ChatMessageFilter(filters.FilterSet):
@@ -58,15 +60,18 @@ class TopicChatMessageViewSet(CustomViewSet):
     filterset_class = ChatMessageFilter
     pagination_class = MessagePaginator
 
-    def filter_queryset(self, queryset):
-        return super().filter_queryset(queryset)
-
     def get_queryset(self):
         return TopicChatMessage.objects.filter(
-                channel__id=int(self.kwargs["channel_pk"])).order_by('-id')
+            channel__id=int(self.kwargs["channel_pk"])
+        ).order_by("-id")
 
     def perform_create(self, serializer):
-        return serializer.save(author=self.request.user, channel=get_object_or_404(TopicChatChannel, id=int(self.kwargs["channel_pk"])))
+        return serializer.save(
+            author=self.request.user,
+            channel=get_object_or_404(
+                TopicChatChannel, id=int(self.kwargs["channel_pk"])
+            ),
+        )
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

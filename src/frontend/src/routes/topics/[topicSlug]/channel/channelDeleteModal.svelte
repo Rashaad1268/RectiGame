@@ -1,29 +1,35 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
+    import { page } from "$app/stores";
     import { fetchApi } from "$lib/api";
     import Button from "$lib/components/button.svelte";
     import { ModalActions } from "$lib/components/modals";
     import Modal from "$lib/components/modals/modal.svelte";
-    import { addToast, channelStore } from "$lib/stores";
+    import { addToast, joinedTopics } from "$lib/stores";
     import type { TopicChatChannelInterface, TopicInterface } from "$lib/types";
 
     export let topic: TopicInterface | undefined;
     export let channelToDelete: TopicChatChannelInterface | null;
 
     async function deleteChannel() {
-        console.log(channelToDelete);
-        console.log(topic);
         if (!channelToDelete || !topic) return;
 
         const response = await fetchApi(`channels/${channelToDelete.id}/`, { method: "DELETE" });
 
         if (response.ok) {
-            channelStore.update((channels) => {
-                channels[topic!.slug] = channels[topic!.slug]!.filter(
-                    (c) => c.id !== channelToDelete!.id
+            joinedTopics.update((topics) => {
+                topics[topic!.slug].channels = topics[topic!.slug]!.channels.filter(
+                    (channel) => channel.id !== channelToDelete!.id
                 );
 
-                return channels;
+                return topics;
             });
+
+            if (parseInt($page.params.channel_id) === channelToDelete.id) {
+                // Redirect the user if he is currently viewing that channel
+                goto(`/topics/${topic.slug}/channel/`)
+            }
+
             channelToDelete = null;
         } else {
             addToast({

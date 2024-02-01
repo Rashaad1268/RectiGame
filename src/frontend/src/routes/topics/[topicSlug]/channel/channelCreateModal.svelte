@@ -6,10 +6,10 @@
     import TextField from "$lib/components/forms/textField.svelte";
     import { Modal, ModalActions } from "$lib/components/modals";
     import type { TopicInterface } from "$lib/types";
-    import { channelStore } from "$lib/stores/";
+    import { joinedTopics } from "$lib/stores/";
 
     export let isOpen: boolean;
-    export let topic: TopicInterface;
+    export let topic: TopicInterface | undefined;
 
     export let channelName = "";
     export let channelDescription = "";
@@ -41,10 +41,10 @@
 
             const newChannel = await resp.json();
 
-            channelStore.update((channels) => {
-                channels[topic.slug] = [...(channels[topic.slug] || []), newChannel];
+            joinedTopics.update((topics) => {
+                topics[topic!.slug].channels = [...topics[topic!.slug].channels, newChannel];
 
-                return channels;
+                return topics;
             });
         } else {
             errorMessages = formatApiErrors(await resp.json());

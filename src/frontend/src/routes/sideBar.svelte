@@ -11,6 +11,8 @@
 
         goto(`/topics/${topic.slug}/channel/${!!topic.channels[0] ? topic.channels[0].id : ""}`);
     }
+
+    $: console.log('mavs', Object.values($joinedTopics))
 </script>
 
 <div class="sidebar">
@@ -31,7 +33,7 @@
     <!-- Divider -->
     <div class="min-h-[1px] w-9 my-[6px] bg-discordDark-460 rounded-full" />
 
-    {#each $joinedTopics as topic (topic.slug)}
+    {#each Object.values($joinedTopics) as topic (topic.slug)}
         <button on:click={() => visitTopicChat(topic)} class="sidebar-icon">
             <div>
                 <img

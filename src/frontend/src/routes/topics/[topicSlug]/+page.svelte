@@ -1,7 +1,7 @@
 <script lang="ts">
     import { fetchApi } from "$lib/api";
     import Button from "$lib/components/button.svelte";
-    import { channelStore, joinedTopics, socket } from "$lib/stores/";
+    import { joinedTopics, socket } from "$lib/stores/";
     import type { TopicInterface } from "$lib/types";
     import type { PageData } from "./$types";
     import CreatePostModal from "./createPostModal.svelte";
@@ -32,12 +32,6 @@
                     topic.is_member = true;
                     joinedTopics.update((topics: TopicInterface[]) => {
                         return [...topics, topic];
-                    });
-
-                    // Update the channels cache when the user joins a topic
-                    channelStore.update((channels) => {
-                        channels[topic.slug] = topic.channels;
-                        return channels;
                     });
 
                     $socket?.sendQueued(

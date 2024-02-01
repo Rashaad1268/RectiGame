@@ -2,24 +2,27 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import Button from "$lib/components/button.svelte";
-    import { addToast, channelStore, joinedTopics, userData } from "$lib/stores/";
+    import { addToast, joinedTopics, userData } from "$lib/stores/";
     import type { TopicChatChannelInterface, TopicInterface } from "$lib/types";
+    import { objIsEmpty } from "$lib/utils";
     import ChannelCreateModal from "./channelCreateModal.svelte";
     import ChannelDeleteModal from "./channelDeleteModal.svelte";
 
-    $: selectedTopicSlug = $page.params.topicSlug as string;
+    $: selectedTopicSlug = $page.params.topicSlug;
 
-    // Get the topic from the cache
-    $: topic = $joinedTopics.find((topic) => topic.slug === selectedTopicSlug) as TopicInterface;
+    // Get the topic from the joinedTopics cache
+    $: topic = $joinedTopics[selectedTopicSlug] as TopicInterface | undefined;
 
-    $: channels = $channelStore[selectedTopicSlug] as Array<TopicChatChannelInterface>;
+    // In the initial load, the user data is still being fetched so the joinedTopics cache could be empty
+    // in that case just set the channels to an empty array so nothing renders
+    $: channels = topic?.channels || [];
 
     let isChannelCreateModalOpen = false;
 
     let channelToDelete: TopicChatChannelInterface | null = null;
 
     $: {
-        if ($joinedTopics.length > 0 && !topic) {
+        if (!objIsEmpty($joinedTopics) && !topic) {
             /*
                 This means that the user is trying to view the chat of a topic which
                 they have not joined.
