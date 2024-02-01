@@ -1,7 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { fetchApi, formatApiErrors } from "$lib/api";
-    import Alert from "$lib/components/alert.svelte";
     import Button from "$lib/components/button.svelte";
     import { TextField } from "$lib/components/forms";
     import { fetchUserData } from "$lib/utils";

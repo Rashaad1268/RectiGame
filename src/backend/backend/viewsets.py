@@ -29,7 +29,8 @@ class CustomViewSet(viewsets.ModelViewSet):
         instance = self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(
-            self.fetch_serializer(instance, context={"request": request}).data,
+            self.fetch_serializer(instance,
+                                  context=self.get_serializer_context()).data,
             status=status.HTTP_201_CREATED,
             headers=headers,
         )
@@ -47,7 +48,8 @@ class CustomViewSet(viewsets.ModelViewSet):
             instance._prefetched_objects_cache = {}
 
         return Response(
-            self.fetch_serializer(instance, context={"request": request}).data
+            self.fetch_serializer(instance,
+                                  context=self.get_serializer_context()).data
         )
 
     def perform_create(self, serializer):

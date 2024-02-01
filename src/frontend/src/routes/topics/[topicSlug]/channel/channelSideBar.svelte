@@ -2,13 +2,14 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import Button from "$lib/components/button.svelte";
-    import { channelStore, joinedTopics, userData } from "$lib/stores/";
+    import { addToast, channelStore, joinedTopics, userData } from "$lib/stores/";
     import type { TopicChatChannelInterface, TopicInterface } from "$lib/types";
     import ChannelCreateModal from "./channelCreateModal.svelte";
     import ChannelDeleteModal from "./channelDeleteModal.svelte";
 
     $: selectedTopicSlug = $page.params.topicSlug as string;
 
+    // Get the topic from the cache
     $: topic = $joinedTopics.find((topic) => topic.slug === selectedTopicSlug) as TopicInterface;
 
     $: channels = $channelStore[selectedTopicSlug] as Array<TopicChatChannelInterface>;
@@ -20,15 +21,15 @@
     $: {
         if ($joinedTopics.length > 0 && !topic) {
             /*
-                Current date of writing: 2023/12/14 9 PM IST
+                This means that the user is trying to view the chat of a topic which
+                they have not joined.
 
-                I have completely forgotten what this block of code does...
-                but since I trust past me so much, I believe that this code probably has some purpose
-                so don't remove this
-
-                - Yours truly
+                Currently, we don't allow users to view channels without joining the topic
+                but in the future it might be possible to add the feature of viewing the channels
+                in a read-only mode
             */
             goto(`/topics/${selectedTopicSlug}`);
+            addToast({delay: 10000, message: "You have to join a topic in order to view its chat" })
         }
     }
 </script>

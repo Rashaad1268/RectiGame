@@ -42,5 +42,5 @@ class TopicSerializer(TopicCreateSerializer):
         return False
 
     class Meta(TopicCreateSerializer.Meta):
-        fields = ('name', 'slug', 'description', 'image', 'banner',
+        fields = ('name', 'slug', 'description', 'icon', 'image', 'banner',
                   'created_at', 'tags', 'member_count', 'is_member', 'channels')

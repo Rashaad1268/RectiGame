@@ -24,14 +24,13 @@ class TopicTagViewSet(CustomViewSet):
     fetch_serializer = serializers.TopicTagSerializer
 
 
-class TopicViewSet(CustomViewSet):
-    permission_classes = (permissions.DjangoModelPermissionsOrAnonReadOnly,)
+class TopicViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (permissions.AllowAny,)
     queryset = Topic.objects.all().order_by('?')
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('name', 'slug', 'tags')
     pagination_class = Paginator
-    create_or_update_serializer = serializers.TopicCreateSerializer
-    fetch_serializer = serializers.TopicSerializer
+    serializer_class = serializers.TopicSerializer
 
     @action(detail=True, methods=['post'], url_path='join', permission_classes=(permissions.IsAuthenticated,))
     def join_topic(self, request, pk):

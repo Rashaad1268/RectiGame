@@ -29,7 +29,7 @@
             @apply w-full transition-transform rounded-sm;
 
             .topic-card:hover > & {
-                @apply translate-x-[6px] -translate-y-2;
+                @apply translate-x-[6px] -translate-y-[6px];
             }
         }
     }

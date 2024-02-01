@@ -1,24 +1,31 @@
 import { get } from "svelte/store";
-import { error } from "@sveltejs/kit";
+import { error, type NumericRange } from "@sveltejs/kit";
 import type { LayoutLoad } from "./$types";
 import { topics } from "$lib/stores/";
+import { browser } from "$app/environment";
 
 export const load: LayoutLoad = async function ({ fetch, params }) {
-    // Check if the topic data is already cached in the topics store
-    const cached_topic = get(topics)?.results.filter((topic) => topic.slug === params.topicSlug)[0];
+    if (browser) {
+        // Check if the topic data is already cached in the topics store
+        const cachedTopic = get(topics)?.results.filter(
+            (topic) => topic.slug === params.topicSlug
+        )[0];
 
-    if (cached_topic) {
-        return {
-            topic: cached_topic
-        };
+        // if it already exists in the cache, return it
+        if (cachedTopic) {
+            return {
+                topic: cachedTopic
+            };
+        }
     }
 
     const response = await fetch(`/api/topics/${params.topicSlug}/`);
+
     if (response.ok) {
         return {
             topic: await response.json()
         };
     } else {
-        error(response.status, response.statusText);
+        error(response.status as NumericRange<400, 599>, response.statusText);
     }
 };

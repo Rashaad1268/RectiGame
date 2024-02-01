@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -65,11 +66,12 @@ class TopicChatMessageViewSet(CustomViewSet):
                 channel__id=int(self.kwargs["channel_pk"])).order_by('-id')
 
     def perform_create(self, serializer):
-        return serializer.save(author=self.request.user, channel_id=int(self.kwargs["channel_pk"]))
+        return serializer.save(author=self.request.user, channel=get_object_or_404(TopicChatChannel, id=int(self.kwargs["channel_pk"])))
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
+        # No need to return anything from this endpoint
         return Response(status=status.HTTP_201_CREATED)

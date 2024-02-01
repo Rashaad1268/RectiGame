@@ -5,7 +5,7 @@
     import type { TopicInterface } from "$lib/types";
 
     function visitTopicChat(topic: TopicInterface) {
-        if (topic.slug === $page.params.topicSlug) {
+        if (topic.slug === $page.params.topicSlug && $page.url.pathname.includes("channel")) {
             return;
         }
 
@@ -29,13 +29,13 @@
     </a>
 
     <!-- Divider -->
-    <div class="h-[1px] w-9 my-[6px] bg-discordDark-460 rounded-full" />
+    <div class="min-h-[1px] w-9 my-[6px] bg-discordDark-460 rounded-full" />
 
     {#each $joinedTopics as topic (topic.slug)}
         <button on:click={() => visitTopicChat(topic)} class="sidebar-icon">
             <div>
                 <img
-                    src={topic.image}
+                    src={topic.icon ?? topic.image}
                     draggable="false"
                     alt={topic.name}
                     loading="lazy"
@@ -51,8 +51,8 @@
 
 <style lang="scss">
     .sidebar {
-        @apply sticky left-0 bottom-0 top-16 flex flex-col items-center gap-2 grow-0
-			  bg-discordDark-860 overflow-y-scroll pt-4 px-4;
+        @apply sticky left-0 top-16 flex flex-col items-center gap-2 grow-0
+			  bg-discordDark-860 overflow-y-auto pt-4 px-4 pb-20;
 
         // Remove the scrollbar
         -ms-overflow-style: none; /* IE and Edge */
@@ -87,7 +87,7 @@
     .sidebar-tooltip {
         @apply absolute w-auto p-2 m-2 min-w-max left-16 rounded-md shadow-md
 			 text-white bg-discordDark-900 text-xs font-semibold
-			   transition-all duration-100 scale-0 origin-left;
+			   transition-all duration-100 scale-0 origin-left z-50;
 
         .sidebar-icon:hover > & {
             // Scale the tooltip up when the icon is hovered

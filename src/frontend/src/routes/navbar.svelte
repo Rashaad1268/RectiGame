@@ -56,7 +56,7 @@
 
 <style lang="scss">
     nav {
-        @apply flex items-center bg-discordDark-860 z-[10000]
+        @apply flex items-center bg-discordDark-830 z-[10000]
 			 shadow-neutral-800 shadow-sm sticky top-0 px-8
 			   h-[var(--navbar-height)] max-h-[var(--navbar-height)];
     }

@@ -28,6 +28,7 @@ export interface TopicInterface {
     slug: string;
     description: string;
     image: string;
+    icon: string;
     created_at: string;
     banner: string | null;
     tags: Array<TopicTagInterface>;

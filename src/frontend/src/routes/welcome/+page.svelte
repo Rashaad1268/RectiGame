@@ -92,7 +92,7 @@ so that the compiler doesn't purge the faded-in class -->
             <h1 class="text-4xl font-doodle text-green-500">Collaboration done easy</h1>
             <p>
                 With RectiGame you can find the perfect squad for you. Whether it is basketball,
-                Fortnite or chess that you're playing RectiGame got you covered
+                Fortnite or chess that you're playing, RectiGame got you covered
             </p>
         </div>
     </div>

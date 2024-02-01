@@ -1,37 +1,15 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import { fetchApi } from "$lib/api.js";
-    import { channelStore, messageStore, socket } from "$lib/stores/";
+    import { messageStore } from "$lib/stores/";
     import Message from "./message.svelte";
-    import type { TopicChatChannelInterface, TopicChatMessageInterface } from "$lib/types";
+    import type { TopicChatMessageInterface } from "$lib/types";
     import MessageInput from "./messageInput.svelte";
 
     export let data;
 
-    $: selectedTopicSlug = $page.params.topicSlug as string;
     $: selectedChannelId = $page.params.channel_id;
-
     $: messages = ($messageStore[data.channel?.id ?? -1] ?? {}).results;
-
-    // Initialize it to undefined to specify that its loading
-    // let channel: TopicChatChannelInterface | undefined | null = undefined;
-
-    $: {
-        if (!selectedChannelId) {
-            // This means that the user has not selected a channel to view
-            // channel = null;
-            break $;
-        }
-
-        if (selectedTopicSlug && Object.keys($channelStore).length > 0) {
-            // channel = null means that the channel is not found
-            // channel =
-            //     ($channelStore[selectedTopicSlug] || []).find(
-            //         (channel: TopicChatChannelInterface) =>
-            //             channel.id === parseInt(selectedChannelId)
-            //     ) || null;
-        }
-    }
 
     $: {
         if (data.channel && messages === undefined) {

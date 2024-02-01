@@ -10,8 +10,8 @@ from messaging.models import TopicChatMessage
 class UsernameValidator(UnicodeUsernameValidator):
     regex = r'^[\w.@+\- ]+$'
     message = _(
-    'Enter a valid username. This value may contain only letters, '
-    'numbers, whitespace, and @/./+/-/_ characters.'
+      'Enter a valid username. This value may contain only letters, '
+      'numbers, whitespace, and @/./+/-/_ characters.'
     )
 
 
