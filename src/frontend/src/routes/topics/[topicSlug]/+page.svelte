@@ -3,6 +3,7 @@
     import Button from "$lib/components/button.svelte";
     import { joinedTopics, socket } from "$lib/stores/";
     import type { TopicInterface } from "$lib/types";
+    import { trimText } from "$lib/utils";
     import type { PageData } from "./$types";
     import CreatePostModal from "./createPostModal.svelte";
     import TopicLeaveModal from "./topicLeaveModal.svelte";
@@ -30,8 +31,10 @@
             }).then((response) => {
                 if (response.ok) {
                     topic.is_member = true;
-                    joinedTopics.update((topics: TopicInterface[]) => {
-                        return [...topics, topic];
+                    joinedTopics.update((topics) => {
+                        topics[topic.slug] = topic;
+
+                        return topics;
                     });
 
                     $socket?.sendQueued(
@@ -55,26 +58,35 @@
         />
 
         <div>
-            <div class="flex items-center">
-                <div>
-                    <h1 class="text-3xl">
+            <div>
+                <div class="flex items-center">
+                    <h1 class="text-2xl">
                         {topic.name}
                     </h1>
+
+                    <Button
+                        aria-label="leave topic button"
+                        on:click={handleTopicJoin}
+                        class="{topic.is_member ? 'btn-destructive' : ''} btn-sm ml-5"
+                    >
+                        {topic.is_member ? "Leave Topic" : "Join Topic"}
+                    </Button>
+                </div>
+
+                <div class="flex items-center gap-3 mt-1">
                     <h6 class="text-[0.9rem] text-discordDark-300 leading-[0.5rem] ml-[3px]">
                         t/{topic.slug}
                     </h6>
+                    <span>•</span>
+                    <div class="flex items-center gap-1">
+                        {#each topic.tags as tag (tag.slug)}
+                            <span class="topic-tag">{tag.name}</span>
+                        {/each}
+                    </div>
                 </div>
-
-                <Button
-                    aria-label="leave topic button"
-                    on:click={handleTopicJoin}
-                    class="{topic.is_member ? 'btn-destructive' : ''} ml-5"
-                >
-                    {topic.is_member ? "Leave Topic" : "Join Topic"}
-                </Button>
             </div>
 
-            <p class="mt-3">{topic.description}</p>
+            <p class="mt-3">{trimText(topic.description, 100)}</p>
             <div class="mt-3 flex gap-5 items-center">
                 {#if topic.is_member}
                     <Button
@@ -98,3 +110,10 @@
 <TopicLeaveModal bind:isModalOpen={isLeavingModalOpen} bind:topic />
 
 <CreatePostModal bind:isModalOpen={isCreatePostModelOpen} bind:topic />
+
+<style lang="postcss">
+    .topic-tag {
+        @apply inline-block bg-zinc-700 rounded-full font-semibold
+               px-[6px] py-[1px] text-[10px] text-nowrap;
+    }
+</style>

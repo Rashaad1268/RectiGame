@@ -16,7 +16,7 @@
     </div>
     <div class="post-tags">
         {#each topic.tags as tag (tag.slug)}
-            <a href="/topics/tag/{tag.slug}">{tag.name}</a>
+            <span class="topic-tag">{tag.name}</span>
         {/each}
     </div>
 </a>
@@ -37,9 +37,9 @@
     .post-tags {
         @apply hidden md:flex overflow-hidden gap-1 px-1 mt-[2px];
 
-        a {
+        .topic-tag {
             @apply inline-block bg-zinc-700 rounded-full font-semibold
-				   px-[6px] py-[1px] text-[10px];
+				   px-[6px] py-[1px] text-[10px] text-nowrap;
         }
     }
 </style>

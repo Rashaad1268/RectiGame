@@ -5,7 +5,7 @@
     import Button from "$lib/components/button.svelte";
     import { ModalActions } from "$lib/components/modals";
     import Modal from "$lib/components/modals/modal.svelte";
-    import { addToast, joinedTopics } from "$lib/stores";
+    import { addToast, joinedTopics, messageStore } from "$lib/stores";
     import type { TopicChatChannelInterface, TopicInterface } from "$lib/types";
 
     export let topic: TopicInterface | undefined;
@@ -24,6 +24,13 @@
 
                 return topics;
             });
+
+            messageStore.update((msgs) => {
+                console.log(msgs[channelToDelete!.id])
+                delete msgs[channelToDelete!.id]
+                return msgs;
+            })
+            console.log($messageStore[channelToDelete!.id])
 
             if (parseInt($page.params.channel_id) === channelToDelete.id) {
                 // Redirect the user if he is currently viewing that channel

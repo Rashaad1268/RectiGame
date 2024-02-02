@@ -17,7 +17,8 @@
             if (response.ok) {
                 topic.is_member = false;
                 joinedTopics.update((topics) => {
-                    return topics.filter((t) => t.slug !== topic.slug);
+                    delete topics[topic.slug];
+                    return topics;
                 });
 
                 $socket?.sendQueued(

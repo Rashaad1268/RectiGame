@@ -22,7 +22,7 @@ class CustomUserAdmin(UserAdmin):
                 ),
             },
         ),
-        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined', 'last_online')}),
         (_('Custom'), {'fields': ('is_online', 'disabled_until')}),
     )
     list_display = ('username', 'email', 'is_online', 'is_staff')

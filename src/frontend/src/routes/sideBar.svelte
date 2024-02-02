@@ -11,8 +11,6 @@
 
         goto(`/topics/${topic.slug}/channel/${!!topic.channels[0] ? topic.channels[0].id : ""}`);
     }
-
-    $: console.log('mavs', Object.values($joinedTopics))
 </script>
 
 <div class="sidebar">

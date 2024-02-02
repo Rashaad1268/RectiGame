@@ -5,8 +5,9 @@
     import Message from "./message.svelte";
     import type { TopicChatMessageInterface } from "$lib/types";
     import MessageInput from "./messageInput.svelte";
+    import type { PageData } from "./$types";
 
-    export let data;
+    export let data: PageData;
 
     $: selectedChannelId = $page.params.channel_id;
     $: messages = ($messageStore[data.channel?.id ?? -1] ?? {}).results;
@@ -16,7 +17,10 @@
             fetchApi(`channels/${data.channel!.id}/messages/`).then((response) => {
                 response.json().then((fetchedMessages) => {
                     messageStore.update((msgs) => {
-                        msgs[data.channel!.id] = fetchedMessages;
+                        if (data.channel?.id) {
+                            // data.channel can be undefined when the channel is deleted
+                            msgs[data.channel.id] = fetchedMessages;
+                        }
                         return msgs;
                     });
                 });
