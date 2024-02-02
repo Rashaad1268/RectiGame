@@ -30,9 +30,7 @@
 <NavBar isLoggedIn={data.isLoggedIn} />
 
 <div class="flex h-[100%]">
-    {#if !objIsEmpty($joinedTopics)}
-        <SideBar />
-    {/if}
+    <SideBar />
 
     <main
         style="--max-content-h: calc(100vh - var(--navbar-height));
