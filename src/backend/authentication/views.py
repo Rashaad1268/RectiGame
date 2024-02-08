@@ -11,20 +11,6 @@ from .permissions import UserViewSetPermissions
 from . import models, serializers
 
 
-def get_full_data(user, request):
-    ctx = {"request": request}
-    return {
-        "user": serializers.UserSerializer(user, context=ctx).data,
-        "joined_topics": {
-            topic.slug: TopicSerializer(topic, context=ctx).data
-            for topic in user.topic_set.all()
-        },
-        "notifications": NotificationSerializer(
-            models.Notification.objects.filter(user=user).order_by("-id"), many=True
-        ).data,
-    }
-
-
 class LoginView(views.APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -84,7 +70,22 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(methods=("GET",), detail=False, url_path="me")
     def get_current_user_data(self, request):
-        return Response(get_full_data(request.user, request))
+        ctx = self.get_serializer_context()
+        return Response(
+            {
+                "user": serializers.UserSerializer(request.user, context=ctx).data,
+                "joined_topics": {
+                    topic.slug: TopicSerializer(topic, context=ctx).data
+                    for topic in request.user.topic_set.all()
+                },
+                "notifications": NotificationSerializer(
+                    models.Notification.objects.filter(user=request.user).order_by(
+                        "-id"
+                    ),
+                    many=True,
+                ).data,
+            }
+        )
 
     def list(self, request):
         raise Http404()

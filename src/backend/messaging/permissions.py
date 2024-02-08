@@ -4,8 +4,8 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, SAFE_METHODS
 
 class TopicChatChannelViewSetPermissions(IsAuthenticatedOrReadOnly):
     def has_permission(self, request, view):
-        if view.action in SAFE_METHODS:
-                return True
+        if request.method in SAFE_METHODS:
+            return True
 
         # Only staff members can modify topic channels
         return request.user.is_staff

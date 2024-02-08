@@ -23,7 +23,7 @@ class Topic(models.Model):
     slug = models.CharField(max_length=50, blank=True, primary_key=True)
     description = models.TextField(max_length=1000)
     image = models.ImageField(upload_to='topic/images')
-    icon = models.ImageField(upload_to='topic/images', null=True, blank=True)
+    icon = models.ImageField(upload_to='topic/icons', null=True, blank=True)
     banner = models.ImageField(upload_to='topic/banners',
                                null=True, blank=True)
     tags = models.ManyToManyField(TopicTag, blank=True)
