@@ -13,3 +13,8 @@ class TopicChatChannelAdmin(admin.ModelAdmin):
 @admin.register(models.TopicChatMessage)
 class TopicChatMessageAdmin(admin.ModelAdmin):
     list_display = ('author', 'created_at')
+
+
+@admin.register(models.TopicRoom)
+class TopicRoomAdmin(admin.ModelAdmin):
+    list_display = ('name', 'created_at')

@@ -14,6 +14,7 @@
         </div>
     {:else}
         <h1 class="text-center text-xl font-semibold">Hello {$userData?.username}</h1>
+
         <ul class="text-center text-lg">
             <li><a href="/topics" class="link link-hover">View topics</a></li>
         </ul>

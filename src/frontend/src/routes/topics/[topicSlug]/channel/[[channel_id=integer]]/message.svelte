@@ -2,9 +2,7 @@
     import { marked } from "marked";
     import type { TopicChatMessageInterface } from "$lib/types";
     import { createPopperActions } from "svelte-popperjs";
-    import { fade } from "svelte/transition";
-
-    import UserProfilePreview from "$lib/components/userProfilePreview.svelte";
+    import UserProfilePopup from "./userProfilePopup.svelte";
 
     const [popperRef, popperContent] = createPopperActions({
         placement: "right",
@@ -19,25 +17,22 @@
 
     const timeFormatter = new Intl.DateTimeFormat("en");
 
-    let showUserProfilePreview = false;
+    let showUserProfilePopup = false;
 </script>
 
-{#if showUserProfilePreview}
-    <div class="bg-discordDark-860" use:popperContent={extraOpts} in:fade|global>
-        My tooltip
-        <div id="arrow" data-popper-arrow />
-        <UserProfilePreview user={message.author} />
+{#if showUserProfilePopup}
+    <div class="w-32" use:popperContent={extraOpts} on:click>
+        <UserProfilePopup user={message.author} />
     </div>
 {/if}
 
 <div class="message" class:inline-msg={isInline}>
     {#if !!message.author}
-        <!-- {@debug isInline} -->
         <div class="profile-picture-wrapper">
             {#if !isInline}
                 <button
                     use:popperRef
-                    on:click={() => (showUserProfilePreview = !showUserProfilePreview)}
+                    on:click={() => (showUserProfilePopup = !showUserProfilePopup)}
                 >
                     {#if !message.author.profile.profile_picture}
                         <div class="bg-discordDark-600 flex items-center justify-center">
@@ -56,7 +51,12 @@
         <div class="flex flex-col">
             {#if !isInline}
                 <div class="flex items-center">
-                    <span class="font-semibold">{message.author.username}</span>
+                    <button
+                        use:popperRef
+                        on:click={() => (showUserProfilePopup = !showUserProfilePopup)}
+                    >
+                        <span class="font-semibold">{message.author.username}</span>
+                    </button>
 
                     {#if message.author.is_staff}
                         <svg

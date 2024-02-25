@@ -1,47 +1,26 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
-    import { fetchApi } from "$lib/api";
-    import { addToast, clearData, toastStore, userData } from "$lib/stores";
+    import { userData } from "$lib/stores";
+    import UserProfileModal from "./userProfileModal.svelte";
 
-    let menuToggleButton: HTMLButtonElement | undefined;
-    let userMenuExpanded = false;
-
-    function handleMouseDown(e: Event) {
-        if (!menuToggleButton?.contains(e.target as HTMLElement)) {
-            userMenuExpanded = false;
-        }
-    }
-
-    async function logoutUser() {
-        const response = await fetchApi("auth/logout/", { method: "POST" });
-
-        if (response.ok) {
-            clearData();
-            addToast({
-                message: "Logged Out",
-                delay: 3000
-            });
-            console.log("ok");
-            goto("/welcome");
-        } else {
-            addToast({
-                message: "Failed to logout",
-                type: "error"
-            });
-        }
-    }
+    $: isLoggedIn = !!$userData;
+    let isUserProfileModalOpen = false;
 </script>
 
-<svelte:window on:mouseup={handleMouseDown} />
+<UserProfileModal bind:isOpen={isUserProfileModalOpen} />
 
 <button
     aria-label="profile menu button"
     class="profile-btn"
-    on:click={() => (userMenuExpanded = !userMenuExpanded)}
-    bind:this={menuToggleButton}
+    on:click={() => {
+        if (isLoggedIn) isUserProfileModalOpen = !isUserProfileModalOpen;
+    }}
 >
     {#if $userData?.profile.profile_picture}
         <img src={$userData?.profile.profile_picture} class="profile-pic-img" alt="Profile pic" />
+    {:else if $userData?.username}
+        <div class="bg-discordDark-600 profile-pic-img grid center items-center">
+            {$userData?.username.slice(0, 1)}
+        </div>
     {:else}
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -60,15 +39,6 @@
     {/if}
 </button>
 
-<div class="menu-content" class:menu-visible={userMenuExpanded}>
-    {#if $userData}
-        <button aria-label="Logout button" class="menu-tile" on:click={logoutUser}>Logout</button>
-    {:else}
-        <a class="menu-tile" href="/auth/login">Login</a>
-        <a class="menu-tile" href="/auth/signup">Signup</a>
-    {/if}
-</div>
-
 <style lang="scss">
     .profile-btn {
         @apply transition-transform;
@@ -78,26 +48,6 @@
         }
     }
     .profile-pic-img {
-        @apply h-11 w-11 rounded-full object-cover;
-    }
-
-    .menu-content {
-        @apply absolute right-8 flex flex-col w-36
-             bg-discordDark-860 rounded-sm p-[3px]
-			   -translate-y-2 opacity-0 scale-95 /* This line is for properties related to the transition*/
-			   transition-all invisible;
-        top: calc(var(--navbar-height) - 2px);
-
-        &.menu-visible {
-            @apply visible opacity-100 scale-100 translate-y-0; /* Reset the transition properties */
-        }
-
-        .menu-tile {
-            @apply rounded-sm p-3 px-6;
-
-            &:hover {
-                @apply bg-neutral-900;
-            }
-        }
+        @apply size-11 rounded-full object-cover;
     }
 </style>

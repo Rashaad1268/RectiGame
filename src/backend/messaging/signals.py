@@ -2,7 +2,6 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
-from topics.models import Topic
 
 from . import models
 from .serializers import TopicChatChannelSerializer, TopicChatMessageSerializer
@@ -35,7 +34,10 @@ def dispatch_message_create_and_edit(sender, instance, created, **kwargs):
 def dispatch_message_delete(sender, instance, **kwargs):
     async_to_sync(channel_layer.group_send)(
         instance.channel.topic.channel_name,
-        {"type": "message_delete", "data": {"id": instance.id, "channel_id": instance.channel.id}},
+        {
+            "type": "message_delete",
+            "data": {"id": instance.id, "channel_id": instance.channel.id},
+        },
     )
 
 
@@ -54,5 +56,8 @@ def dispatch_channel_create_and_edit(sender, instance, created, **kwargs):
 def dispatch_channel_delete(sender, instance, **kwargs):
     async_to_sync(channel_layer.group_send)(
         instance.topic.channel_name,
-        {"type": "channel_delete", "data": {"id": instance.id, "topic": instance.topic.slug}},
+        {
+            "type": "channel_delete",
+            "data": {"id": instance.id, "topic": instance.topic.slug},
+        },
     )

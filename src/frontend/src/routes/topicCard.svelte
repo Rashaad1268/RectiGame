@@ -14,7 +14,7 @@
             {topic.member_count} Member{topic.member_count !== 1 ? "s" : ""}
         </p>
     </div>
-    <div class="post-tags">
+    <div class="topic-tags">
         {#each topic.tags as tag (tag.slug)}
             <span class="topic-tag">{tag.name}</span>
         {/each}
@@ -34,12 +34,16 @@
         }
     }
 
-    .post-tags {
-        @apply hidden md:flex overflow-hidden gap-1 px-1 mt-[2px];
+    .topic-tags {
+        @apply hidden md:flex overflow-x-scroll gap-1 px-1 mt-[2px];
 
         .topic-tag {
             @apply inline-block bg-zinc-700 rounded-full font-semibold
 				   px-[6px] py-[1px] text-[10px] text-nowrap;
+        }
+
+        &::-webkit-scrollbar {
+            @apply hidden;
         }
     }
 </style>

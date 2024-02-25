@@ -1,9 +1,6 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import { userData } from "$lib/stores";
-    /*
-	Only use the navbar for some endpoints such as /, /welcome, /auth/login, /auth/signup
-	*/
     import ProfileMenu from "./profileMenu.svelte";
 
     export let isLoggedIn: boolean;
@@ -30,12 +27,10 @@
     $: fromEndpoint = $page.url.searchParams.get("from");
 </script>
 
-<nav>
+<header>
     <a class="nav-title size-8 flex items-center gap-4" href={homepageUrl}
-        ><img src="/logo.png" alt="Logo" />
-        <h1 class="nested-green" /></a
-    >
-
+        ><img src="/logo.png" alt="Logo" /></a>
+ 
     <div class="ml-auto">
         {#if isActuallyLoggedIn}
             <ProfileMenu />
@@ -52,10 +47,10 @@
             </div>
         {/if}
     </div>
-</nav>
+</header>
 
 <style lang="scss">
-    nav {
+    header {
         @apply flex items-center bg-discordDark-830 z-[10000]
 			 shadow-neutral-800 shadow-sm sticky top-0 px-8
 			   h-[var(--navbar-height)] max-h-[var(--navbar-height)];

@@ -4,7 +4,7 @@
     import Button from "$lib/components/button.svelte";
     import { addToast, joinedTopics, userData } from "$lib/stores/";
     import type { TopicChatChannelInterface, TopicInterface } from "$lib/types";
-    import { objIsEmpty } from "$lib/utils";
+    import { truncate } from "$lib/utils";
     import ChannelCreateModal from "./channelCreateModal.svelte";
     import ChannelDeleteModal from "./channelDeleteModal.svelte";
 
@@ -22,7 +22,7 @@
     let channelToDelete: TopicChatChannelInterface | null = null;
 
     $: {
-        if (!objIsEmpty($joinedTopics) && !topic) {
+        if (!topic && $userData) {
             /*
                 This means that the user is trying to view the chat of a topic which
                 they have not joined.
@@ -32,7 +32,10 @@
                 in a read-only mode
             */
             goto(`/topics/${selectedTopicSlug}`);
-            addToast({delay: 10000, message: "You have to join a topic in order to view its chat" })
+            addToast({
+                delay: 10000,
+                message: "You have to join a topic in order to view its chat"
+            });
         }
     }
 </script>
@@ -58,14 +61,15 @@
                 <a
                     href="/topics/{topic.slug}/channel/{channel.id}"
                     class="channel-tab"
-                    class:selected={parseInt($page.params.channel_id) === channel.id}
+                    draggable="false"
+                    data-selected={parseInt($page.params.channel_id) === channel.id}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 0 448 512"
                         ><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path
                             d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"
                         /></svg
                     >
-                    <span>{channel.name}</span>
+                    <span class="overflow-hidden">{truncate(channel.name, 12)}</span>
 
                     {#if $userData?.is_staff}
                         <button
@@ -107,12 +111,12 @@
             @apply bg-discordDark-660 text-discordDark-300;
         }
 
-        &:not(.selected):active {
+        &:not([data-selected="true"]):active {
             // The effect when a tab which is not selected is :active
             @apply bg-discordDark-630 text-gray-200 brightness-90;
         }
 
-        &.selected {
+        &[data-selected="true"] {
             @apply bg-discordDark-630 text-gray-200;
         }
 

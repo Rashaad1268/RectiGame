@@ -2,7 +2,7 @@ from authentication.serializers import UserSerializer
 from rest_framework import serializers
 
 from authentication.models import Notification
-from .models import TopicChatChannel, TopicChatMessage
+from .models import TopicChatChannel, TopicChatMessage, TopicRoom
 
 
 class TopicChatChannelCreateSerializer(serializers.ModelSerializer):
@@ -31,6 +31,21 @@ class TopicChatMessageSerializer(TopicChatMessageCreateSerializer):
         extra_kwargs = {"author": {"allow_null": True}} 
 
 
+class TopicRoomCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TopicRoom
+        fields = ("name", "topic")
+
+
+class TopicRoomSerializer(TopicRoomCreateSerializer):
+    members = UserSerializer(many=True)
+
+    class Meta(TopicRoomCreateSerializer.Meta):
+        fields = ("id", "name", "creator", "code", "topic", "members", "created_at")
+
+
+# creating the notification serializer in authentication/models will cause a recursive import error
+# so, define the notification serializer here even though it doesn't fully belong here
 class NotificationSerializer(serializers.ModelSerializer):
     referenced_message = TopicChatMessageSerializer()
 

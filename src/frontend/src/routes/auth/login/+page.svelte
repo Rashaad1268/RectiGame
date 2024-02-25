@@ -41,13 +41,7 @@
                 errorMessages = [String(err), ...errorMessages];
             }
         } else {
-            const responseData = await response.json();
-
-            if (responseData) {
-                errorMessages = formatApiErrors(await response.json());
-            } else {
-                addToast({ message: await response.text(), type: "error", delay: 5000 });
-            }
+            errorMessages = formatApiErrors(await response.json());
         }
     };
 </script>

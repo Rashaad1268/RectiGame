@@ -3,9 +3,12 @@
     import { page } from "$app/stores";
     import { joinedTopics } from "$lib/stores/";
     import type { TopicInterface } from "$lib/types";
+    import { flip } from "svelte/animate";
+
+    $: selectedTopicSlug = $page.params.topicSlug;
 
     function visitTopicChat(topic: TopicInterface) {
-        if (topic.slug === $page.params.topicSlug && $page.url.pathname.includes("channel")) {
+        if (topic.slug === selectedTopicSlug && $page.url.pathname.includes("channel")) {
             return;
         }
 
@@ -25,27 +28,30 @@
                 /></svg
             >
         </div>
-        <span class="sidebar-tooltip">View all topics</span>
     </a>
 
     <!-- Divider -->
     <div class="min-h-[1px] w-9 my-[6px] bg-discordDark-460 rounded-full" />
 
     {#each Object.values($joinedTopics) as topic (topic.slug)}
-        <button on:click={() => visitTopicChat(topic)} class="sidebar-icon">
-            <div>
-                <img
-                    src={topic.icon ?? topic.image}
-                    draggable="false"
-                    alt={topic.name}
-                    loading="lazy"
-                    class="square-on-hover"
-                />
-            </div>
-            <span class="sidebar-tooltip">
-                {topic.name}
-            </span>
-        </button>
+        <div class="flex items-center" animate:flip>
+            <button
+                on:click={() => visitTopicChat(topic)}
+                class="sidebar-icon"
+                data-selected={selectedTopicSlug === topic.slug}
+            >
+                <div>
+                    <img
+                        src={topic.icon ?? topic.image}
+                        draggable="false"
+                        alt={topic.name}
+                        loading="lazy"
+                        class="square-on-hover"
+                    />
+                </div>
+            </button>
+            <span class="sidebar-icon-selected-indicator" />
+        </div>
     {/each}
 </div>
 
@@ -77,6 +83,12 @@
 					transition-all duration-100 ease-linear;
             }
         }
+
+        &[data-selected="true"] {
+            .square-on-hover {
+                @apply rounded-[17px];
+            }
+        }
     }
 
     .square-on-hover {
@@ -84,14 +96,17 @@
         @apply rounded-3xl transition-all duration-100 ease-linear;
     }
 
-    .sidebar-tooltip {
-        @apply absolute w-auto p-2 m-2 min-w-max left-16 rounded-md shadow-md
-			 text-white bg-discordDark-900 text-xs font-semibold
-			   transition-all duration-100 scale-0 origin-left z-50;
+    .sidebar-icon-selected-indicator {
+        @apply size-5 absolute bg-neutral-300 rounded-full -left-4
+               transition-all;
 
-        .sidebar-icon:hover > & {
-            // Scale the tooltip up when the icon is hovered
-            @apply scale-100;
+        .sidebar-icon:hover + & {
+            @apply bg-neutral-200 h-7;
+        }
+
+        .sidebar-icon[data-selected="true"] + & {
+            @apply bg-green-500 h-8;
         }
     }
+
 </style>

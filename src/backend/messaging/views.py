@@ -7,12 +7,14 @@ from rest_framework import pagination, status
 
 from backend.viewsets import CustomViewSet
 
-from .models import TopicChatMessage, TopicChatChannel
+from .models import TopicChatMessage, TopicChatChannel, TopicRoom
 from .serializers import (
     TopicChatMessageSerializer,
     TopicChatMessageCreateSerializer,
     TopicChatChannelSerializer,
     TopicChatChannelCreateSerializer,
+    TopicRoomCreateSerializer,
+    TopicRoomSerializer,
 )
 from . import permissions
 
@@ -80,3 +82,15 @@ class TopicChatMessageViewSet(CustomViewSet):
 
         # No need to return anything from this endpoint
         return Response(status=status.HTTP_201_CREATED)
+
+
+class TopicRoomViewSet(CustomViewSet):
+    create_or_update_serializer = TopicRoomCreateSerializer
+    fetch_serializer = TopicRoomSerializer
+
+    def get_queryset(self):
+        return self.request.user.topic_room_member.all()
+
+    def perform_create(self, serializer):
+        topic_room = serializer.save(creator=self.request.user)
+        return topic_room

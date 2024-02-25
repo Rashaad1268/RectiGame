@@ -77,7 +77,7 @@
                     <h6 class="text-[0.9rem] text-discordDark-300 leading-[0.5rem] ml-[3px]">
                         t/{topic.slug}
                     </h6>
-                    <span>•</span>
+                    <span class="select-none">•</span>
                     <div class="flex items-center gap-1">
                         {#each topic.tags as tag (tag.slug)}
                             <span class="topic-tag">{tag.name}</span>

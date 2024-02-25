@@ -7,14 +7,16 @@ export const handle: Handle = async ({ event, resolve }) => {
     const isLoggedIn = !!event.cookies.get("sessionid"); // Check if the sessionid cookie exists
 
     if (isLoggedIn) {
-        // If the user is logged in and he visits the authentication pages, redirect him to the home page
+        // If the user is logged in and he visits the authentication pages
         if (authEndpoints.includes(urlEndpoint)) {
-            event.url.pathname = "/";
+            // redirect the user to the home page
+            event.url = new URL(event.url.origin);
             return Response.redirect(event.url);
         }
     } else {
-        // If the user is not logged in and visits any othe
+        // If the user is not logged in and visits any other pages than the auth pages
         if (!authEndpoints.includes(urlEndpoint)) {
+            // redirect him to the welcome page
             event.url = new URL(`${event.url.origin}/welcome?from=${event.url.pathname}`);
 
             return Response.redirect(event.url);

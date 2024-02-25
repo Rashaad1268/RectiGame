@@ -8,7 +8,7 @@
     import { initWebSocket } from "$lib/ws";
 
     import "../styles/app.scss";
-    import { fetchUserData, objIsEmpty } from "$lib/utils";
+    import { fetchUserData, isObjEmpty } from "$lib/utils";
 
     export let data: LayoutData;
 
@@ -30,7 +30,9 @@
 <NavBar isLoggedIn={data.isLoggedIn} />
 
 <div class="flex h-[100%]">
-    <SideBar />
+    {#if data.isLoggedIn || !!$userData}
+        <SideBar />
+    {/if}
 
     <main
         style="--max-content-h: calc(100vh - var(--navbar-height));

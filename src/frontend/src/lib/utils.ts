@@ -27,6 +27,6 @@ export function trimText(text: string, length: number) {
     return text;
 }
 
-export function objIsEmpty(obj: object) {
+export function isObjEmpty(obj: object) {
     return Object.keys(obj).length === 0 && obj.constructor === Object
 }
