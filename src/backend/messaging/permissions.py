@@ -18,3 +18,11 @@ class TopicChatMessageViewSetPermissions(IsAuthenticatedOrReadOnly):
             return super().has_permission(request, view)
         except ValueError:
             raise ValidationError("Invalid channel ID")
+
+
+class TopicRoomViewSetPermissions(IsAuthenticatedOrReadOnly):
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+
+        return request.user.is_staff or request.user == obj.creator

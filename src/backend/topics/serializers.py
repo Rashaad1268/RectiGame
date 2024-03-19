@@ -9,18 +9,18 @@ from .models import Topic, TopicTag
 class TopicTagCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = TopicTag
-        fields = ('name',)
+        fields = ("name",)
 
 
 class TopicTagSerializer(TopicTagCreateSerializer):
     class Meta(TopicTagCreateSerializer.Meta):
-        fields = ('name', 'slug')
+        fields = ("name", "slug")
 
 
 class TopicCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topic
-        fields = ('name', 'description', 'image', 'banner', 'tags')
+        fields = ("name", "description", "image", "banner", "tags")
 
 
 class TopicSerializer(TopicCreateSerializer):
@@ -31,16 +31,29 @@ class TopicSerializer(TopicCreateSerializer):
 
     def get_member_count(self, topic):
         return topic.members.count()
-    
+
     def get_channels(self, topic):
-        return TopicChatChannelSerializer(TopicChatChannel.objects.filter(topic=topic), many=True).data
+        return TopicChatChannelSerializer(
+            TopicChatChannel.objects.filter(topic=topic, type=1), many=True
+        ).data
 
     def get_is_member(self, topic):
-        request = self.context.get('request')
+        request = self.context.get("request")
         if request is not None and request.user.is_authenticated:
-            return topic.members.contains(self.context['request'].user)
+            return topic.members.contains(self.context["request"].user)
         return False
 
     class Meta(TopicCreateSerializer.Meta):
-        fields = ('name', 'slug', 'description', 'icon', 'image', 'banner',
-                  'created_at', 'tags', 'member_count', 'is_member', 'channels')
+        fields = (
+            "name",
+            "slug",
+            "description",
+            "icon",
+            "image",
+            "banner",
+            "created_at",
+            "tags",
+            "member_count",
+            "is_member",
+            "channels",
+        )

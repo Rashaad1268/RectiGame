@@ -7,37 +7,32 @@ from topics.models import Topic
 
 
 class TopicChatChannel(models.Model):
+    type = models.PositiveSmallIntegerField(choices=((1, "Text Channel"), (2, "Room")), default=1)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-
-def generate_room_code():
-    return crypto.get_random_string(8)
-
-
-class TopicRoom(models.Model):
-    name = models.CharField(null=True, blank=True)
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="topic_room_member")
+    invite_code = models.SlugField(
+        max_length=20, unique=True, null=True, blank=True
+    )
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
+        null=True, blank=True,
         related_name="topic_room_creator",
     )
-    code = models.SlugField(
-        max_length=20, unique=True, blank=True, default=generate_room_code
-    )
-    created_at = models.DateTimeField(default=timezone.now)
-    members = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="topic_room_member", blank=True
-    )
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         is_being_created = self._state.adding
+
+        if self.type == 2 and not self.invite_code and is_being_created:
+            self.invite_code = crypto.get_random_string(8)
+
         super().save(*args, **kwargs)
 
-        if is_being_created:
+        if self.type == 2 and is_being_created:
 
             def add_member():
                 # Add the creator of the room as a member
@@ -54,7 +49,6 @@ class TopicChatMessage(models.Model):
     channel = models.ForeignKey(
         TopicChatChannel, on_delete=models.CASCADE, null=True, blank=True
     )
-    room = models.ForeignKey(TopicRoom, on_delete=models.CASCADE, null=True, blank=True)
     content = models.TextField(max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True)
     edited_at = models.DateTimeField(null=True, blank=True)

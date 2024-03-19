@@ -8,7 +8,7 @@ router = routers.DefaultRouter()
 router.register(
     "rooms", TopicRoomViewSet, basename="topic_chat_room_viewset"
 )  # register the room viewset first, so it is given priority
-router.register("", TopicChatChannelViewSet)
+router.register("", TopicChatChannelViewSet, basename="topic_chat_channels")
 
 messages_router = routers.NestedSimpleRouter(router, r"", lookup="channel")
 messages_router.register(

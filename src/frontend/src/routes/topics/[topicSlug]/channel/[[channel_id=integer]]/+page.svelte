@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import { fetchApi } from "$lib/api.js";
-    import { messageStore } from "$lib/stores/";
+    import { messageStore, userData } from "$lib/stores/";
     import Message from "./message.svelte";
     import type { TopicChatMessageInterface } from "$lib/types";
     import MessageInput from "./messageInput.svelte";
@@ -10,6 +10,7 @@
     export let data: PageData;
 
     $: selectedChannelId = $page.params.channel_id;
+    $: isRoom = data.channel.type === 2;
     $: messages = ($messageStore[data.channel?.id ?? -1] ?? {}).results;
 
     $: {
@@ -131,6 +132,12 @@
             >
             <span>
                 {data.channel.name}
+
+                {#if isRoom && data.channel.creator === $userData?.id}
+                    <span class="ml-2">
+                        (invite code: {data.channel.invite_code})
+                    </span>
+                {/if}
             </span>
         </div>
 

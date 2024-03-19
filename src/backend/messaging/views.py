@@ -1,29 +1,34 @@
 from django.http import Http404
+from rest_framework import pagination, status, exceptions
+from rest_framework.response import Response
+from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework import pagination, status
 
 from backend.viewsets import CustomViewSet
 
-from .models import TopicChatMessage, TopicChatChannel, TopicRoom
+from .models import TopicChatMessage, TopicChatChannel
 from .serializers import (
     TopicChatMessageSerializer,
     TopicChatMessageCreateSerializer,
     TopicChatChannelSerializer,
     TopicChatChannelCreateSerializer,
     TopicRoomCreateSerializer,
-    TopicRoomSerializer,
+    TopicChatChannelSerializer,
 )
 from . import permissions
 
 
 class TopicChatChannelViewSet(CustomViewSet):
-    queryset = TopicChatChannel.objects.all()
     create_or_update_serializer = TopicChatChannelCreateSerializer
     fetch_serializer = TopicChatChannelSerializer
     permission_classes = (permissions.TopicChatChannelViewSetPermissions,)
+
+    def get_queryset(self):
+        return (
+            TopicChatChannel.objects.filter(type=1)
+            | self.request.user.topic_room_member.all()
+        )
 
     def list(self, request, *args, **kwargs):
         raise Http404()
@@ -86,11 +91,55 @@ class TopicChatMessageViewSet(CustomViewSet):
 
 class TopicRoomViewSet(CustomViewSet):
     create_or_update_serializer = TopicRoomCreateSerializer
-    fetch_serializer = TopicRoomSerializer
+    fetch_serializer = TopicChatChannelSerializer
+    permission_classes = (permissions.TopicRoomViewSetPermissions,)
 
     def get_queryset(self):
         return self.request.user.topic_room_member.all()
 
     def perform_create(self, serializer):
-        topic_room = serializer.save(creator=self.request.user)
-        return topic_room
+        topic = serializer.validated_data["topic"]
+
+        if not topic.members.contains(self.request.user):
+            raise exceptions.PermissionDenied(
+                "You need to join a topic in order to create a room in that topic"
+            )
+
+        # type=2 means that the channel is a room channel
+        return serializer.save(creator=self.request.user, type=2)
+
+    @action(detail=True, methods=("POST",), url_path="join")
+    def join_topic_room(self, request, pk):
+        # pk is actually the invite code of the topic room
+        topic_room = get_object_or_404(TopicChatChannel, invite_code=pk)
+
+        if not topic_room.members.contains(request.user):
+            topic_room.members.add(self.request.user)
+
+        return Response(
+            TopicChatChannelSerializer(
+                topic_room, context=self.get_serializer_context()
+            ).data
+        )
+
+    @action(detail=True, methods=("POST",), url_path="leave")
+    def leave_topic_room(self, request, pk):
+        topic_room = self.get_object()
+
+        if (
+            topic_room.members.contains(request.user)
+            and topic_room.creator != request.user
+        ):
+            topic_room.members.remove(self.request.user)
+
+        return Response()
+
+    @action(detail=True, methods=("GET",), url_path="invite-details")
+    def get_invite_details(self, request, pk):
+        topic_room = get_object_or_404(TopicChatChannel, invite_code=pk)
+
+        return Response(
+            TopicChatChannelSerializer(
+                topic_room, context=self.get_serializer_context()
+            ).data
+        )

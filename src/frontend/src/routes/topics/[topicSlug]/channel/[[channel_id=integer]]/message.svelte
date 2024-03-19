@@ -3,6 +3,7 @@
     import type { TopicChatMessageInterface } from "$lib/types";
     import { createPopperActions } from "svelte-popperjs";
     import UserProfilePopup from "./userProfilePopup.svelte";
+    import ProfilePicture from "$lib/components/profilePicture.svelte";
 
     const [popperRef, popperContent] = createPopperActions({
         placement: "right",
@@ -21,29 +22,20 @@
 </script>
 
 {#if showUserProfilePopup}
-    <div class="w-32" use:popperContent={extraOpts} on:click>
+    <div class="w-32" use:popperContent={extraOpts}>
         <UserProfilePopup user={message.author} />
     </div>
 {/if}
 
 <div class="message" class:inline-msg={isInline}>
     {#if !!message.author}
-        <div class="profile-picture-wrapper">
+        <div class="min-w-[40px] mr-3">
             {#if !isInline}
                 <button
                     use:popperRef
                     on:click={() => (showUserProfilePopup = !showUserProfilePopup)}
                 >
-                    {#if !message.author.profile.profile_picture}
-                        <div class="bg-discordDark-600 flex items-center justify-center">
-                            <span>{message.author.username.slice(0, 1)}</span>
-                        </div>
-                    {:else}
-                        <img
-                            src={message.author.profile.profile_picture}
-                            alt="{message.author.username} profile"
-                        />
-                    {/if}
+                    <ProfilePicture user={message.author} class="size-10" />
                 </button>
             {/if}
         </div>
@@ -74,7 +66,7 @@
                     >
                 </div>
             {/if}
-            <div class="message-content">{@html marked(message.content)}</div>
+            <div class="prose prose-invert">{@html marked(message.content)}</div>
         </div>
     {/if}
 </div>
@@ -83,23 +75,8 @@
     .message {
         @apply flex mt-2;
 
-        .profile-picture-wrapper {
-            @apply min-w-[40px] mr-3;
-
-            img,
-            div {
-                @apply h-10 w-10 object-cover rounded-full mt-[4px] text-center;
-            }
-        }
-
         &:hover {
             @apply bg-discordDark-760;
-        }
-
-        .message-content {
-            @apply prose prose-invert
-                   prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl
-                   prose-h4:text-xl prose-h5:text-lg prose-h6:text-sm;
         }
     }
 </style>

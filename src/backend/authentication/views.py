@@ -6,7 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from topics.serializers import TopicSerializer
-from messaging.serializers import NotificationSerializer
+from messaging.serializers import NotificationSerializer, TopicChatChannelSerializer
 from .permissions import UserViewSetPermissions
 from . import models, serializers
 
@@ -30,7 +30,8 @@ class LoginView(views.APIView):
             if user.disabled_until > timezone.now():
                 return Response(
                     {
-                        "detail": f'Account is disabled until {user.disabled_until.strftime("%Y-%m-%d %H:%M:%S")}'
+                        "detail": "Account is disabled until "
+                        + user.disabled_until.strftime("%Y-%m-%d %H:%M:%S")
                     },
                     status=status.HTTP_403_FORBIDDEN,
                 )
@@ -62,6 +63,23 @@ class LogoutView(views.APIView):
         return Response(status=status.HTTP_200_OK)
 
 
+def serialize_topic_rooms(user, ctx):
+    result = {}
+
+    for topic_room in user.topic_room_member.all():
+        if topic_room.topic.slug not in result:
+            result[topic_room.topic.slug] = [
+                TopicChatChannelSerializer(topic_room, context=ctx).data
+            ]
+
+        else:
+            result[topic_room.topic.slug].append(
+                TopicChatChannelSerializer(topic_room, context=ctx).data
+            )
+
+    return result
+
+
 class UserViewSet(viewsets.ModelViewSet):
     http_method_names = ("get", "put", "patch", "options")
     permission_classes = (UserViewSetPermissions,)
@@ -78,6 +96,7 @@ class UserViewSet(viewsets.ModelViewSet):
                     topic.slug: TopicSerializer(topic, context=ctx).data
                     for topic in request.user.topic_set.all()
                 },
+                "joined_rooms": serialize_topic_rooms(request.user, ctx),
                 "notifications": NotificationSerializer(
                     models.Notification.objects.filter(user=request.user).order_by(
                         "-id"

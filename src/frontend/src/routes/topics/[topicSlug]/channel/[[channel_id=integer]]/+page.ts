@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 import { get } from "svelte/store";
 import type { PageLoad } from "./$types";
-import { joinedTopics } from "$lib/stores";
+import { joinedTopicRooms, joinedTopics } from "$lib/stores";
 import { error, type NumericRange } from "@sveltejs/kit";
 
 export const load: PageLoad = async (event) => {
@@ -18,6 +18,8 @@ export const load: PageLoad = async (event) => {
         //     (channel) => channel.id === parseInt(channel_id)
         // );
         const channel = (get(joinedTopics)[topicSlug])?.channels?.find(c => c.id === parseInt(channel_id))
+        ||
+        (get(joinedTopicRooms)[topicSlug] || []).find(c => c.id === parseInt(channel_id))
 
         if (channel) {
             return { channel: channel };

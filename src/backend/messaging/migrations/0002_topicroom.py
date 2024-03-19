@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(blank=True, null=True)),
-                ('code', models.SlugField(blank=True, default=messaging.models.generate_room_code, max_length=20, unique=True)),
+                ('code', models.SlugField(blank=True, max_length=20, unique=True)),
                 ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
                 ('creator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='topic_room_creator', to=settings.AUTH_USER_MODEL)),
                 ('members', models.ManyToManyField(related_name='topic_room_member', to=settings.AUTH_USER_MODEL)),

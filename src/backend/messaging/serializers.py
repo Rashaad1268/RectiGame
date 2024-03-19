@@ -2,7 +2,7 @@ from authentication.serializers import UserSerializer
 from rest_framework import serializers
 
 from authentication.models import Notification
-from .models import TopicChatChannel, TopicChatMessage, TopicRoom
+from .models import TopicChatChannel, TopicChatMessage
 
 
 class TopicChatChannelCreateSerializer(serializers.ModelSerializer):
@@ -12,8 +12,19 @@ class TopicChatChannelCreateSerializer(serializers.ModelSerializer):
 
 
 class TopicChatChannelSerializer(TopicChatChannelCreateSerializer):
+    members = serializers.SerializerMethodField()
+
+    def get_members(self, channel):
+        if channel.type == 2:
+            return UserSerializer(channel.members.all(), many=True).data
+
+        else:
+            # if the channel type is not a room, then there can be no members
+            # so return an empty list
+            return []
+
     class Meta(TopicChatChannelCreateSerializer.Meta):
-        fields = ("id", "name", "description", "created_at")
+        fields = ("id", "type", "name", "creator", "invite_code", "topic", "members", "created_at")
 
 
 class TopicChatMessageCreateSerializer(serializers.ModelSerializer):
@@ -33,15 +44,8 @@ class TopicChatMessageSerializer(TopicChatMessageCreateSerializer):
 
 class TopicRoomCreateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TopicRoom
-        fields = ("name", "topic")
-
-
-class TopicRoomSerializer(TopicRoomCreateSerializer):
-    members = UserSerializer(many=True)
-
-    class Meta(TopicRoomCreateSerializer.Meta):
-        fields = ("id", "name", "creator", "code", "topic", "members", "created_at")
+        model = TopicChatChannel
+        fields = ("name", "topic", "description")
 
 
 # creating the notification serializer in authentication/models will cause a recursive import error

@@ -6,45 +6,49 @@
     import TextField from "$lib/components/forms/textField.svelte";
     import { Modal, ModalActions } from "$lib/components/modals";
     import type { TopicInterface } from "$lib/types";
-    import { joinedTopics } from "$lib/stores/";
+    import { joinedTopicRooms } from "$lib/stores/";
 
     export let isOpen: boolean;
     export let topic: TopicInterface | undefined;
 
-    export let channelName = "";
-    export let channelDescription = "";
+    export let roomName = "";
+    export let roomDescription = "";
 
     let errorMessages: string[] = [];
 
     async function createChannel() {
         if (!topic) return; // for whatever reason ¯\_(ツ)_/¯
 
-        channelName = channelName.trim();
-        channelDescription = channelDescription.trim();
+        roomName = roomName.trim();
+        roomDescription = roomDescription.trim();
 
-        if (!channelName) {
+        if (!roomName) {
             isOpen = false;
             return;
         }
 
-        const resp = await fetchApi("channels/", {
+        const resp = await fetchApi("channels/rooms/", {
             method: "POST",
             body: JSON.stringify({
                 topic: topic.slug,
-                name: channelName,
-                description: channelDescription
+                name: roomName,
+                description: roomDescription
             })
         });
 
         if (resp.ok) {
             isOpen = false;
 
-            const newChannel = await resp.json();
+            const newRoom = await resp.json();
 
-            joinedTopics.update((topics) => {
-                topics[topic!.slug].channels = [...topics[topic!.slug].channels, newChannel];
+            joinedTopicRooms.update((joinedRooms) => {
+                if (joinedRooms[newRoom.topic]) {
+                    joinedRooms[newRoom.topic].push(newRoom);
+                } else {
+                    joinedRooms[newRoom.topic] = [newRoom];
+                }
 
-                return topics;
+                return joinedRooms;
             });
         } else {
             errorMessages = formatApiErrors(await resp.json());
@@ -54,38 +58,40 @@
     $: {
         if (!isOpen) {
             // Clear up the inputs
-            channelName = "";
-            channelDescription = "";
+            roomName = "";
+            roomDescription = "";
         }
     }
 </script>
 
 <Modal bind:isOpen>
     <Form on:submit={createChannel} bind:errorMessages>
-        <h1 class="text-2xl">Create a new channel</h1>
+        <h1 class="text-2xl">Create a new private room</h1>
         <h3 class="mb-4">for the topic {topic?.name}</h3>
 
-        <label for="channel-name" class="text-lg">Channel name</label>
+        <label for="room-name" class="text-lg">Room name</label>
         <div class="flex items-center gap-2 mb-2">
             <span class="font-semibold text-2xl">#</span>
             <TextField
-                id="channel-name"
-                placeholder="test-channel"
+                id="room-name"
+                placeholder="test-room"
                 autocomplete="off"
-                bind:value={channelName}
+                bind:value={roomName}
             />
         </div>
 
-        <label for="channel-description" class="text-lg">Channel description</label>
+        <label for="room-description" class="text-lg">Room description</label>
         <TextArea
-            id="channel-description"
+            id="room-description"
             placeholder="description (optional)"
-            bind:value={channelDescription}
+            bind:value={roomDescription}
         />
 
         <ModalActions class="pt-3">
-            <Button class="btn-destructive" type="button" on:click={() => (isOpen = false)}>Cancel</Button>
-            <Button type="submit" class="btn-blue">Create channel</Button>
+            <Button class="btn-destructive" type="button" on:click={() => (isOpen = false)}
+                >Cancel</Button
+            >
+            <Button type="submit" class="btn-blue">Create Room</Button>
         </ModalActions>
     </Form>
 </Modal>

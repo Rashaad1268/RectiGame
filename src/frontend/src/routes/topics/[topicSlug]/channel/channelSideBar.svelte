@@ -2,11 +2,13 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import Button from "$lib/components/button.svelte";
-    import { addToast, joinedTopics, userData } from "$lib/stores/";
+    import { addToast, joinedTopicRooms, joinedTopics, userData } from "$lib/stores/";
     import type { TopicChatChannelInterface, TopicInterface } from "$lib/types";
     import { truncate } from "$lib/utils";
     import ChannelCreateModal from "./channelCreateModal.svelte";
     import ChannelDeleteModal from "./channelDeleteModal.svelte";
+    import CreateRoomModal from "./roomCreateModal.svelte";
+    import JoinRoomModal from "./joinRoomModal.svelte";
 
     $: selectedTopicSlug = $page.params.topicSlug;
 
@@ -18,6 +20,8 @@
     $: channels = topic?.channels || [];
 
     let isChannelCreateModalOpen = false;
+    let isJoinRoomModalOpen = false;
+    let isCreateRoomModalOpen = false;
 
     let channelToDelete: TopicChatChannelInterface | null = null;
 
@@ -46,12 +50,23 @@
             <h1 class="text-3xl font-semibold font-monocraft text-white">{topic.name}</h1>
             <a href="/topics/{topic.slug}" class="block my-1 link">View posts</a>
 
-            {#if $userData?.is_staff}
-                <Button
-                    class="btn-xs btn-dark mt-4"
-                    on:click={() => (isChannelCreateModalOpen = true)}>+ Create channel</Button
-                >
-            {/if}
+            <div class="mt-4 flex flex-col gap-1 items-start">
+                <div class="flex gap-1 flex-wrap">
+                    <Button class="btn-xs btn-blue" on:click={() => (isJoinRoomModalOpen = true)}
+                        >Join Room</Button
+                    >
+                    <Button class="btn-xs btn-blue" on:click={() => (isCreateRoomModalOpen = true)}
+                        >Create Room</Button
+                    >
+                </div>
+
+                {#if $userData?.is_staff}
+                    <Button
+                        class="btn-xs btn-dark"
+                        on:click={() => (isChannelCreateModalOpen = true)}>+ Create channel</Button
+                    >
+                {/if}
+            </div>
         </header>
 
         <div class="w-full h-[1px] bg-discordDark-630 mb-2" />
@@ -85,11 +100,35 @@
                 </a>
             {/each}
         </div>
+
+        <div class="topic-rooms-container">
+            {#if !!$joinedTopicRooms[selectedTopicSlug]}
+                <h3 class="font-monocraft mb-1">Private Rooms</h3>
+                {#each $joinedTopicRooms[selectedTopicSlug] || [] as topicRoom (topicRoom.id)}
+                    <a
+                        href="/topics/{topic.slug}/channel/{topicRoom.id}"
+                        class="channel-tab"
+                        draggable="false"
+                        data-selected={parseInt($page.params.channel_id) === topicRoom.id}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 0 448 512"
+                            ><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path
+                                d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"
+                            /></svg
+                        >
+                        <span class="overflow-hidden">{truncate(topicRoom.name, 12)}</span>
+                    </a>
+                {/each}
+            {/if}
+        </div>
     {/if}
 </div>
 
 <ChannelCreateModal bind:isOpen={isChannelCreateModalOpen} bind:topic />
 <ChannelDeleteModal bind:channelToDelete bind:topic />
+
+<JoinRoomModal bind:isOpen={isJoinRoomModalOpen} />
+<CreateRoomModal bind:isOpen={isCreateRoomModalOpen} bind:topic />
 
 <style lang="scss">
     .channel-sidebar {
@@ -127,5 +166,9 @@
         &:hover > .channel-delete-btn {
             @apply opacity-100;
         }
+    }
+
+    .topic-rooms-container {
+        @apply mt-[10vh];
     }
 </style>

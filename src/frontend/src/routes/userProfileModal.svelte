@@ -3,6 +3,7 @@
     import { fetchApi } from "$lib/api";
     import Button from "$lib/components/button.svelte";
     import { FullScreenModal } from "$lib/components/modals";
+    import ProfilePicture from "$lib/components/profilePicture.svelte";
     import { addToast, clearData, userData } from "$lib/stores";
 
     export let isOpen: boolean;
@@ -29,11 +30,7 @@
 
 <FullScreenModal bind:isOpen>
     <div class="flex items-center justify-center mt-16 gap-4">
-        <img
-            src={$userData?.profile.profile_picture}
-            class="rounded-full object-cover size-20"
-            alt="Profile"
-        />
+        <ProfilePicture user={$userData} class="size-20" />
         <div>
             <h1 class="text-bold text-xl">{$userData?.username}</h1>
             <Button class="btn-destructive btn-sm" on:click={logoutUser}>Logout</Button>

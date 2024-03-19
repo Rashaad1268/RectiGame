@@ -52,6 +52,7 @@ export interface PostInterface {
 }
 
 export interface TopicChatChannelInterface {
+    type: number;
     id: number;
     name: string;
     description: string;
@@ -66,6 +67,14 @@ export interface TopicChatMessageInterface {
     created_at: string;
     edited_at: string;
     message_type: number;
+}
+
+export interface TopicRoomInterface extends TopicChatChannelInterface {
+    creator: number;
+    invite_code: string;
+    topic: string;
+    members: UserInterface[];
+    created_at: string;
 }
 
 // -------------------------------
