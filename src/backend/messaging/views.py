@@ -14,7 +14,6 @@ from .serializers import (
     TopicChatChannelSerializer,
     TopicChatChannelCreateSerializer,
     TopicRoomCreateSerializer,
-    TopicChatChannelSerializer,
 )
 from . import permissions
 
@@ -121,9 +120,7 @@ class TopicRoomViewSet(CustomViewSet):
             room.members.add(self.request.user)
 
         return Response(
-            TopicChatChannelSerializer(
-                room, context=self.get_serializer_context()
-            ).data
+            TopicChatChannelSerializer(room, context=self.get_serializer_context()).data
         )
 
     @action(detail=True, methods=("POST",), url_path="leave")
