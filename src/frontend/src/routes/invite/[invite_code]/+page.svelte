@@ -2,14 +2,21 @@
     import { onMount } from "svelte";
     import { page } from "$app/stores";
     import type { TopicInterface, TopicChatRoomInterface, UserInterface } from "$lib/types";
+    import { joinedTopics, joinedTopicRooms } from "$lib/stores";
     import { fetchApi, formatApiErrors } from "$lib/api";
     import { Form } from "$lib/components/forms";
     import ProfilePicture from "$lib/components/profilePicture.svelte";
     import Button from "$lib/components/button.svelte";
+    import { toast } from "svelte-sonner";
+    import { goto } from "$app/navigation";
 
     $: inviteCode = $page.params.invite_code;
 
-    let room: TopicChatRoomInterface | null | undefined = undefined;
+    interface NewTopicChatRoomInterface extends TopicChatRoomInterface {
+        is_member: boolean;
+    }
+
+    let room: NewTopicChatRoomInterface | null | undefined = undefined;
     let topic: TopicInterface | undefined;
     let roomCreator: UserInterface | undefined;
     let errorMessages: string[] = [];
@@ -27,13 +34,47 @@
     onMount(async () => {
         room = await fetchAndHandleErr(`channels/rooms/${inviteCode}/invite-details/`);
 
-        if (room) {
+        if (!room) {
+            return;
+        } else if (room.is_member) {
+            toast.info("You are already a member of this room");
+            goto(`/topics/${room.topic}/channel/${room.id}`);
+
+            return;
+        } else {
             topic = await fetchAndHandleErr(`topics/${room?.topic}/`);
             roomCreator = await fetchAndHandleErr(`auth/users/${room.creator}/`);
         }
     });
 
-    async function joinTopicRoom() {}
+    async function joinTopicRoom() {
+        const response = await fetchApi(`channels/rooms/${inviteCode}/join/`, {
+            method: "POST"
+        });
+
+        if (response.ok) {
+            const newRoom = (await response.json()) as TopicChatRoomInterface;
+
+            joinedTopicRooms.update((joinedRooms) => {
+                if (joinedRooms[newRoom.topic]) {
+                    joinedRooms[newRoom.topic].push(newRoom);
+                } else {
+                    joinedRooms[newRoom.topic] = [newRoom];
+                }
+
+                return joinedRooms;
+            });
+
+            joinedTopics.update((joinedTopics) => {
+                // add the topic to the users joined topics
+                // just in case they have not joined the rooms topic
+                joinedTopics[topic!.slug] = topic!;
+                return joinedTopics;
+            });
+
+            goto(`/topics/${newRoom.topic}/channel/${newRoom.id}/`);
+        }
+    }
 </script>
 
 <Form bind:errorMessages class="flex flex-col items-center justify-center h-full">
@@ -65,7 +106,9 @@
             </div>
         </div>
 
-        <Button class="font-monocraft text-xl btn-xl mt-4" on:click={joinTopicRoom}>Join Room</Button>
+        <Button class="font-monocraft text-xl btn-xl mt-4" on:click={joinTopicRoom}
+            >Join Room</Button
+        >
     {:else}
         <h1>Loading...</h1>
     {/if}

@@ -7,11 +7,12 @@
     import MessageInput from "./messageInput.svelte";
     import type { PageData } from "./$types";
     import Button from "$lib/components/button.svelte";
+    import { toast } from "svelte-sonner";
 
     export let data: PageData;
 
     $: selectedChannelId = $page.params.channel_id;
-    $: isRoom = data.channel.type === 2;
+    $: isRoom = data.channel?.type === 2;
     $: messages = ($messageStore[data.channel?.id ?? -1] ?? {}).results;
 
     $: {
@@ -105,9 +106,17 @@
     }
 
     async function addRoomMember() {
-        await navigator.clipboard.writeText(
-            window.location.origin + `/invite/${data.channel.invite_code}`
-        );
+        const inviteLink = window.location.origin + `/invite/${data.channel.invite_code}`;
+
+        await navigator.clipboard.writeText(inviteLink);
+
+        toast.success("Successfully copied room invite link to clipboard", {
+            duration: 7000,
+            action: {
+                label: "Copy again",
+                onClick: () => navigator.clipboard.writeText(inviteLink)
+            }
+        });
     }
 </script>
 
@@ -141,7 +150,8 @@
                 {data.channel.name}
             </span>
 
-            {#if isRoom && data.channel.creator === $userData?.id}
+            <!-- Only show the room invite if the user is the creator of the topic or if the user is staff -->
+            {#if isRoom && (data.channel.creator === $userData?.id || $userData?.is_staff)}
                 <Button class="btn-dark btn-icon ml-2" on:click={addRoomMember}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

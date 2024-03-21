@@ -111,14 +111,18 @@ class TopicRoomViewSet(CustomViewSet):
     @action(detail=True, methods=("POST",), url_path="join")
     def join_topic_room(self, request, pk):
         # pk is actually the invite code of the topic room
-        topic_room = get_object_or_404(TopicChatChannel, invite_code=pk)
+        room = get_object_or_404(TopicChatChannel, invite_code=pk)
 
-        if not topic_room.members.contains(request.user):
-            topic_room.members.add(self.request.user)
+        if not room.topic.members.contains(request.user):
+            # add the user to the rooms topic if they already aren't one
+            room.topic.members.add(request.user)
+
+        if not room.members.contains(request.user):
+            room.members.add(self.request.user)
 
         return Response(
             TopicChatChannelSerializer(
-                topic_room, context=self.get_serializer_context()
+                room, context=self.get_serializer_context()
             ).data
         )
 
@@ -142,7 +146,10 @@ class TopicRoomViewSet(CustomViewSet):
         topic_room = get_object_or_404(TopicChatChannel, invite_code=pk)
 
         return Response(
-            TopicChatChannelSerializer(
-                topic_room, context=self.get_serializer_context()
-            ).data
+            {
+                **TopicChatChannelSerializer(
+                    topic_room, context=self.get_serializer_context()
+                ).data,
+                "is_member": topic_room.members.contains(request.user),
+            }
         )
