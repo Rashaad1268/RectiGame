@@ -29,7 +29,7 @@ const config: UserConfig = {
                 changeOrigin: true
             }
         }
-    }
+    },
 };
 
 export default config;

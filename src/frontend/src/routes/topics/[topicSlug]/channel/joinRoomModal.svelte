@@ -5,7 +5,7 @@
     import TextArea from "$lib/components/forms/textArea.svelte";
     import TextField from "$lib/components/forms/textField.svelte";
     import { Modal, ModalActions } from "$lib/components/modals";
-    import type { TopicInterface, TopicRoomInterface } from "$lib/types";
+    import type { TopicChatRoomInterface } from "$lib/types";
     import { joinedTopicRooms } from "$lib/stores/";
     import { goto } from "$app/navigation";
 
@@ -21,7 +21,7 @@
         });
 
         if (response.ok) {
-            const newlyJoinedRoom = (await response.json()) as TopicRoomInterface;
+            const newlyJoinedRoom = (await response.json()) as TopicChatRoomInterface;
 
             joinedTopicRooms.update((joinedRooms) => {
                 if (joinedRooms[newlyJoinedRoom.topic]) {

@@ -1,8 +1,9 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
+    import { toast } from "svelte-sonner";
     import Button from "$lib/components/button.svelte";
-    import { addToast, joinedTopicRooms, joinedTopics, userData } from "$lib/stores/";
+    import { joinedTopicRooms, joinedTopics, userData } from "$lib/stores/";
     import type { TopicChatChannelInterface, TopicInterface } from "$lib/types";
     import { truncate } from "$lib/utils";
     import ChannelCreateModal from "./channelCreateModal.svelte";
@@ -36,9 +37,8 @@
                 in a read-only mode
             */
             goto(`/topics/${selectedTopicSlug}`);
-            addToast({
-                delay: 10000,
-                message: "You have to join a topic in order to view its chat"
+            toast("You have to join a topic in order to view its chat", {
+                duration: 10000
             });
         }
     }

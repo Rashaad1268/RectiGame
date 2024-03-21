@@ -4,7 +4,8 @@
     import Button from "$lib/components/button.svelte";
     import { FullScreenModal } from "$lib/components/modals";
     import ProfilePicture from "$lib/components/profilePicture.svelte";
-    import { addToast, clearData, userData } from "$lib/stores";
+    import { clearData, userData } from "$lib/stores";
+    import { toast } from "svelte-sonner";
 
     export let isOpen: boolean;
 
@@ -13,16 +14,13 @@
 
         if (response.ok) {
             isOpen = false;
+            toast.success("Logged Out");
             clearData();
-            addToast({
-                message: "Logged Out",
-                delay: 3000
-            });
             goto("/welcome");
         } else {
-            addToast({
-                message: "Failed to logout",
-                type: "error"
+            toast.error("Failed to logout", {
+                description: `${response.statusText} ${response.status}`,
+                duration: 10000
             });
         }
     }

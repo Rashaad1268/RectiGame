@@ -1,15 +1,17 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { page } from "$app/stores";
-    import type { TopicInterface, TopicRoomInterface, UserInterface } from "$lib/types";
+    import type { TopicInterface, TopicChatRoomInterface, UserInterface } from "$lib/types";
     import { fetchApi, formatApiErrors } from "$lib/api";
     import { Form } from "$lib/components/forms";
+    import ProfilePicture from "$lib/components/profilePicture.svelte";
+    import Button from "$lib/components/button.svelte";
 
     $: inviteCode = $page.params.invite_code;
 
-    let room: TopicRoomInterface | null | undefined = undefined;
+    let room: TopicChatRoomInterface | null | undefined = undefined;
     let topic: TopicInterface | undefined;
-    let inviter: UserInterface | undefined;
+    let roomCreator: UserInterface | undefined;
     let errorMessages: string[] = [];
 
     async function fetchAndHandleErr(endpoint: string, options?: RequestInit | undefined) {
@@ -27,26 +29,51 @@
 
         if (room) {
             topic = await fetchAndHandleErr(`topics/${room?.topic}/`);
-            inviter = await fetchAndHandleErr(`auth/users/${room.creator}/`);
+            roomCreator = await fetchAndHandleErr(`auth/users/${room.creator}/`);
         }
     });
+
+    async function joinTopicRoom() {}
 </script>
 
 <Form bind:errorMessages class="flex flex-col items-center justify-center h-full">
-    {#if room && topic && inviter}
-        <div class="flex">
-            <img src={topic.image} alt="topic icon" class="size-64 object-contain" />
+    {#if room && topic && roomCreator}
+        <h1 class="text-2xl">
+            You are invited to join the private room <strong>#{room.name}</strong>
+        </h1>
 
+        <h2 class="text-2xl">Created by</h2>
+        <div class="info-card items-center justify-center px-4 py-2">
+            <ProfilePicture user={roomCreator} class="size-12" />
             <div>
-                <h2 class="text-xl font-medium">
-                    You are invited to join the room <strong>#{room.name}</strong>
-                    <div>
-                        <img src="" alt="">
-                        created by {inviter.username}
-                    </div>
-                </h2>
-                <h3>Under the topic {topic.name}</h3>
+                <span class="text-lg font-medium">{roomCreator.username}</span>
             </div>
         </div>
+
+        <h2 class="text-xl">in the topic</h2>
+        <div class="info-card items-start">
+            <img src={topic.image} class="object-contain h-28 rounded-l-lg" alt="topic" />
+
+            <div class="my-4">
+                <h2 class="text-xl font-semibold">{topic.name}</h2>
+                <h3 class="text-sm text-gray-400 mb-2">t/{topic.slug}</h3>
+                <div class="topic-tags">
+                    {#each topic.tags as tag (tag.slug)}
+                        <span class="topic-tag">{tag.name}</span>
+                    {/each}
+                </div>
+            </div>
+        </div>
+
+        <Button class="font-monocraft text-xl btn-xl mt-4" on:click={joinTopicRoom}>Join Room</Button>
+    {:else}
+        <h1>Loading...</h1>
     {/if}
 </Form>
+
+<style lang="postcss">
+    .info-card {
+        @apply my-4 rounded-lg pr-16 flex gap-4 border
+             bg-discordDark-800 border-discordDark-760;
+    }
+</style>

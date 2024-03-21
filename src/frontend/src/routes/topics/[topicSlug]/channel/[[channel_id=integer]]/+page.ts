@@ -14,12 +14,9 @@ export const load: PageLoad = async (event) => {
 
     if (browser) {
         // first check if the channel is cached in the channelStore
-        // const channel = (get(channelStore)[topicSlug] || []).find(
-        //     (channel) => channel.id === parseInt(channel_id)
-        // );
         const channel = (get(joinedTopics)[topicSlug])?.channels?.find(c => c.id === parseInt(channel_id))
         ||
-        (get(joinedTopicRooms)[topicSlug] || []).find(c => c.id === parseInt(channel_id))
+        (get(joinedTopicRooms)[topicSlug] || []).find(c => c.id === parseInt(channel_id));
 
         if (channel) {
             return { channel: channel };
@@ -28,7 +25,7 @@ export const load: PageLoad = async (event) => {
 
     const response = await event.fetch(`/api/channels/${channel_id}/`);
     if (response.ok) {
-        return { channel: await response.json() };
+        return { channel: (await response.json()) };
     } else {
         error(response.status as NumericRange<400, 599>, response.statusText);
     }

@@ -1,11 +1,12 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
+    import { toast } from "svelte-sonner";
     import { fetchApi } from "$lib/api";
     import Button from "$lib/components/button.svelte";
     import { ModalActions } from "$lib/components/modals";
     import Modal from "$lib/components/modals/modal.svelte";
-    import { addToast, joinedTopics, messageStore } from "$lib/stores";
+    import { joinedTopics, messageStore } from "$lib/stores";
     import type { TopicChatChannelInterface, TopicInterface } from "$lib/types";
 
     export let topic: TopicInterface | undefined;
@@ -26,23 +27,22 @@
             });
 
             messageStore.update((msgs) => {
-                console.log(msgs[channelToDelete!.id])
-                delete msgs[channelToDelete!.id]
+                console.log(msgs[channelToDelete!.id]);
+                delete msgs[channelToDelete!.id];
                 return msgs;
-            })
-            console.log($messageStore[channelToDelete!.id])
+            });
+            console.log($messageStore[channelToDelete!.id]);
 
             if (parseInt($page.params.channel_id) === channelToDelete.id) {
                 // Redirect the user if he is currently viewing that channel
-                goto(`/topics/${topic.slug}/channel/`)
+                goto(`/topics/${topic.slug}/channel/`);
             }
 
             channelToDelete = null;
         } else {
-            addToast({
-                type: "error",
-                delay: 10000,
-                message: `Failed to delete channel. ${response.statusText} ${response.status}`
+            toast.error("Failed to delete channel", {
+                duration: 10000,
+                description: `${response.statusText} ${response.status}`
             });
         }
     }

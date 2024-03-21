@@ -124,15 +124,18 @@ class TopicRoomViewSet(CustomViewSet):
 
     @action(detail=True, methods=("POST",), url_path="leave")
     def leave_topic_room(self, request, pk):
-        topic_room = self.get_object()
+        topic_room = get_object_or_404(TopicChatChannel, invite_code=pk)
 
-        if (
-            topic_room.members.contains(request.user)
-            and topic_room.creator != request.user
-        ):
+        if topic_room.creator == request.user:
+            return Response(
+                {"detail": "Topic room creator cannot leave their room"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if topic_room.members.contains(request.user):
             topic_room.members.remove(self.request.user)
 
-        return Response()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=True, methods=("GET",), url_path="invite-details")
     def get_invite_details(self, request, pk):

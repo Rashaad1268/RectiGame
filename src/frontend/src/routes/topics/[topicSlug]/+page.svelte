@@ -78,7 +78,7 @@
                         t/{topic.slug}
                     </h6>
                     <span class="select-none">•</span>
-                    <div class="flex items-center gap-1">
+                    <div class="topic-tags">
                         {#each topic.tags as tag (tag.slug)}
                             <span class="topic-tag">{tag.name}</span>
                         {/each}
@@ -110,10 +110,3 @@
 <TopicLeaveModal bind:isModalOpen={isLeavingModalOpen} bind:topic />
 
 <CreatePostModal bind:isModalOpen={isCreatePostModelOpen} bind:topic />
-
-<style lang="postcss">
-    .topic-tag {
-        @apply inline-block bg-zinc-700 rounded-full font-semibold
-               px-[6px] py-[1px] text-[10px] text-nowrap;
-    }
-</style>

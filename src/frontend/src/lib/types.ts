@@ -57,6 +57,18 @@ export interface TopicChatChannelInterface {
     name: string;
     description: string;
     created_at: string;
+    topic: string;
+
+    // room channel fields
+    creator?: number;
+    invite_code?: string;
+    members?: UserInterface[];
+}
+
+export interface TopicChatRoomInterface extends TopicChatChannelInterface {
+    creator: number;
+    invite_code: string;
+    members: UserInterface[];
 }
 
 export interface TopicChatMessageInterface {
@@ -67,23 +79,4 @@ export interface TopicChatMessageInterface {
     created_at: string;
     edited_at: string;
     message_type: number;
-}
-
-export interface TopicRoomInterface extends TopicChatChannelInterface {
-    creator: number;
-    invite_code: string;
-    topic: string;
-    members: UserInterface[];
-    created_at: string;
-}
-
-// -------------------------------
-// |    Non API related types    |
-// -------------------------------
-export interface ToastInterface {
-    id: string;
-    message: string;
-    type?: "success" | "error" | "info";
-    icon?: string;
-    delay?: number;
 }

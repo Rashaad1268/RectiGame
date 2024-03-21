@@ -1,6 +1,7 @@
 <script lang="ts">
     import Button from "$lib/components/button.svelte";
-    import { addToast, userData } from "$lib/stores/";
+    import { userData } from "$lib/stores/";
+    import { toast } from "svelte-sonner";
 </script>
 
 <svelte:head>
@@ -47,10 +48,6 @@
 <Button
     aria-label="test button"
     on:click={() => {
-        addToast({
-            message: "Hello world",
-            type: "error",
-            delay: 25000
-        });
+        toast.info("Hello world", {duration: 20000, description: "lorem"});
     }}>Open toast</Button
 >

@@ -47,6 +47,10 @@
         &.btn-xs {
             @apply h-6 px-2 text-xs;
         }
+
+        &.btn-icon {
+            @apply aspect-square size-7 px-1 py-1 fill-gray-300;
+        }
     }
 
     .btn-destructive {

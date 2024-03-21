@@ -1,6 +1,5 @@
 import { writable } from "svelte/store";
-import type { PaginatorInterface, TopicInterface, TopicRoomInterface, UserInterface } from "../types";
-export { toastStore, addToast, removeToast } from "./toast";
+import type { PaginatorInterface, TopicInterface, TopicChatRoomInterface, UserInterface } from "../types";
 
 export { topicPosts } from "./posts";
 export { messageStore } from "./messages";
@@ -17,7 +16,7 @@ interface JoinedTopicsInterface {
 export const joinedTopics = writable<JoinedTopicsInterface>({});
 
 interface JoinedTopicRoomsInterface {
-    [key: string]: TopicRoomInterface[];
+    [key: string]: TopicChatRoomInterface[];
 }
 
 export const joinedTopicRooms = writable<JoinedTopicRoomsInterface>({});

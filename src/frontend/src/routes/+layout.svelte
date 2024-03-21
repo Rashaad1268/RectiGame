@@ -1,14 +1,14 @@
 <script lang="ts">
     import { browser } from "$app/environment";
     import NavBar from "./navbar.svelte";
-    import ToastGroup from "$lib/components/toast/toastGroup.svelte";
-    import { joinedTopics, userData } from "$lib/stores";
+    import { userData } from "$lib/stores";
     import type { LayoutData } from "./$types";
     import SideBar from "./sideBar.svelte";
+	import { Toaster } from "svelte-sonner";
     import { initWebSocket } from "$lib/ws";
 
     import "../styles/app.scss";
-    import { fetchUserData, isObjEmpty } from "$lib/utils";
+    import { fetchUserData } from "$lib/utils";
 
     export let data: LayoutData;
 
@@ -43,6 +43,4 @@
     </main>
 </div>
 
-<!-- <Footer /> -->
-
-<ToastGroup />
+<Toaster theme="dark" />

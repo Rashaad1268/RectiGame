@@ -1,5 +1,9 @@
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, SAFE_METHODS
+from rest_framework.permissions import (
+    IsAuthenticatedOrReadOnly,
+    IsAuthenticated,
+    SAFE_METHODS,
+)
 
 
 class TopicChatChannelViewSetPermissions(IsAuthenticatedOrReadOnly):
@@ -20,7 +24,7 @@ class TopicChatMessageViewSetPermissions(IsAuthenticatedOrReadOnly):
             raise ValidationError("Invalid channel ID")
 
 
-class TopicRoomViewSetPermissions(IsAuthenticatedOrReadOnly):
+class TopicRoomViewSetPermissions(IsAuthenticated):
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
             return True

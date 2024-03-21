@@ -24,3 +24,16 @@ body {
     height: 100%;
     overflow: hidden;
 }
+
+.topic-tags {
+    @apply hidden md:flex overflow-x-scroll gap-1 mt-[2px];
+
+    .topic-tag {
+        @apply inline-block bg-zinc-700 rounded-full font-semibold
+               px-[6px] py-[1px] text-[10px] text-nowrap;
+    }
+
+    &::-webkit-scrollbar {
+        @apply hidden;
+    }
+}

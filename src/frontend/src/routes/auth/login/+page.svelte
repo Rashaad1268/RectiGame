@@ -10,7 +10,6 @@
     import BackgroundGrid from "../backgroundGrid.svelte";
     import { page } from "$app/stores";
     import { initWebSocket } from "$lib/ws";
-    import { addToast } from "$lib/stores";
 
     $: nextEndpoint = $page.url.searchParams.get("next");
 
