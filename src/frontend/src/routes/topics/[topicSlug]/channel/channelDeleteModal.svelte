@@ -27,7 +27,6 @@
             });
 
             messageStore.update((msgs) => {
-                console.log(msgs[channelToDelete!.id]);
                 delete msgs[channelToDelete!.id];
                 return msgs;
             });
