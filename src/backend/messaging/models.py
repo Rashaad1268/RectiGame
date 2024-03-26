@@ -7,20 +7,23 @@ from topics.models import Topic
 
 
 class TopicChatChannel(models.Model):
-    type = models.PositiveSmallIntegerField(choices=((1, "Text Channel"), (2, "Room")), default=1)
+    type = models.PositiveSmallIntegerField(
+        choices=((1, "Text Channel"), (2, "Room")), default=1
+    )
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    members = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="topic_room_member")
-    invite_code = models.SlugField(
-        max_length=20, unique=True, null=True, blank=True
+    members = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, blank=True, related_name="topic_room_member"
     )
+    invite_code = models.SlugField(max_length=20, unique=True, null=True, blank=True)
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        null=True, blank=True,
+        null=True,
+        blank=True,
         related_name="topic_room_creator",
     )
 
@@ -40,6 +43,10 @@ class TopicChatChannel(models.Model):
 
             # https://stackoverflow.com/a/78053539/13953998
             transaction.on_commit(add_member)
+
+    @property
+    def room_name(self):
+        return f"Channel-Room-{self.id}"
 
 
 class TopicChatMessage(models.Model):

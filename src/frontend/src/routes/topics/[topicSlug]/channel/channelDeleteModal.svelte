@@ -18,25 +18,6 @@
         const response = await fetchApi(`channels/${channelToDelete.id}/`, { method: "DELETE" });
 
         if (response.ok) {
-            joinedTopics.update((topics) => {
-                topics[topic!.slug].channels = topics[topic!.slug]!.channels.filter(
-                    (channel) => channel.id !== channelToDelete!.id
-                );
-
-                return topics;
-            });
-
-            messageStore.update((msgs) => {
-                delete msgs[channelToDelete!.id];
-                return msgs;
-            });
-            console.log($messageStore[channelToDelete!.id]);
-
-            if (parseInt($page.params.channel_id) === channelToDelete.id) {
-                // Redirect the user if he is currently viewing that channel
-                goto(`/topics/${topic.slug}/channel/`);
-            }
-
             channelToDelete = null;
         } else {
             toast.error("Failed to delete channel", {

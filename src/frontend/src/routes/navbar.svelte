@@ -29,8 +29,9 @@
 
 <header>
     <a class="nav-title size-8 flex items-center gap-4" href={homepageUrl}
-        ><img src="/logo.png" alt="Logo" /></a>
- 
+        ><img src="/logo.png" alt="Logo" /></a
+    >
+
     <div class="ml-auto">
         {#if isActuallyLoggedIn}
             <ProfileMenu />

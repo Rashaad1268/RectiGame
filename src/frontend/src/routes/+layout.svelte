@@ -4,7 +4,7 @@
     import { userData } from "$lib/stores";
     import type { LayoutData } from "./$types";
     import SideBar from "./sideBar.svelte";
-	import { Toaster } from "svelte-sonner";
+    import { Toaster } from "svelte-sonner";
     import { initWebSocket } from "$lib/ws";
 
     import "../styles/app.scss";

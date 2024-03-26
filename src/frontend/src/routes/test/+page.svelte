@@ -48,6 +48,6 @@
 <Button
     aria-label="test button"
     on:click={() => {
-        toast.info("Hello world", {duration: 20000, description: "lorem"});
+        toast.info("Hello world", { duration: 20000, description: "lorem" });
     }}>Open toast</Button
 >

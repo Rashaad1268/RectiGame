@@ -1,7 +1,10 @@
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import post_save, pre_delete, m2m_changed
 from django.dispatch import receiver
+
+from authentication.serializers import UserSerializer
+from authentication.models import User
 
 from . import models
 from .serializers import TopicChatChannelSerializer, TopicChatMessageSerializer
@@ -43,10 +46,20 @@ def dispatch_message_delete(sender, instance, **kwargs):
 
 @receiver(post_save, sender=models.TopicChatChannel)
 def dispatch_channel_create_and_edit(sender, instance, created, **kwargs):
+    is_topic_room = instance.type == 2
+
+    if is_topic_room and created:
+        # there is no ws event for the creation of rooms
+        return
+
+    topic_room_or_channel = "topic_room" if is_topic_room else "channel"
+
     async_to_sync(channel_layer.group_send)(
-        instance.topic.channel_name,
+        instance.room_name if is_topic_room else instance.topic.channel_name,
         {
-            "type": "channel_create" if created else "channel_update",
+            "type": (
+                "channel_create" if created else f"{topic_room_or_channel}_update"
+            ),
             "data": TopicChatChannelSerializer(instance).data,
         },
     )
@@ -61,3 +74,20 @@ def dispatch_channel_delete(sender, instance, **kwargs):
             "data": {"id": instance.id, "topic": instance.topic.slug},
         },
     )
+
+
+@receiver(m2m_changed, sender=models.TopicChatChannel.members.through)
+def dispatch_room_member_join(instance, action, pk_set, model, **kwargs):
+    if action == "post_add" and model == User:
+        # here instance will be the topic chat channel instance
+        for user_id in pk_set:
+            async_to_sync(channel_layer.group_send)(
+                instance.room_name,
+                {
+                    "type": "room_member_join",
+                    "data": {
+                        "user": UserSerializer(User.objects.get(id=user_id)).data,
+                        "room": TopicChatChannelSerializer(instance).data,
+                    },
+                },
+            )

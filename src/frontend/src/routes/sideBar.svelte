@@ -108,5 +108,4 @@
             @apply bg-green-500 h-8;
         }
     }
-
 </style>

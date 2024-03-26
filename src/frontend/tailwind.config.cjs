@@ -34,7 +34,7 @@ module.exports = {
                 monocraft: ["monocraft", "sans-serif"],
                 doodle: ["doodle", "sans-serif"],
                 cod: ["cod", "sans-serif"]
-            },
+            }
         }
     }
 };

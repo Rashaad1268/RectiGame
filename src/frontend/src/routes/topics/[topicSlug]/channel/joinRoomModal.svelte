@@ -29,11 +29,11 @@
                 } else {
                     joinedRooms[newlyJoinedRoom.topic] = [newlyJoinedRoom];
                 }
-                
+
                 return joinedRooms;
             });
 
-            goto(`/topics/${newlyJoinedRoom.topic}/channel/${newlyJoinedRoom.id}/`)
+            goto(`/topics/${newlyJoinedRoom.topic}/channel/${newlyJoinedRoom.id}/`);
             isOpen = false;
         }
     }

@@ -89,18 +89,18 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(methods=("GET",), detail=False, url_path="me")
     def get_current_user_data(self, request):
         ctx = self.get_serializer_context()
+        user = request.user
+
         return Response(
             {
-                "user": serializers.UserSerializer(request.user, context=ctx).data,
+                "user": serializers.UserSerializer(user, context=ctx).data,
                 "joined_topics": {
                     topic.slug: TopicSerializer(topic, context=ctx).data
-                    for topic in request.user.topic_set.all()
+                    for topic in user.topic_set.all()
                 },
-                "joined_rooms": serialize_topic_rooms(request.user, ctx),
+                "joined_rooms": serialize_topic_rooms(user, ctx),
                 "notifications": NotificationSerializer(
-                    models.Notification.objects.filter(user=request.user).order_by(
-                        "-id"
-                    ),
+                    models.Notification.objects.filter(user=user).order_by("-id"),
                     many=True,
                 ).data,
             }

@@ -37,15 +37,8 @@
         });
 
         if (resp.ok) {
+            // the channel will be added to the store by the ws event handler
             isOpen = false;
-
-            const newChannel = await resp.json();
-
-            joinedTopics.update((topics) => {
-                topics[topic!.slug].channels = [...topics[topic!.slug].channels, newChannel];
-
-                return topics;
-            });
         } else {
             errorMessages = formatApiErrors(await resp.json());
         }
@@ -84,7 +77,9 @@
         />
 
         <ModalActions class="pt-3">
-            <Button class="btn-destructive" type="button" on:click={() => (isOpen = false)}>Cancel</Button>
+            <Button class="btn-destructive" type="button" on:click={() => (isOpen = false)}
+                >Cancel</Button
+            >
             <Button type="submit" class="btn-blue">Create channel</Button>
         </ModalActions>
     </Form>

@@ -147,6 +147,8 @@ class TopicRoomViewSet(CustomViewSet):
                 **TopicChatChannelSerializer(
                     topic_room, context=self.get_serializer_context()
                 ).data,
-                "is_member": topic_room.members.contains(request.user),
+                "is_member": topic_room.members.contains(
+                    request.user
+                ),  # add this to give some context to the frontend
             }
         )

@@ -5,8 +5,8 @@ from django.utils import timezone
 
 from topics.models import Topic
 from .serializers import WebSocketActionSerializer
-# from .serializers import UserSerializer, ChatGroupSerializer
 
+# from .serializers import UserSerializer, ChatGroupSerializer
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -22,8 +22,12 @@ class ChatConsumer(WebsocketConsumer):
 
         for topic in Topic.objects.filter(members__id=user.id):
             async_to_sync(self.channel_layer.group_add)(
-                topic.channel_name,
-                self.channel_name
+                topic.channel_name, self.channel_name
+            )
+
+        for channel in user.topic_room_member.all():
+            async_to_sync(self.channel_layer.group_add)(
+                channel.room_name, self.channel_name
             )
 
         self.accept()
@@ -36,8 +40,12 @@ class ChatConsumer(WebsocketConsumer):
 
         for topic in Topic.objects.filter(members__id=user.id):
             async_to_sync(self.channel_layer.group_discard)(
-                topic.channel_name,
-                self.channel_name
+                topic.channel_name, self.channel_name
+            )
+
+        for channel in user.topic_room_member.all():
+            async_to_sync(self.channel_layer.group_discard)(
+                channel.room_name, self.channel_name
             )
 
         user.is_online = False
@@ -46,11 +54,7 @@ class ChatConsumer(WebsocketConsumer):
 
     def dispatch_named_event(self, event_name, payload, extra_params={}):
         """A helper function to dispatch an event with a name specified"""
-        data = {
-            "e": event_name.upper(),
-            "d": payload,
-            **extra_params
-        }
+        data = {"e": event_name.upper(), "d": payload, **extra_params}
         self.send(text_data=json.dumps(data))
 
     def message_create(self, event):
@@ -71,14 +75,17 @@ class ChatConsumer(WebsocketConsumer):
     def channel_delete(self, event):
         self.dispatch_named_event("CHANNEL_DELETE", event["data"])
 
-    def member_join(self, event):
-        self.dispatch_named_event("MEMBER_JOIN", event["data"])
+    def topic_room_update(self, event):
+        self.dispatch_named_event("TOPIC_ROOM_UPDATE", event["data"])
 
-    def member_update(self, event):
-        self.dispatch_named_event("MEMBER_UPDATE", event["data"])
+    def room_member_join(self, event):
+        self.dispatch_named_event("ROOM_MEMBER_JOIN", event["data"])
 
-    def member_leave(self, event):
-        self.dispatch_named_event("MEMBER_LEAVE", event["data"])
+    def room_member_update(self, event):
+        self.dispatch_named_event("ROOM_MEMBER_UPDATE", event["data"])
+
+    def room_member_leave(self, event):
+        self.dispatch_named_event("ROOM_MEMBER_LEAVE", event["data"])
 
     def receive(self, text_data=None, bytes_data=None):
         try:
@@ -97,8 +104,7 @@ class ChatConsumer(WebsocketConsumer):
 
                 if topic_slug and Topic.objects.filter(slug=topic_slug).exists():
                     async_to_sync(self.channel_layer.group_add)(
-                        f"Topic-{topic_slug}",
-                        self.channel_name
+                        f"Topic-{topic_slug}", self.channel_name
                     )
 
             case "UNSUBSCRIBE_FROM_TOPIC":
@@ -106,6 +112,5 @@ class ChatConsumer(WebsocketConsumer):
 
                 if topic_slug and Topic.objects.filter(slug=topic_slug).exists():
                     async_to_sync(self.channel_layer.group_discard)(
-                        f"Topic-{topic_slug}",
-                        self.channel_name
+                        f"Topic-{topic_slug}", self.channel_name
                     )

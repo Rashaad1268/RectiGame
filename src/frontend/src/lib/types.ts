@@ -74,7 +74,7 @@ export interface TopicChatRoomInterface extends TopicChatChannelInterface {
 export interface TopicChatMessageInterface {
     id: number;
     author: UserInterface;
-    channel: TopicChatChannelInterface;
+    channel: number;
     content: string;
     created_at: string;
     edited_at: string;
