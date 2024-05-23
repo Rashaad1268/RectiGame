@@ -10,7 +10,7 @@ class PostViewSetPermissions(IsAuthenticatedOrReadOnly):
 
             if (
                 not serializer.validated_data["topic"]
-                .topic_members.filter(user=request.user)
+                .topic_members.filter(user=request.user, has_left=False)
                 .exists()
                 and not request.user.is_staff
             ):

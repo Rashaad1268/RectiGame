@@ -68,7 +68,7 @@ class LogoutView(views.APIView):
 def serialize_topic_rooms(user, ctx):
     result = {}
 
-    for topic_room in TopicChatChannel.objects.filter(members__user__id=user.id):
+    for topic_room in TopicChatChannel.objects.filter(members__user=user):
         if topic_room.topic.slug not in result:
             result[topic_room.topic.slug] = [
                 TopicChatChannelSerializer(topic_room, context=ctx).data
@@ -98,7 +98,9 @@ class UserViewSet(viewsets.ModelViewSet):
                 "user": serializers.UserSerializer(user, context=ctx).data,
                 "joined_topics": {
                     topic.slug: TopicSerializer(topic, context=ctx).data
-                    for topic in Topic.objects.filter(topic_members__user__id=user.id)
+                    for topic in Topic.objects.filter(
+                        topic_members__user=user, topic_members__has_left=False
+                    )
                 },
                 "joined_rooms": serialize_topic_rooms(user, ctx),
                 "notifications": NotificationSerializer(

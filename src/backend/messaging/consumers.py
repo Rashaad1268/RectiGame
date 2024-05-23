@@ -21,12 +21,12 @@ class ChatConsumer(WebsocketConsumer):
         user.channel_name = self.channel_name
         user.save()
 
-        for topic in Topic.objects.filter(topic_members__user__id=user.id):
+        for topic in Topic.objects.filter(topic_members__user=user):
             async_to_sync(self.channel_layer.group_add)(
                 topic.channel_name, self.channel_name
             )
 
-        for channel in TopicChatChannel.objects.filter(members__user__id=user.id):
+        for channel in TopicChatChannel.objects.filter(members__user=user):
             async_to_sync(self.channel_layer.group_add)(
                 channel.room_name, self.channel_name
             )
@@ -39,14 +39,14 @@ class ChatConsumer(WebsocketConsumer):
         if user.is_anonymous:
             return
 
-        for topic in Topic.objects.filter(topic_members__user__id=user.id):
+        for topic in Topic.objects.filter(topic_members__user=user):
             async_to_sync(self.channel_layer.group_discard)(
                 topic.channel_name, self.channel_name
             )
 
-        for channel in TopicChatChannel.objects.filter(members__user__id=user.id):
+        for room in TopicChatChannel.objects.filter(members__user=user):
             async_to_sync(self.channel_layer.group_discard)(
-                channel.room_name, self.channel_name
+                room.room_name, self.channel_name
             )
 
         user.is_online = False

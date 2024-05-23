@@ -34,7 +34,7 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
 
     @action(
         detail=True,
-        methods=["post"],
+        methods=("POST",),
         url_path="join",
         permission_classes=(permissions.IsAuthenticated,),
     )
@@ -51,6 +51,7 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
 
             topic_member.has_left = False
             topic_member.joined_at = timezone.now()
+            topic_member.save()
 
         except TopicMember.DoesNotExist:
             # else, create a new topic member instance for this user
@@ -60,7 +61,7 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
 
     @action(
         detail=True,
-        methods=["post"],
+        methods=("POST",),
         url_path="leave",
         permission_classes=(permissions.IsAuthenticated,),
     )
@@ -68,7 +69,7 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
         topic = self.get_object()
 
         try:
-            topic_member = topic.topic_members.get(user=request.user)
+            topic_member = topic.topic_members.get(user=request.user, has_left=False)
             topic_member.nickname = None
             topic_member.has_left = True
             topic_member.save()

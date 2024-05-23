@@ -43,7 +43,7 @@ class TopicSerializer(TopicCreateSerializer):
         request = self.context.get("request")
         if request is not None and request.user.is_authenticated:
             return TopicMember.objects.filter(
-                topic=topic, user=self.context["request"].user
+                topic=topic, user=self.context["request"].user, has_left=False
             ).exists()
         return False
 
@@ -61,4 +61,3 @@ class TopicSerializer(TopicCreateSerializer):
             "is_member",
             "channels",
         )
-

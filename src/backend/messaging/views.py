@@ -26,7 +26,7 @@ class TopicChatChannelViewSet(CustomViewSet):
     def get_queryset(self):
         return (
             TopicChatChannel.objects.filter(type=1)
-            | self.request.user.topic_room_member.all()
+            | TopicChatChannel.objects.filter(members__user=self.request.user)
         )
 
     def list(self, request, *args, **kwargs):
@@ -75,7 +75,9 @@ class TopicChatMessageViewSet(CustomViewSet):
         channel = get_object_or_404(TopicChatChannel, id=int(self.kwargs["channel_pk"]))
 
         return serializer.save(
-            author=channel.topic.topic_members.get(user=self.request.user),
+            author=channel.topic.topic_members.get(
+                user=self.request.user, has_left=False
+            ),
             channel=channel,
         )
 
@@ -94,12 +96,14 @@ class TopicRoomViewSet(CustomViewSet):
     permission_classes = (permissions.TopicRoomViewSetPermissions,)
 
     def get_queryset(self):
-        return self.request.user.topic_room_member.all()
+        return TopicChatChannel.objects.filter(members__user=self.request.user)
 
     def perform_create(self, serializer):
         topic = serializer.validated_data["topic"]
 
-        if not topic.topic_members.filter(user=self.request.user).exists():
+        if not topic.topic_members.filter(
+            user=self.request.user, has_left=False
+        ).exists():
             raise exceptions.PermissionDenied(
                 "You need to join a topic in order to create a room in that topic"
             )
@@ -112,7 +116,7 @@ class TopicRoomViewSet(CustomViewSet):
         # pk is actually the invite code of the topic room
         room = get_object_or_404(TopicChatChannel, invite_code=pk)
 
-        member, _ = room.topic.topic_members.get_or_create(user=request.user)
+        member, _ = room.topic.topic_members.get_or_create(user=request.user, has_left=False)
 
         if not room.members.contains(member):
             room.members.add(member)
@@ -145,8 +149,8 @@ class TopicRoomViewSet(CustomViewSet):
                 **TopicChatChannelSerializer(
                     topic_room, context=self.get_serializer_context()
                 ).data,
-                "is_member": topic_room.members.contains(
-                    request.user
-                ),  # add this to give some context to the frontend
+                "is_member": topic_room.members.filter(
+                    user=request.user, has_left=False
+                ).exists(),  # add this to give some context to the frontend
             }
         )

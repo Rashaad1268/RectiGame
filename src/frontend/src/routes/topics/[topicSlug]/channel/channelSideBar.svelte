@@ -9,7 +9,6 @@
     import ChannelCreateModal from "./channelCreateModal.svelte";
     import ChannelDeleteModal from "./channelDeleteModal.svelte";
     import CreateRoomModal from "./roomCreateModal.svelte";
-    import JoinRoomModal from "./joinRoomModal.svelte";
 
     $: selectedTopicSlug = $page.params.topicSlug;
 
@@ -21,7 +20,6 @@
     $: channels = topic?.channels || [];
 
     let isChannelCreateModalOpen = false;
-    let isJoinRoomModalOpen = false;
     let isCreateRoomModalOpen = false;
 
     let channelToDelete: TopicChatChannelInterface | null = null;
@@ -52,9 +50,6 @@
 
             <div class="mt-4 flex flex-col gap-1 items-start">
                 <div class="flex gap-1 flex-wrap">
-                    <Button class="btn-xs btn-blue" on:click={() => (isJoinRoomModalOpen = true)}
-                        >Join Room</Button
-                    >
                     <Button class="btn-xs btn-blue" on:click={() => (isCreateRoomModalOpen = true)}
                         >Create Room</Button
                     >
@@ -134,7 +129,6 @@
 <ChannelCreateModal bind:isOpen={isChannelCreateModalOpen} bind:topic />
 <ChannelDeleteModal bind:channelToDelete bind:topic />
 
-<JoinRoomModal bind:isOpen={isJoinRoomModalOpen} />
 <CreateRoomModal bind:isOpen={isCreateRoomModalOpen} bind:topic />
 
 <style lang="scss">

@@ -1,5 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import pagination, status, viewsets
+from rest_framework import pagination, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -30,10 +30,9 @@ class PostsViewSet(CustomViewSet):
     fetch_serializer = PostSerializer
 
     def perform_create(self, serializer):
-        print()
         return serializer.save(
             author=serializer.validated_data["topic"].topic_members.get(
-                user=self.request.user
+                user=self.request.user, has_left=False
             )
         )
 
