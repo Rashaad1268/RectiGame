@@ -54,7 +54,7 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
 
         except TopicMember.DoesNotExist:
             # else, create a new topic member instance for this user
-            topic.members.create(user=request.user)
+            topic.topic_members.create(user=request.user)
 
         return Response(status=status.HTTP_201_CREATED)
 

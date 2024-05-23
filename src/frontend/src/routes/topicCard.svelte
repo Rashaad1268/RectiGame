@@ -4,7 +4,7 @@
     export let topic: TopicInterface;
 </script>
 
-<a href="/topics/{topic.slug}" class="topic-card">
+<a href="/topics/{topic.slug}" class="topic-card max-w-[15vw] min-w-[10vw]">
     <div class="topic-image">
         <img loading="lazy" src={topic.image} alt={topic.name} />
     </div>

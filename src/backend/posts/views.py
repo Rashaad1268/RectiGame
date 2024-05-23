@@ -30,7 +30,12 @@ class PostsViewSet(CustomViewSet):
     fetch_serializer = PostSerializer
 
     def perform_create(self, serializer):
-        return serializer.save(author=self.request.user)
+        print()
+        return serializer.save(
+            author=serializer.validated_data["topic"].topic_members.get(
+                user=self.request.user
+            )
+        )
 
     @action(
         detail=True,

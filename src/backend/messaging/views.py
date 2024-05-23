@@ -99,7 +99,7 @@ class TopicRoomViewSet(CustomViewSet):
     def perform_create(self, serializer):
         topic = serializer.validated_data["topic"]
 
-        if not topic.members.contains(self.request.user):
+        if not topic.topic_members.filter(user=self.request.user).exists():
             raise exceptions.PermissionDenied(
                 "You need to join a topic in order to create a room in that topic"
             )
@@ -112,12 +112,10 @@ class TopicRoomViewSet(CustomViewSet):
         # pk is actually the invite code of the topic room
         room = get_object_or_404(TopicChatChannel, invite_code=pk)
 
-        if not room.topic.members.contains(request.user):
-            # add the user to the rooms topic if they already aren't one
-            room.topic.members.add(request.user)
+        member, _ = room.topic.topic_members.get_or_create(user=request.user)
 
-        if not room.members.contains(request.user):
-            room.members.add(self.request.user)
+        if not room.members.contains(member):
+            room.members.add(member)
 
         return Response(
             TopicChatChannelSerializer(room, context=self.get_serializer_context()).data

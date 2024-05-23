@@ -36,7 +36,7 @@ class TopicChatChannelSerializer(TopicChatChannelCreateSerializer):
     def get_members(self, channel):
         if channel.type == 2:
             return TopicMemberSerializer(
-                channel.members.all(), many=True, context={"omit_user": True}
+                channel.members.all(), many=True
             ).data
 
         else:
@@ -65,7 +65,7 @@ class TopicChatMessageCreateSerializer(serializers.ModelSerializer):
 
 
 class TopicChatMessageSerializer(TopicChatMessageCreateSerializer):
-    author = TopicMemberSerializer(context={"omit_user": True})
+    author = TopicMemberSerializer()
 
     class Meta(TopicChatMessageCreateSerializer.Meta):
         fields = (

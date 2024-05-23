@@ -33,10 +33,9 @@
 </div>
 
 <style lang="scss">
+    // TODO: Make the topics grid look similar to https://twitch.tv/directory
     #topics-grid {
-        @apply grid gap-3 gap-y-4 pt-4 pr-4 h-full ml-4;
-        max-width: 100%; /* DON'T TOUCH THIS!, WITHOUT THIS THE auto-fit DOESN'T WORK FOR SOME REASON */
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        @apply flex flex-wrap max-w-full w-full gap-2;
     }
 
     @media (max-width: 380px) {

@@ -12,7 +12,7 @@ class PostCreateSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(PostCreateSerializer):
-    author = TopicMemberSerializer(context={"omit_user": True})
+    author = TopicMemberSerializer()
     like_count = serializers.SerializerMethodField()
     dislike_count = serializers.SerializerMethodField()
     is_liked = serializers.SerializerMethodField()
