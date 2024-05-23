@@ -72,11 +72,11 @@ class TopicChatMessageViewSet(CustomViewSet):
         ).order_by("-id")
 
     def perform_create(self, serializer):
+        channel = get_object_or_404(TopicChatChannel, id=int(self.kwargs["channel_pk"]))
+
         return serializer.save(
-            author=self.request.user,
-            channel=get_object_or_404(
-                TopicChatChannel, id=int(self.kwargs["channel_pk"])
-            ),
+            author=channel.topic.topic_members.get(user=self.request.user),
+            channel=channel,
         )
 
     def create(self, request, *args, **kwargs):

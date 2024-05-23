@@ -1,7 +1,5 @@
 export interface PaginatorInterface<T> {
     count: number;
-    next: string | null;
-    previous: string | null;
     results: Array<T>;
 }
 
@@ -42,7 +40,7 @@ export interface PostInterface {
     topic: string; // The topic slug is only provided
     title: string;
     content: string;
-    author: UserInterface;
+    author: TopicMemberInterface;
     created_at: string;
     edited_at: string;
     like_count: number;
@@ -51,7 +49,9 @@ export interface PostInterface {
     is_disliked: boolean;
 }
 
-export interface TopicChatChannelInterface {
+
+
+export interface TopicChatRoomInterface {
     type: number;
     id: number;
     name: string;
@@ -59,24 +59,28 @@ export interface TopicChatChannelInterface {
     created_at: string;
     topic: string;
 
-    // room channel fields
-    creator?: number;
-    invite_code?: string;
-    members?: UserInterface[];
-}
-
-export interface TopicChatRoomInterface extends TopicChatChannelInterface {
     creator: number;
     invite_code: string;
-    members: UserInterface[];
+    members: TopicMemberInterface[];
 }
+
+export type TopicChatChannelInterface = Omit<TopicChatRoomInterface, "creator" | "invite_code" | "members">
 
 export interface TopicChatMessageInterface {
     id: number;
-    author: UserInterface;
+    author: TopicMemberInterface;
     channel: number;
     content: string;
     created_at: string;
     edited_at: string;
     message_type: number;
+}
+
+export interface TopicMemberInterface {
+    user: UserInterface;
+    topic: string;
+    nickname?: string;
+    permissions: number;
+    joined_at?: string;
+    has_left: boolean;
 }

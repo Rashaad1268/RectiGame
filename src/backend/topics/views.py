@@ -1,12 +1,13 @@
-from rest_framework import viewsets, permissions, pagination, status
-from rest_framework.response import Response
+from django.utils import timezone
 from rest_framework.decorators import action
+from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets, permissions, pagination, status
 
 from backend.viewsets import CustomViewSet
 
 from . import serializers
-from .models import TopicTag, Topic
+from .models import Topic, TopicTag, TopicMember
 
 
 class Paginator(pagination.PageNumberPagination):
@@ -40,11 +41,20 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
     def join_topic(self, request, pk):
         topic = self.get_object()
 
-        if not topic.members.contains(request.user):
-            topic.members.add(request.user)
+        try:
+            # If a topic member instance already exists for this user
+            # then just set joined_at to False
+            topic_member = topic.topic_members.get(user=request.user)
 
-        else:
-            return Response({"detail": "User is already a member of this topic"})
+            if topic_member.has_left is False:
+                return Response({"detail": "User is already a member of this topic"})
+
+            topic_member.has_left = False
+            topic_member.joined_at = timezone.now()
+
+        except TopicMember.DoesNotExist:
+            # else, create a new topic member instance for this user
+            topic.members.create(user=request.user)
 
         return Response(status=status.HTTP_201_CREATED)
 
@@ -57,10 +67,13 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
     def leave_topic(self, request, pk):
         topic = self.get_object()
 
-        if topic.members.contains(request.user):
-            topic.members.remove(request.user)
+        try:
+            topic_member = topic.topic_members.get(user=request.user)
+            topic_member.nickname = None
+            topic_member.has_left = True
+            topic_member.save()
 
-        else:
+        except TopicMember.DoesNotExist:
             return Response(
                 {"detail": "User is not a member of this topic to be removed from"},
                 status=status.HTTP_400_BAD_REQUEST,

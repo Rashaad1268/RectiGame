@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from "$app/stores";
-    import { fetchApi } from "$lib/api.js";
+    import { fetchApi } from "$lib/api";
     import { joinedTopics, messageStore, userData, joinedTopicRooms } from "$lib/stores/";
     import Message from "./message.svelte";
     import type {
@@ -19,15 +19,18 @@
     $: topicSlug = $page.params.topicSlug;
     $: selectedChannelId = parseInt($page.params.channel_id);
 
-    $: channel = !!$userData
-        ? $joinedTopics[topicSlug]?.channels?.find((c) => c.id === selectedChannelId) ||
-          (($joinedTopicRooms[topicSlug] || []).find((c) => c.id === selectedChannelId) as
-              | undefined
-              | null
-              | TopicChatChannelInterface
-              | TopicChatRoomInterface) ||
-          null
-        : undefined;
+    $: channel = (
+        !!$userData
+            ? $joinedTopics[topicSlug]?.channels?.find((c) => c.id === selectedChannelId) ||
+              ($joinedTopicRooms[topicSlug] || []).find((c) => c.id === selectedChannelId) ||
+              null
+            : undefined
+    ) as
+        | undefined // loading
+        | null // channel not found
+        | TopicChatChannelInterface;
+
+    $: room = channel as TopicChatRoomInterface;
 
     $: isRoom = channel?.type === 2;
     $: messages = ($messageStore[channel?.id ?? -1] ?? {}).results;
@@ -80,7 +83,7 @@
     function calculateIsInlineMsg(idx: number, message: TopicChatMessageInterface): boolean {
         const msg = ($messageStore[channel!.id]?.results ?? [])[idx + 1];
 
-        if (msg?.author?.id === message?.author.id) {
+        if (msg?.author?.user.id === message?.author.user.id) {
             const prevMsgCreatedAt = Date.parse(msg.created_at);
             const currentMsgCreatedAt = Date.parse(message.created_at);
 
@@ -119,7 +122,8 @@
     }
 
     async function addRoomMember() {
-        const inviteLink = window.location.origin + `/invite/${channel!.invite_code}`;
+        channel as TopicChatRoomInterface;
+        const inviteLink = window.location.origin + `/invite/${room.invite_code}`;
 
         await navigator.clipboard.writeText(inviteLink);
 
@@ -165,7 +169,7 @@
                 </span>
 
                 <!-- Only show the room invite if the user is the creator of the topic or if the user is staff -->
-                {#if isRoom && (channel.creator === $userData?.id || $userData?.is_staff)}
+                {#if isRoom && (room.creator === $userData?.id || $userData?.is_staff)}
                     <Button class="btn-dark btn-icon ml-2" on:click={addRoomMember}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -193,7 +197,7 @@
         </div>
 
         {#if isRoom}
-            <RoomMemberList {channel} /> <!-- @eslint-ignore -->
+            <RoomMemberList channel={room} />
         {/if}
     </div>
 {/if}

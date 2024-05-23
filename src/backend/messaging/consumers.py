@@ -4,6 +4,7 @@ from channels.generic.websocket import WebsocketConsumer
 from django.utils import timezone
 
 from topics.models import Topic
+from messaging.models import TopicChatChannel
 from .serializers import WebSocketActionSerializer
 
 # from .serializers import UserSerializer, ChatGroupSerializer
@@ -20,12 +21,12 @@ class ChatConsumer(WebsocketConsumer):
         user.channel_name = self.channel_name
         user.save()
 
-        for topic in Topic.objects.filter(members__id=user.id):
+        for topic in Topic.objects.filter(topic_members__user__id=user.id):
             async_to_sync(self.channel_layer.group_add)(
                 topic.channel_name, self.channel_name
             )
 
-        for channel in user.topic_room_member.all():
+        for channel in TopicChatChannel.objects.filter(members__user__id=user.id):
             async_to_sync(self.channel_layer.group_add)(
                 channel.room_name, self.channel_name
             )
@@ -38,12 +39,12 @@ class ChatConsumer(WebsocketConsumer):
         if user.is_anonymous:
             return
 
-        for topic in Topic.objects.filter(members__id=user.id):
+        for topic in Topic.objects.filter(topic_members__user__id=user.id):
             async_to_sync(self.channel_layer.group_discard)(
                 topic.channel_name, self.channel_name
             )
 
-        for channel in user.topic_room_member.all():
+        for channel in TopicChatChannel.objects.filter(members__user__id=user.id):
             async_to_sync(self.channel_layer.group_discard)(
                 channel.room_name, self.channel_name
             )

@@ -1,9 +1,8 @@
 from django.db import models, transaction
 from django.conf import settings
 from django.utils import timezone, crypto
-from django.core.exceptions import ValidationError
 
-from topics.models import Topic
+from topics.models import Topic, TopicMember
 
 
 class TopicChatChannel(models.Model):
@@ -13,10 +12,10 @@ class TopicChatChannel(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=500, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
     members = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, blank=True, related_name="topic_room_member"
+        TopicMember, blank=True, related_name="room_member"
     )
     invite_code = models.SlugField(max_length=20, unique=True, null=True, blank=True)
     creator = models.ForeignKey(
@@ -24,7 +23,7 @@ class TopicChatChannel(models.Model):
         on_delete=models.CASCADE,
         null=True,
         blank=True,
-        related_name="topic_room_creator",
+        related_name="room_creator",
     )
 
     def save(self, *args, **kwargs):
@@ -39,33 +38,35 @@ class TopicChatChannel(models.Model):
 
             def add_member():
                 # Add the creator of the room as a member
-                self.members.add(self.creator)
+                creator_member, created = TopicMember.objects.get_or_create(
+                    topic=self.topic, user=self.creator
+                )
+                self.members.add(creator_member)
 
             # https://stackoverflow.com/a/78053539/13953998
             transaction.on_commit(add_member)
 
     @property
     def room_name(self):
-        return f"Channel-Room-{self.id}"
+        return f"Channel-{self.id}"
 
 
 class TopicChatMessage(models.Model):
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL
-    )
+    author = models.ForeignKey(TopicMember, null=True, on_delete=models.SET_NULL)
     channel = models.ForeignKey(
         TopicChatChannel, on_delete=models.CASCADE, null=True, blank=True
     )
     content = models.TextField(max_length=1000)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
     edited_at = models.DateTimeField(null=True, blank=True)
-    message_type = models.PositiveSmallIntegerField(default=0)
 
-    def clean(self) -> None:
-        if not self.channel and not self.room:
-            raise ValidationError(
-                "Either channel or room must be specified when creating a message"
-            )
+    MESSAGE_TYPES = [
+        ("System Message", 0),
+        ("Normal Message", 1),
+        ("Reply", 2),
+        ("Reply System message", 3),
+    ]
+    type = models.PositiveSmallIntegerField(default=0)
 
     def save(self, *args, **kwargs):
         if self.id:

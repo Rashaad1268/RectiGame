@@ -11,11 +11,11 @@
 
     $: {
         /*
-			This code block makes the api call twice for some reson
-			Someone fix it
+			This code block makes the api call twice for some reason
+			Someone fix it, thanks
 		*/
         if (browser) {
-            if (Boolean(!postsPaginator)) {
+            if (!postsPaginator) {
                 fetchApi(`posts/?topic=${topic.slug}`).then(async (response) => {
                     if (response.ok) {
                         const data = await response.json();

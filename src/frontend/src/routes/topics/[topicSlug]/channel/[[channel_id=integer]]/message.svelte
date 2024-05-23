@@ -23,7 +23,7 @@
 
 {#if showUserProfilePopup}
     <div class="w-32" use:popperContent={extraOpts}>
-        <UserProfilePopup user={message.author} />
+        <UserProfilePopup user={message.author.user} />
     </div>
 {/if}
 
@@ -35,7 +35,7 @@
                     use:popperRef
                     on:click={() => (showUserProfilePopup = !showUserProfilePopup)}
                 >
-                    <ProfilePicture user={message.author} class="size-10" />
+                    <ProfilePicture user={message.author.user} class="size-10" />
                 </button>
             {/if}
         </div>
@@ -47,10 +47,10 @@
                         use:popperRef
                         on:click={() => (showUserProfilePopup = !showUserProfilePopup)}
                     >
-                        <span class="font-semibold">{message.author.username}</span>
+                        <span class="font-semibold">{message.author.user.username}</span>
                     </button>
 
-                    {#if message.author.is_staff}
+                    {#if message.author.user.is_staff}
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             class="w-5 h-5 fill-blue-500 ml-1"
@@ -73,10 +73,15 @@
 
 <style lang="scss">
     .message {
-        @apply flex mt-2;
+        @apply flex;
 
         &:hover {
             @apply bg-discordDark-760;
+        }
+
+        &:not(.inline-msg) {
+            // Add a margin on the top for non-inline messages
+            @apply mt-2;
         }
     }
 </style>

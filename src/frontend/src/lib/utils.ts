@@ -19,15 +19,3 @@ export async function fetchUserData() {
         );
     }
 }
-
-export function trimText(text: string, length: number) {
-    if (text.length > length) {
-        return text.substring(0, length) + "...";
-    }
-
-    return text;
-}
-
-export function isObjEmpty(obj: object) {
-    return Object.keys(obj).length === 0 && obj.constructor === Object;
-}

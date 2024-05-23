@@ -3,7 +3,7 @@
     import Button from "$lib/components/button.svelte";
     import { joinedTopics, socket } from "$lib/stores/";
     import type { TopicInterface } from "$lib/types";
-    import { trimText } from "$lib/utils";
+    import { truncate } from "$lib/utils";
     import type { PageData } from "./$types";
     import CreatePostModal from "./createPostModal.svelte";
     import TopicLeaveModal from "./topicLeaveModal.svelte";
@@ -86,7 +86,7 @@
                 </div>
             </div>
 
-            <p class="mt-3">{trimText(topic.description, 100)}</p>
+            <p class="mt-3">{truncate(topic.description, 100)}</p>
             <div class="mt-3 flex gap-5 items-center">
                 {#if topic.is_member}
                     <Button

@@ -3,18 +3,18 @@
     import { joinedTopicRooms } from "$lib/stores";
     import type { TopicChatChannelInterface, TopicChatRoomInterface } from "$lib/types";
 
-    export let channel: TopicChatChannelInterface | undefined;
+    export let channel: TopicChatRoomInterface;
 </script>
 
 {#if channel}
     <div class="room-member-list bg-discordDark-800 w-[18vw]">
         <h3 class="text-xl font-monocraft pl-4 pt-4">Room Members</h3>
         <div class="flex flex-col gap-[1px]">
-            {#each channel?.members || [] as member (member.id)}
+            {#each channel?.members || [] as member (member.user.id)}
                 <div class="member-tile">
-                    <ProfilePicture user={member} class="size-10" />
+                    <ProfilePicture user={member.user} class="size-10" />
                     <div>
-                        <span class="text-lg font-medium">{member.username}</span>
+                        <span class="text-lg font-medium">{member.user.username}</span>
                     </div>
                 </div>
             {/each}

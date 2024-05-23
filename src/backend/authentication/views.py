@@ -6,7 +6,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from topics.serializers import TopicSerializer
+from topics.models import Topic
 from messaging.serializers import NotificationSerializer, TopicChatChannelSerializer
+from messaging.models import TopicChatChannel
 from .permissions import UserViewSetPermissions
 from . import models, serializers
 
@@ -66,7 +68,7 @@ class LogoutView(views.APIView):
 def serialize_topic_rooms(user, ctx):
     result = {}
 
-    for topic_room in user.topic_room_member.all():
+    for topic_room in TopicChatChannel.objects.filter(members__user__id=user.id):
         if topic_room.topic.slug not in result:
             result[topic_room.topic.slug] = [
                 TopicChatChannelSerializer(topic_room, context=ctx).data
@@ -96,7 +98,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 "user": serializers.UserSerializer(user, context=ctx).data,
                 "joined_topics": {
                     topic.slug: TopicSerializer(topic, context=ctx).data
-                    for topic in user.topic_set.all()
+                    for topic in Topic.objects.filter(topic_members__user__id=user.id)
                 },
                 "joined_rooms": serialize_topic_rooms(user, ctx),
                 "notifications": NotificationSerializer(

@@ -6,6 +6,10 @@
     "strings": true
   },
   "scss.lint.unknownAtRules": "ignore",
-  "cSpell.words": ["Gamerz"]
+  "cSpell.words": ["Gamerz"],
+  "files.exclude": {
+    "src/frontend/node_modules/": true,
+    "src/backend/**/__pycache__": true,
+}
   // "svelte.language-server.runtime": "/usr/local/bin/node",
 }

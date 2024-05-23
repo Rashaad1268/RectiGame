@@ -3,13 +3,13 @@
 </script>
 
 <div class="relative flex ml-auto">
-    <input type="checkbox" bind:checked />
+    <input type="checkbox" class="peer" bind:checked />
     <span />
 </div>
 
 <style lang="scss">
     input {
-        @apply peer appearance-none cursor-pointer
+        @apply appearance-none cursor-pointer
                border border-gray-300 rounded-full w-12 h-6;
 
         svg {

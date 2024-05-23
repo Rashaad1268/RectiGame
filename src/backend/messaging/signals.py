@@ -3,23 +3,13 @@ from channels.layers import get_channel_layer
 from django.db.models.signals import post_save, pre_delete, m2m_changed
 from django.dispatch import receiver
 
-from authentication.serializers import UserSerializer
-from authentication.models import User
+from topics.models import TopicMember
+from messaging.serializers import TopicMemberSerializer
 
 from . import models
 from .serializers import TopicChatChannelSerializer, TopicChatMessageSerializer
 
 channel_layer = get_channel_layer()
-
-
-@receiver(post_save, sender=models.Topic)
-def create_topic_chat_channel(sender, instance, created, **kwargs):
-    if created:
-        models.TopicChatChannel(
-            name="main",
-            description=f"The main channel for {instance.name}",
-            topic=instance,
-        ).save()
 
 
 @receiver(post_save, sender=models.TopicChatMessage)
@@ -78,15 +68,17 @@ def dispatch_channel_delete(sender, instance, **kwargs):
 
 @receiver(m2m_changed, sender=models.TopicChatChannel.members.through)
 def dispatch_room_member_join(instance, action, pk_set, model, **kwargs):
-    if action == "post_add" and model == User:
+    if action == "post_add" and model == TopicMember:
         # here instance will be the topic chat channel instance
-        for user_id in pk_set:
+        for member_id in pk_set:
             async_to_sync(channel_layer.group_send)(
                 instance.room_name,
                 {
                     "type": "room_member_join",
                     "data": {
-                        "user": UserSerializer(User.objects.get(id=user_id)).data,
+                        "member": TopicMemberSerializer(
+                            TopicMember.objects.get(id=member_id)
+                        ).data,
                         "room": TopicChatChannelSerializer(instance).data,
                     },
                 },

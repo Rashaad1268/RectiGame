@@ -37,14 +37,14 @@
                 in a read-only mode
             */
             goto(`/topics/${selectedTopicSlug}`);
-            toast("You have to join a topic in order to view its chat", {
+            toast.info("You have to join a topic in order to view its chat", {
                 duration: 10000
             });
         }
     }
 </script>
 
-<div class="channel-sidebar">
+<div class="channel-sidebar overflow-auto">
     {#if !!topic}
         <header class="mb-3 pl-2">
             <h1 class="text-3xl font-semibold font-monocraft text-white">{topic.name}</h1>
@@ -71,60 +71,62 @@
 
         <div class="w-full h-[1px] bg-discordDark-630 mb-2" />
 
-        <div class="channels-container">
-            {#each channels || [] as channel (channel.id)}
-                <a
-                    href="/topics/{topic.slug}/channel/{channel.id}"
-                    class="channel-tab"
-                    draggable="false"
-                    data-selected={parseInt($page.params.channel_id) === channel.id}
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 0 448 512"
-                        ><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path
-                            d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"
-                        /></svg
+        <div class="overflow-y-auto">
+            <div class="channels-container">
+                {#each channels as channel (channel.id)}
+                    <a
+                        href="/topics/{topic.slug}/channel/{channel.id}"
+                        class="channel-tab"
+                        draggable="false"
+                        data-selected={parseInt($page.params.channel_id) === channel.id}
                     >
-                    <span class="overflow-hidden">{truncate(channel.name, 12)}</span>
-
-                    {#if $userData?.is_staff}
-                        <button
-                            class="channel-delete-btn"
-                            on:click={() => (channelToDelete = channel)}
-                            ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
-                                ><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path
-                                    d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"
-                                /></svg
-                            ></button
+                        <svg xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 0 448 512"
+                            ><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path
+                                d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"
+                            /></svg
                         >
-                    {/if}
-                </a>
-            {/each}
-        </div>
+                        <span class="overflow-hidden">{truncate(channel.name, 12)}</span>
 
-        <div class="topic-rooms-container">
-            {#if !!$joinedTopicRooms[selectedTopicSlug]}
-                <h3 class="font-monocraft mb-1">Private Rooms</h3>
-                <div class="channels-container">
-                    {#each $joinedTopicRooms[selectedTopicSlug] || [] as topicRoom (topicRoom.id)}
-                        <a
-                            href="/topics/{topic.slug}/channel/{topicRoom.id}"
-                            class="channel-tab"
-                            draggable="false"
-                            data-selected={parseInt($page.params.channel_id) === topicRoom.id}
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                height="15px"
-                                viewBox="0 0 448 512"
-                                ><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path
-                                    d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"
-                                /></svg
+                        {#if $userData?.is_staff}
+                            <button
+                                class="channel-delete-btn"
+                                on:click={() => (channelToDelete = channel)}
+                                ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                                    ><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path
+                                        d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"
+                                    /></svg
+                                ></button
                             >
-                            <span class="overflow-hidden">{truncate(topicRoom.name, 12)}</span>
-                        </a>
-                    {/each}
-                </div>
-            {/if}
+                        {/if}
+                    </a>
+                {/each}
+            </div>
+
+            <div class="topic-rooms-container">
+                {#if !!$joinedTopicRooms[selectedTopicSlug]}
+                    <h3 class="font-monocraft mb-1">Private Rooms</h3>
+                    <div class="channels-container">
+                        {#each $joinedTopicRooms[selectedTopicSlug] || [] as topicRoom (topicRoom.id)}
+                            <a
+                                href="/topics/{topic.slug}/channel/{topicRoom.id}"
+                                class="channel-tab"
+                                draggable="false"
+                                data-selected={parseInt($page.params.channel_id) === topicRoom.id}
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    height="15px"
+                                    viewBox="0 0 448 512"
+                                    ><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path
+                                        d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"
+                                    /></svg
+                                >
+                                <span class="overflow-hidden">{truncate(topicRoom.name, 12)}</span>
+                            </a>
+                        {/each}
+                    </div>
+                {/if}
+            </div>
         </div>
     {/if}
 </div>

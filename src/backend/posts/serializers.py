@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from authentication.serializers import UserSerializer
+from messaging.serializers import TopicMemberSerializer
 
 from . import models
 
@@ -7,11 +8,11 @@ from . import models
 class PostCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Post
-        fields = ('topic', 'title', 'content')
+        fields = ("topic", "title", "content")
 
 
 class PostSerializer(PostCreateSerializer):
-    author = UserSerializer()
+    author = TopicMemberSerializer(context={"omit_user": True})
     like_count = serializers.SerializerMethodField()
     dislike_count = serializers.SerializerMethodField()
     is_liked = serializers.SerializerMethodField()
@@ -24,7 +25,7 @@ class PostSerializer(PostCreateSerializer):
         return post.dislikes.count()
 
     def get_is_liked(self, post):
-        request = self.context.get('request')
+        request = self.context.get("request")
 
         if not request:
             return False
@@ -33,7 +34,7 @@ class PostSerializer(PostCreateSerializer):
             return post.likes.contains(request.user)
 
     def get_is_disliked(self, post):
-        request = self.context.get('request')
+        request = self.context.get("request")
 
         if not request:
             return False
@@ -42,14 +43,25 @@ class PostSerializer(PostCreateSerializer):
             return post.dislikes.contains(request.user)
 
     class Meta(PostCreateSerializer.Meta):
-        fields = ('id', 'topic', 'title', 'content', 'author',
-                  'created_at', 'edited_at', 'like_count', 'dislike_count', 'is_liked', 'is_disliked')
+        fields = (
+            "id",
+            "topic",
+            "title",
+            "content",
+            "author",
+            "created_at",
+            "edited_at",
+            "like_count",
+            "dislike_count",
+            "is_liked",
+            "is_disliked",
+        )
 
 
 class ReplyCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Reply
-        fields = ('post', 'content')
+        fields = ("post", "content")
 
 
 class ReplySerializer(ReplyCreateSerializer):
@@ -71,7 +83,7 @@ class ReplySerializer(ReplyCreateSerializer):
         return reply.dislikes.count()
 
     def get_is_liked(self, reply):
-        request = self.context.get('request')
+        request = self.context.get("request")
 
         if not request:
             return False
@@ -80,7 +92,7 @@ class ReplySerializer(ReplyCreateSerializer):
             return reply.likes.contains(request.user)
 
     def get_is_disliked(self, reply):
-        request = self.context.get('request')
+        request = self.context.get("request")
 
         if not request:
             return False
@@ -90,4 +102,15 @@ class ReplySerializer(ReplyCreateSerializer):
 
     class Meta(ReplyCreateSerializer.Meta):
         # No need to include the post, I think
-        fields = ('id', 'author', 'content', 'created_at', 'edited_at', 'replying_to', 'like_count', 'dislike_count', 'is_liked', 'is_disliked')
+        fields = (
+            "id",
+            "author",
+            "content",
+            "created_at",
+            "edited_at",
+            "replying_to",
+            "like_count",
+            "dislike_count",
+            "is_liked",
+            "is_disliked",
+        )

@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 import re
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -39,6 +40,14 @@ class User(AbstractUser):
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ("username",)
+
+    def save(self, *args, **kwargs) -> None:
+        is_being_created = not self.id
+
+        super().save(*args, **kwargs)
+
+        if is_being_created:
+            Profile.objects.create(user=self)
 
 
 class Profile(models.Model):

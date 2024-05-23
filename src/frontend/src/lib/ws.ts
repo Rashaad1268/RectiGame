@@ -11,7 +11,11 @@ import { goto } from "$app/navigation";
 
 let queue: (string | ArrayBufferLike | Blob | ArrayBufferView)[] = [];
 
-export function initWebSocket() {
+interface WSInitOptions {
+    reconnecting?: boolean;
+}
+
+export function initWebSocket(options: WSInitOptions = {}) {
     let wsUrl = "";
 
     if (window.location.protocol === "http:") {
@@ -21,6 +25,10 @@ export function initWebSocket() {
     }
 
     wsUrl += window.location.host + "/api/ws/";
+
+    if (options.reconnecting) {
+        wsUrl += "?reconnect=true";
+    }
 
     const websocket = new WebSocket(wsUrl) as WS;
 
@@ -40,7 +48,7 @@ export function initWebSocket() {
     const reConnect = () => {
         if (websocket.readyState !== WebSocket.OPEN) {
             socket.set(null);
-            initWebSocket();
+            initWebSocket({ reconnecting: true });
         }
     };
 
@@ -53,8 +61,8 @@ export function initWebSocket() {
 }
 
 function handleWsMessage(event: MessageEvent) {
-    const payload:
-        | { e: "MESSAGE_CREATE"; d: TopicChatMessageInterface }
+    const payload: // e: event name, d: data
+    | { e: "MESSAGE_CREATE"; d: TopicChatMessageInterface }
         | { e: "MESSAGE_DELETE"; d: { id: number; channel_id: number } }
         | { e: "MESSAGE_UPDATE"; d: TopicChatMessageInterface }
         | { e: "CHANNEL_CREATE"; d: TopicChatChannelInterface }
