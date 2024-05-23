@@ -1,5 +1,7 @@
 export interface PaginatorInterface<T> {
     count: number;
+    previous?: string;
+    next?: string;
     results: Array<T>;
 }
 
