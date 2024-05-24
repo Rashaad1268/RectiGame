@@ -79,3 +79,7 @@ class CustomTopicEmojiCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomTopicEmoji
         fields = ("topic", "name", "image")
+
+class CustomTopicEmojiSerializer(CustomTopicEmojiCreateSerializer):
+    class Meta(CustomTopicEmojiCreateSerializer.Meta):
+        fields = ("id", "topic", "name", "image", "created_by", "created_at")

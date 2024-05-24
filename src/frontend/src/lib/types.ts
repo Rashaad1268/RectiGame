@@ -35,6 +35,7 @@ export interface TopicInterface {
     member_count: number;
     is_member: boolean;
     channels: Array<TopicChatChannelInterface>;
+    me?: TopicMemberInterface;
 }
 
 export interface PostInterface {
