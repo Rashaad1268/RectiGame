@@ -13,6 +13,11 @@ class TopicAdmin(admin.ModelAdmin):
     list_display = ("name", "slug")
 
 
+@admin.register(models.CustomTopicEmoji)
+class CustomTopicEmojiAdmin(admin.ModelAdmin):
+    list_display = ("topic", "name")
+
+
 @admin.register(models.TopicMember)
 class TopicMemberAdmin(admin.ModelAdmin):
     list_display = ("topic", "user")

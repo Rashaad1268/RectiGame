@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
 from messaging.models import TopicChatChannel
-from messaging.serializers import TopicChatChannelSerializer
+from messaging.serializers import TopicChatChannelSerializer, TopicMemberSerializer
 
-from .models import Topic, TopicTag, TopicMember
+from .models import Topic, TopicTag, TopicMember, CustomTopicEmoji
 
 
 class TopicTagCreateSerializer(serializers.ModelSerializer):
@@ -28,6 +28,7 @@ class TopicSerializer(TopicCreateSerializer):
     member_count = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
     channels = serializers.SerializerMethodField()
+    me = serializers.SerializerMethodField()
 
     def get_member_count(self, topic):
         return TopicMember.objects.filter(topic=topic).count()
@@ -46,6 +47,16 @@ class TopicSerializer(TopicCreateSerializer):
                 topic=topic, user=self.context["request"].user, has_left=False
             ).exists()
         return False
+    
+    def get_me(self, topic):
+        request = self.context.get("request")
+        if request is not None and request.user.is_authenticated:
+            member = topic.topic_members.filter(user=request.user, has_left=False).first()
+
+            if member:
+                return TopicMemberSerializer(member).data
+
+        return None
 
     class Meta(TopicCreateSerializer.Meta):
         fields = (
@@ -60,4 +71,11 @@ class TopicSerializer(TopicCreateSerializer):
             "member_count",
             "is_member",
             "channels",
+            "me",
         )
+
+
+class CustomTopicEmojiCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomTopicEmoji
+        fields = ("topic", "name", "image")
