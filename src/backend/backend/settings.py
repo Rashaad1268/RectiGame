@@ -113,7 +113,7 @@ else:
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-if os.getenv("DB_NAME") and not DEBUG:  # use postgres if env variables are configured
+if os.getenv("DB_NAME"):  # use postgres if env variables are configured
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
