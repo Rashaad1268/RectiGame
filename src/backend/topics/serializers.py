@@ -47,11 +47,13 @@ class TopicSerializer(TopicCreateSerializer):
                 topic=topic, user=self.context["request"].user, has_left=False
             ).exists()
         return False
-    
+
     def get_me(self, topic):
         request = self.context.get("request")
         if request is not None and request.user.is_authenticated:
-            member = topic.topic_members.filter(user=request.user, has_left=False).first()
+            member = topic.topic_members.filter(
+                user=request.user, has_left=False
+            ).first()
 
             if member:
                 return TopicMemberSerializer(member).data
@@ -79,6 +81,7 @@ class CustomTopicEmojiCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomTopicEmoji
         fields = ("topic", "name", "image")
+
 
 class CustomTopicEmojiSerializer(CustomTopicEmojiCreateSerializer):
     class Meta(CustomTopicEmojiCreateSerializer.Meta):
