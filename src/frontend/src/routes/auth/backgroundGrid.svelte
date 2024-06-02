@@ -1,8 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    // export let tileFixed;
-
     let size = 0;
     let columns = 0;
     let rows = 0;
@@ -12,8 +10,6 @@
 
         columns = Math.floor((document.body.clientWidth - 64) / size); // subtract the height of the navbar (64px)
         rows = Math.floor(document.body.clientHeight / size);
-
-        // rows = ;
     };
 
     onMount(createGrid);

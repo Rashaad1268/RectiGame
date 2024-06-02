@@ -6,7 +6,7 @@
     import { fetchApi, formatApiErrors } from "$lib/api";
     import { Form } from "$lib/components/forms";
     import Button from "$lib/components/button.svelte";
-    import { fetchUserData } from "$lib/utils";
+    import { fetchUserData } from "$lib/utils/";
     import BackgroundGrid from "../backgroundGrid.svelte";
     import { page } from "$app/stores";
     import { initWebSocket } from "$lib/ws";

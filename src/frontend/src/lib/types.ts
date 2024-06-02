@@ -36,6 +36,7 @@ export interface TopicInterface {
     is_member: boolean;
     channels: Array<TopicChatChannelInterface>;
     me?: TopicMemberInterface;
+    custom_emojis: Array<CustomTopicEmojiInterface>;
 }
 
 export interface PostInterface {
@@ -52,8 +53,6 @@ export interface PostInterface {
     is_disliked: boolean;
 }
 
-
-
 export interface TopicChatRoomInterface {
     type: number;
     id: number;
@@ -67,7 +66,10 @@ export interface TopicChatRoomInterface {
     members: TopicMemberInterface[];
 }
 
-export type TopicChatChannelInterface = Omit<TopicChatRoomInterface, "creator" | "invite_code" | "members">
+export type TopicChatChannelInterface = Omit<
+    TopicChatRoomInterface,
+    "creator" | "invite_code" | "members"
+>;
 
 export interface TopicChatMessageInterface {
     id: number;
@@ -86,4 +88,12 @@ export interface TopicMemberInterface {
     permissions: number;
     joined_at?: string;
     has_left: boolean;
+}
+
+export interface CustomTopicEmojiInterface {
+    id: number;
+    topic: string; // slug of the topic
+    name: string;
+    image: string;
+    created_at: string;
 }

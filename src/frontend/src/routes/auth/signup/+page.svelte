@@ -3,7 +3,7 @@
     import { fetchApi, formatApiErrors } from "$lib/api";
     import Button from "$lib/components/button.svelte";
     import { TextField } from "$lib/components/forms";
-    import { fetchUserData } from "$lib/utils";
+    import { fetchUserData } from "$lib/utils/";
     import BackgroundGrid from "../backgroundGrid.svelte";
     import Form from "$lib/components/forms/form.svelte";
     import { page } from "$app/stores";

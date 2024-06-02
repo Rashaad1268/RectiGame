@@ -3,7 +3,8 @@ import type {
     PaginatorInterface,
     TopicInterface,
     TopicChatRoomInterface,
-    UserInterface
+    UserInterface,
+    CustomTopicEmojiInterface
 } from "../types";
 
 export { topicPosts } from "./posts";
@@ -37,3 +38,8 @@ export function clearData() {
     topics.set(null);
     joinedTopicRooms.set({});
 }
+
+interface CustomEmojiStoreInterface {
+    [key: number]: CustomTopicEmojiInterface;
+}
+export const customEmojiStore = writable<CustomEmojiStoreInterface>({});

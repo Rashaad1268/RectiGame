@@ -8,7 +8,7 @@
     import { initWebSocket } from "$lib/ws";
 
     import "../styles/app.scss";
-    import { fetchUserData } from "$lib/utils";
+    import { fetchUserData } from "$lib/utils/";
 
     export let data: LayoutData;
 

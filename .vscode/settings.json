@@ -10,6 +10,7 @@
   "files.exclude": {
     "src/frontend/node_modules/": true,
     "src/backend/**/__pycache__": true,
-}
+  },
+  "editor.formatOnSave": true,
   // "svelte.language-server.runtime": "/usr/local/bin/node",
 }

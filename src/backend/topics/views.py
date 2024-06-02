@@ -5,9 +5,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions, pagination, status
 
 from backend.viewsets import CustomViewSet
+from messaging.serializers import TopicMemberSerializer
 
 from . import serializers
-from .models import Topic, TopicTag, TopicMember
+from .models import Topic, TopicTag, TopicMember, CustomTopicEmoji
 
 
 class Paginator(pagination.PageNumberPagination):
@@ -55,9 +56,9 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
 
         except TopicMember.DoesNotExist:
             # else, create a new topic member instance for this user
-            topic.topic_members.create(user=request.user)
+            topic_member = topic.topic_members.create(user=request.user)
 
-        return Response(status=status.HTTP_201_CREATED)
+        return Response(TopicMemberSerializer(topic_member).data)
 
     @action(
         detail=True,
@@ -81,3 +82,14 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
             )
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TopicCustomEmojiViewSet(CustomViewSet):
+    create_or_update_serializer = serializers.CustomTopicEmojiCreateSerializer
+    fetch_serializer = serializers.CustomTopicEmojiSerializer
+    permission_classes = (permissions.IsAdminUser,)
+
+    def get_queryset(self):
+        return CustomTopicEmoji.objects.filter(
+            topic__slug=self.kwargs["topic_pk"]
+        ).order_by("-id")

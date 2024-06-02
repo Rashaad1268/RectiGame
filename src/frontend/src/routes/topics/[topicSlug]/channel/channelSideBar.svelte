@@ -5,7 +5,7 @@
     import Button from "$lib/components/button.svelte";
     import { joinedTopicRooms, joinedTopics, userData } from "$lib/stores/";
     import type { TopicChatChannelInterface, TopicInterface } from "$lib/types";
-    import { truncate } from "$lib/utils";
+    import { truncate } from "$lib/utils/";
     import ChannelCreateModal from "./channelCreateModal.svelte";
     import ChannelDeleteModal from "./channelDeleteModal.svelte";
     import CreateRoomModal from "./roomCreateModal.svelte";

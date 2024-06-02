@@ -1,5 +1,5 @@
-import { browser } from "$app/environment";
-import {toast} from "svelte-sonner"
+// import { browser } from "$app/environment";
+// import { toast } from "svelte-sonner";
 
 export const getCookie = (name: string) =>
     document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)")?.pop() || null;
@@ -25,15 +25,14 @@ export const fetchApi = async (
         defaultOptions.headers = { "X-CSRFToken": csrfToken, ...defaultOptions.headers };
     }
     defaultOptions.credentials = "include";
-    
+
     const response = await fetch("/api/" + endpoint, defaultOptions);
 
-    if (!response.ok && browser) {
-        toast.error(`Error while fetching api (${response.status} ${response.statusText})`)
-    }
+    // if (!response.ok && browser) {
+    //     toast.error(`Error while fetching api (${response.status} ${response.statusText})`);
+    // }
 
     return response;
-
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

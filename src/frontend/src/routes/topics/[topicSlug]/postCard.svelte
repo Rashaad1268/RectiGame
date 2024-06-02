@@ -110,7 +110,9 @@
 
         <!-- <a href="posts/{post.id}"> -->
         <div>
-            <span class="text-xs sm:text-sm text-gray-300">Posted by {post.author.user.username}</span>
+            <span class="text-xs sm:text-sm text-gray-300"
+                >Posted by {post.author.user.username}</span
+            >
             <h2 class="text-2xl sm:text-3xl font-semibold">{post.title}</h2>
             <p class="text-sm sm:text-base">{post.content}</p>
         </div>

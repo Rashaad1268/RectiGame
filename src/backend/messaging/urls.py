@@ -10,10 +10,10 @@ router.register(
 )  # register the room viewset first, so it is given priority
 router.register("", TopicChatChannelViewSet, basename="topic_chat_channels")
 
-messages_router = routers.NestedSimpleRouter(router, r"", lookup="channel")
-messages_router.register(
+channels_router = routers.NestedSimpleRouter(router, r"", lookup="channel")
+channels_router.register(
     r"messages", TopicChatMessageViewSet, basename="topic_chat_messages_viewset"
 )
-urlpatterns = router.urls + messages_router.urls
+urlpatterns = router.urls + channels_router.urls
 
 websocket_urlpatterns = [path("api/ws/", ChatConsumer.as_asgi())]

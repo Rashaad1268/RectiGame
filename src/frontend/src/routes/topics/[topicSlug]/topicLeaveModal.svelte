@@ -16,6 +16,7 @@
         }).then((response) => {
             if (response.ok) {
                 topic.is_member = false;
+                topic.me = undefined;
                 joinedTopics.update((topics) => {
                     delete topics[topic.slug];
                     return topics;

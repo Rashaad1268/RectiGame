@@ -3,7 +3,7 @@
     import Button from "$lib/components/button.svelte";
     import { joinedTopics, socket } from "$lib/stores/";
     import type { TopicInterface } from "$lib/types";
-    import { truncate } from "$lib/utils";
+    import { truncate } from "$lib/utils/";
     import type { PageData } from "./$types";
     import CreatePostModal from "./createPostModal.svelte";
     import TopicLeaveModal from "./topicLeaveModal.svelte";
@@ -28,9 +28,10 @@
         } else {
             fetchApi(`topics/${topic.slug}/join/`, {
                 method: "POST"
-            }).then((response) => {
+            }).then(async (response) => {
                 if (response.ok) {
                     topic.is_member = true;
+                    topic.me = await response.json();
                     joinedTopics.update((topics) => {
                         topics[topic.slug] = topic;
 

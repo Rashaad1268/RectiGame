@@ -1,9 +1,14 @@
 <script lang="ts">
     import { marked } from "marked";
-    import type { TopicChatMessageInterface } from "$lib/types";
+    import type {
+        TopicChatChannelInterface,
+        TopicChatMessageInterface,
+        TopicChatRoomInterface
+    } from "$lib/types";
     import { createPopperActions } from "svelte-popperjs";
     import UserProfilePopup from "./userProfilePopup.svelte";
     import ProfilePicture from "$lib/components/profilePicture.svelte";
+    import { parseMessage, convertMessageEmojis } from "$lib/utils/emojis";
 
     const [popperRef, popperContent] = createPopperActions({
         placement: "right",
@@ -14,6 +19,7 @@
     };
 
     export let message: TopicChatMessageInterface;
+    export let channel: TopicChatChannelInterface | TopicChatRoomInterface;
     export let isInline: boolean;
 
     const timeFormatter = new Intl.DateTimeFormat("en");
@@ -66,7 +72,15 @@
                     >
                 </div>
             {/if}
-            <div class="prose prose-invert">{@html marked(message.content)}</div>
+            <div class="prose prose-invert">
+                {#await convertMessageEmojis({ content: message.content, topic: channel?.topic })}
+                    {@html marked(parseMessage(message.content))}
+                {:then content}
+                    {@html marked(content)}
+                {:catch error}
+                    {@html marked(parseMessage(message.content))}
+                {/await}
+            </div>
         </div>
     {/if}
 </div>

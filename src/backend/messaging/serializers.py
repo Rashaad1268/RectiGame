@@ -11,6 +11,21 @@ from topics.models import TopicMember
 # ...due to circular import issue
 class TopicMemberSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    nickname = serializers.SerializerMethodField()
+    joined_at = serializers.SerializerMethodField()
+
+    def get_nickname(self, member):
+        if not member.has_left:
+            return member.nickname
+
+        return None
+
+    def get_joined_at(self, member):
+        if not member.has_left:
+            # return the default representation
+            return serializers.DateTimeField().to_representation(member.joined_at)
+
+        return None
 
     class Meta:
         model = TopicMember
@@ -35,9 +50,7 @@ class TopicChatChannelSerializer(TopicChatChannelCreateSerializer):
 
     def get_members(self, channel):
         if channel.type == 2:
-            return TopicMemberSerializer(
-                channel.members.all(), many=True
-            ).data
+            return TopicMemberSerializer(channel.members.all(), many=True).data
 
         else:
             # if the channel type is not a room, then there can be no members

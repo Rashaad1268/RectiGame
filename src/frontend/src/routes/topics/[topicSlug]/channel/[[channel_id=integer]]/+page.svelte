@@ -140,9 +140,11 @@
 {#if !selectedChannelId}
     <h1 class="text-3xl text-center font-semibold mt-[20dvh]">Select a channel to view</h1>
 {:else if channel === undefined}
-    Loading
+    Loading...
 {:else if channel === null}
-    404 not found
+    <h3 class="font-semibold text-3xl h-full flex justify-center items-center">
+        Invalid channel selected
+    </h3>
 {:else}
     <div class="flex h-full">
         <div
@@ -187,7 +189,7 @@
             <div class="channel-messages" on:scroll={loadMessages}>
                 {#each messages || [] as message, idx (message.id)}
                     {@const isInlineMsg = calculateIsInlineMsg(idx, message)}
-                    <Message {message} isInline={isInlineMsg} />
+                    <Message {message} {channel} isInline={isInlineMsg} />
                 {/each}
             </div>
 

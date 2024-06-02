@@ -1,3 +1,4 @@
+import bleach
 from django.db import models, transaction
 from django.conf import settings
 from django.utils import timezone, crypto
@@ -72,4 +73,7 @@ class TopicChatMessage(models.Model):
         if self.id:
             self.edited_at = timezone.now()
 
+        self.content = bleach.linkify(
+            bleach.clean(self.content, tags=set())  # Allow no html tags
+        )
         super().save(*args, **kwargs)
