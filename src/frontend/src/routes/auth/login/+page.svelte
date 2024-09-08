@@ -12,6 +12,7 @@
     import { initWebSocket } from "$lib/ws";
 
     $: nextEndpoint = $page.url.searchParams.get("next");
+    $: nextUrl = nextEndpoint ? `?next=${nextEndpoint}` : '';
 
     let email: string;
     let password: string;
@@ -62,7 +63,7 @@
             </h2>
             <p class="mt-2 text-center font-monocraft text-sm">
                 Don't have an account?
-                <a href="signup{nextEndpoint ? `?next=${nextEndpoint}` : ''}" class="link">Signup</a
+                <a href="signup{nextUrl}" class="link">Signup</a
                 >
             </p>
         </div>
