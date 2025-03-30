@@ -185,5 +185,6 @@ CSRF_TRUSTED_ORIGINS = [
     "http://192.168.8.198:5173",
     "http://localhost:5173",
     "http://localhost:4173",
+    "https://char-genesis-times-hayes.trycloudflare.com"
 ]
 CORS_ALLOWED_ORIGINS = CSRF_TRUSTED_ORIGINS

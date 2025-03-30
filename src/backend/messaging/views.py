@@ -24,10 +24,9 @@ class TopicChatChannelViewSet(CustomViewSet):
     permission_classes = (permissions.TopicChatChannelViewSetPermissions,)
 
     def get_queryset(self):
-        return (
-            TopicChatChannel.objects.filter(type=1)
-            | TopicChatChannel.objects.filter(members__user=self.request.user)
-        )
+        return TopicChatChannel.objects.filter(
+            type=1
+        ) | TopicChatChannel.objects.filter(members__user=self.request.user)
 
     def list(self, request, *args, **kwargs):
         raise Http404()
@@ -116,7 +115,9 @@ class TopicRoomViewSet(CustomViewSet):
         # pk is actually the invite code of the topic room
         room = get_object_or_404(TopicChatChannel, invite_code=pk)
 
-        member, _ = room.topic.topic_members.get_or_create(user=request.user, has_left=False)
+        member, _ = room.topic.topic_members.get_or_create(
+            user=request.user, has_left=False
+        )
 
         if not room.members.contains(member):
             room.members.add(member)

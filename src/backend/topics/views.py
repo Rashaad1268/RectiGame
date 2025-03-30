@@ -87,7 +87,7 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
 class TopicCustomEmojiViewSet(CustomViewSet):
     create_or_update_serializer = serializers.CustomTopicEmojiCreateSerializer
     fetch_serializer = serializers.CustomTopicEmojiSerializer
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         return CustomTopicEmoji.objects.filter(

@@ -30,6 +30,10 @@ class TopicSerializer(TopicCreateSerializer):
     channels = serializers.SerializerMethodField()
     me = serializers.SerializerMethodField()
     custom_emojis = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, topic):
+        return topic.image.url
 
     def get_member_count(self, topic):
         return TopicMember.objects.filter(topic=topic).count()
@@ -91,5 +95,10 @@ class CustomTopicEmojiCreateSerializer(serializers.ModelSerializer):
 
 
 class CustomTopicEmojiSerializer(CustomTopicEmojiCreateSerializer):
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, topic):
+        return topic.image.url
+
     class Meta(CustomTopicEmojiCreateSerializer.Meta):
         fields = ("id", "topic", "name", "image", "created_at")
