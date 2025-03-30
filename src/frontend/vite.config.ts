@@ -19,12 +19,12 @@ const config: UserConfig = {
                 changeOrigin: true
             },
             "/static/": {
-                // Static files Proxy
+                // proxy the DRF static files, only needed for local testing
                 target: SERVER_ADDR,
                 changeOrigin: true
             },
             "/media/": {
-                // Media files proxy, only for local testing
+                // proxy the user uploaded media files, only for local testing
                 target: SERVER_ADDR,
                 changeOrigin: true
             }

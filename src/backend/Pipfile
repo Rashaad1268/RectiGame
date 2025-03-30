@@ -4,19 +4,17 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
-pillow = "*"
 djangorestframework = "*"
-channels = {extras = ["daphne"], version = "*"}
-django-cors-headers = "*"
 django-filter = "*"
-drf-nested-routers = "*"
+pillow = "*"
+channels = {extras = ["daphne"], version = "*"}
 django-environ = "*"
+django-cors-headers = "*"
 psycopg2 = "*"
-channels-redis = "*"
-typing-extensions = "*"
+bleach = "*"
+drf-nested-routers = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.10"
+python_version = "3.13"
