@@ -1,0 +1,21 @@
+{
+    "rewrites": [
+        {
+            "source": "/api/(.*)",
+            "destination": "http://43.204.157.96:8000/$1"
+        },
+        {
+            "source": "/api/ws/",
+            "destination": "http://43.204.157.96:8000/api/ws/",
+            "ws": true
+        },
+        {
+            "source": "/static/",
+            "destination": "http://43.204.157.96:8000/static/"
+        },
+        {
+           "source": "/media/",
+           "destination": "http://43.204.157.96:8000/static/"
+        }
+    ]
+}
