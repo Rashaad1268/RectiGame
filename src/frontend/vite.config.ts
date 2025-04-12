@@ -1,7 +1,7 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import type { UserConfig } from "vite";
 
-const SERVER_ADDR = "http://127.0.0.1:8000/";
+const SERVER_ADDR = process.env.SERVER_ADDR || "http://127.0.0.1/";
 
 const config: UserConfig = {
     plugins: [sveltekit()],
