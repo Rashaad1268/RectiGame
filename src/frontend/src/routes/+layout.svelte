@@ -9,6 +9,7 @@
 
     import "../styles/app.scss";
     import { fetchUserData } from "$lib/utils/";
+    import { fetchApi } from "$lib/api";
 
     export let data: LayoutData;
 
@@ -18,10 +19,14 @@
         }
 
         if (data.isLoggedIn && !$userData) {
-            const ws = initWebSocket();
+            fetch("/ext_api/getWsUrl/").then((response) => {
+                response.json().then((data) => {
+                    if (data.sessionIdExists) {
+                        const ws = initWebSocket({ wsUrl: data.wsUrl });
 
-            ws.addEventListener("open", () => {
-                fetchUserData();
+                        ws.addEventListener("open", fetchUserData);
+                    }
+                });
             });
         }
     }

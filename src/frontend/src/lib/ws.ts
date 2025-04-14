@@ -13,24 +13,15 @@ let queue: (string | ArrayBufferLike | Blob | ArrayBufferView)[] = [];
 
 interface WSInitOptions {
     reconnecting?: boolean;
+    wsUrl: string;
 }
 
-export function initWebSocket(options: WSInitOptions = {}) {
-    let wsUrl = "";
-
-    if (window.location.protocol === "http:") {
-        wsUrl = "ws://";
-    } else {
-        wsUrl = "wss://";
+export function initWebSocket(options: WSInitOptions) {
+    if (options.reconnecting && !options.wsUrl.includes("reconnect=true")) {
+        options.wsUrl += "&reconnect=true";
     }
 
-    wsUrl += window.location.host + "/api/ws/";
-
-    if (options.reconnecting) {
-        wsUrl += "?reconnect=true";
-    }
-
-    const websocket = new WebSocket(wsUrl) as WS;
+    const websocket = new WebSocket(options.wsUrl) as WS;
 
     websocket.sendQueued = (data: string | ArrayBufferLike | Blob | ArrayBufferView) => {
         if (websocket.readyState === 1) {
@@ -48,7 +39,7 @@ export function initWebSocket(options: WSInitOptions = {}) {
     const reConnect = () => {
         if (websocket.readyState !== WebSocket.OPEN) {
             socket.set(null);
-            initWebSocket({ reconnecting: true });
+            initWebSocket({ reconnecting: true, wsUrl: options.wsUrl });
         }
     };
 

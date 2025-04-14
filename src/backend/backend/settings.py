@@ -182,9 +182,10 @@ REST_FRAMEWORK = {
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "https://*",
-    "http://192.168.8.198:5173",
+    "http://192.168.8.142:8000",
     "http://localhost:5173",
     "http://localhost:4173",
-    "https://char-genesis-times-hayes.trycloudflare.com"
+    "http://192.168.8.142:5173",
+    "https://reprint-customise-identity-packaging.trycloudflare.com"
 ]
 CORS_ALLOWED_ORIGINS = CSRF_TRUSTED_ORIGINS

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
+    import { goto, invalidate, invalidateAll } from "$app/navigation";
 
     import { TextField } from "$lib/components/forms";
 
@@ -10,9 +10,12 @@
     import BackgroundGrid from "../backgroundGrid.svelte";
     import { page } from "$app/stores";
     import { initWebSocket } from "$lib/ws";
+    import type { PageData } from "./$types";
 
     $: nextEndpoint = $page.url.searchParams.get("next");
     $: nextUrl = nextEndpoint ? `?next=${nextEndpoint}` : '';
+
+    export let data: PageData;
 
     let email: string;
     let password: string;
@@ -30,7 +33,7 @@
 
         if (response.ok) {
             try {
-                const ws = initWebSocket();
+                const ws = initWebSocket({wsUrl: data.wsUrl});
 
                 ws.addEventListener("open", () => {
                     fetchUserData().then(() => {

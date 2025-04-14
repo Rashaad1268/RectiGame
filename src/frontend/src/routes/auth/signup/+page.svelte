@@ -8,7 +8,10 @@
     import Form from "$lib/components/forms/form.svelte";
     import { page } from "$app/stores";
     import { initWebSocket } from "$lib/ws";
+    import type { PageData } from "./$types";
 
+
+    export let data: PageData;
     $: nextEndpoint = $page.url.searchParams.get("next");
 
     let username: string;
@@ -37,7 +40,7 @@
 
         if (response.ok) {
             try {
-                const ws = initWebSocket();
+                const ws = initWebSocket({wsUrl: data.wsUrl});
 
                 ws.addEventListener("open", () => {
                     fetchUserData().then(() => {

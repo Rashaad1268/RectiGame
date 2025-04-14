@@ -13,8 +13,10 @@ from .serializers import WebSocketActionSerializer
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
         user = self.scope["user"]
+        print('okokokok')
 
         if user.is_anonymous:
+            print("Not todayu ANON")
             return self.close()
 
         user.is_online = True
@@ -31,6 +33,7 @@ class ChatConsumer(WebsocketConsumer):
                 channel.room_name, self.channel_name
             )
 
+        print("Accepted")
         self.accept()
 
     def disconnect(self, close_code):
