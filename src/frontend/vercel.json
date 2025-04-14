@@ -1,12 +1,20 @@
 {
-    "rewrites": [
-      { "source": "/api/admin", "destination": "http://43.204.157.96:8000/admin/" },
-      { "source": "/api/admin/", "destination": "http://43.204.157.96:8000/admin/" },
-      { "source": "/api/:path*", "destination": "http://43.204.157.96:8000/api/:path*/" },
-      { "source": "/api/:path*/", "destination": "http://43.204.157.96:8000/api/:path*/" },
-      { "source": "/static/:path*", "destination": "http://43.204.157.96:8000/static/:path*/" },
-      { "source": "/static/:path/*", "destination": "http://43.204.157.96:8000/static/:path*/" },
-      { "source": "/media/:path*", "destination": "http://43.204.157.96:8000/media/:path*/" },
-      { "source": "/media/:path*/", "destination": "http://43.204.157.96:8000/media/:path*/" }
-    ]
-  }
+  "rewrites": [
+    {
+      "source": "/api/admin",
+      "destination": "http://43.204.157.96:8000/admin/"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "http://43.204.157.96:8000/api/:path*"
+    },
+    {
+      "source": "/static/:path*",
+      "destination": "http://43.204.157.96:8000/static/:path*"
+    },
+    {
+      "source": "/media/:path*",
+      "destination": "http://43.204.157.96:8000/media/:path*"
+    }
+  ]
+}
