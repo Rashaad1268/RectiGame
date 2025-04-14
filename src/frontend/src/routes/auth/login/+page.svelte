@@ -13,7 +13,7 @@
     import type { PageData } from "./$types";
 
     $: nextEndpoint = $page.url.searchParams.get("next");
-    $: nextUrl = nextEndpoint ? `?next=${nextEndpoint}` : '';
+    $: nextUrl = nextEndpoint ? `?next=${nextEndpoint}` : "";
 
     export let data: PageData;
 
@@ -33,11 +33,17 @@
 
         if (response.ok) {
             try {
-                const ws = initWebSocket({wsUrl: data.wsUrl});
+                fetch("/ext_api/getWsUrl/").then((response) => {
+                    response.json().then((data) => {
+                        if (data.sessionIdExists) {
+                            const ws = initWebSocket({ wsUrl: data.wsUrl });
 
-                ws.addEventListener("open", () => {
-                    fetchUserData().then(() => {
-                        goto(nextEndpoint ?? "/");
+                            ws.addEventListener("open", () => {
+                                fetchUserData().then(() => {
+                                    goto(nextEndpoint ?? "/");
+                                });
+                            });
+                        }
                     });
                 });
             } catch (err) {
@@ -66,8 +72,7 @@
             </h2>
             <p class="mt-2 text-center font-monocraft text-sm">
                 Don't have an account?
-                <a href="signup{nextUrl}" class="link">Signup</a
-                >
+                <a href="signup{nextUrl}" class="link">Signup</a>
             </p>
         </div>
         <Form class="mt-6" on:submit={handleLogin} bind:errorMessages>

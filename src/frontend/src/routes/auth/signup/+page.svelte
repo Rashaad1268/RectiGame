@@ -10,7 +10,6 @@
     import { initWebSocket } from "$lib/ws";
     import type { PageData } from "./$types";
 
-
     export let data: PageData;
     $: nextEndpoint = $page.url.searchParams.get("next");
 
@@ -40,11 +39,17 @@
 
         if (response.ok) {
             try {
-                const ws = initWebSocket({wsUrl: data.wsUrl});
+                fetch("/ext_api/getWsUrl/").then((response) => {
+                    response.json().then((data) => {
+                        if (data.sessionIdExists) {
+                            const ws = initWebSocket({ wsUrl: data.wsUrl });
 
-                ws.addEventListener("open", () => {
-                    fetchUserData().then(() => {
-                        goto(nextEndpoint ?? "/");
+                            ws.addEventListener("open", () => {
+                                fetchUserData().then(() => {
+                                    goto(nextEndpoint ?? "/");
+                                });
+                            });
+                        }
                     });
                 });
             } catch (err) {
