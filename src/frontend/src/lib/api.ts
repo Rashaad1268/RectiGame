@@ -21,6 +21,10 @@ export const fetchApi = async (
         ...defaultOptions.headers
     };
 
+    if (!endpoint.endsWith('/')) {
+        endpoint = endpoint + '/'
+    }
+
     if (csrfToken) {
         defaultOptions.headers = { "X-CSRFToken": csrfToken, ...defaultOptions.headers };
     }
@@ -40,8 +44,7 @@ export const formatApiErrors = (data: any): Array<string> => {
     const messages: Array<string> = [];
     for (const [key, value] of Object.entries(data)) {
         messages.push(
-            `${key !== "detail" ? `${key}: ` : ""}${
-                Array.isArray(value) ? value.join(", ") : value
+            `${key !== "detail" ? `${key}: ` : ""}${Array.isArray(value) ? value.join(", ") : value
             }`
         );
     }
