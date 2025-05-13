@@ -15,7 +15,7 @@
 
     $: topic = data.topic as TopicInterface;
 
-    const dateTimeFormatter = new Intl.DateTimeFormat("en", {
+    const dateTimeFormatter = new Intl.DateTimeFormat("en-UK", {
         year: "numeric",
         month: "long",
         day: "numeric"

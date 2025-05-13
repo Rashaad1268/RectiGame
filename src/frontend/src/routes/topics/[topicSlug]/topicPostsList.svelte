@@ -16,7 +16,7 @@
 		*/
         if (browser) {
             if (!postsPaginator) {
-                fetchApi(`posts/?topic=${topic.slug}`).then(async (response) => {
+                fetchApi(`posts/?topic=${topic.slug}`, {appendSlash: false}).then(async (response) => {
                     if (response.ok) {
                         const data = await response.json();
                         // console.log('topic post data: ', data);

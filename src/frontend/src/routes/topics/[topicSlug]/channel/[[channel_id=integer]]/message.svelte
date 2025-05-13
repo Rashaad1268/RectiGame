@@ -8,7 +8,7 @@
     import { createPopperActions } from "svelte-popperjs";
     import UserProfilePopup from "./userProfilePopup.svelte";
     import ProfilePicture from "$lib/components/profilePicture.svelte";
-    import { parseMessage, convertMessageEmojis } from "$lib/utils/emojis";
+    import { parseMessageEmojis, convertMessageEmojis } from "$lib/utils/emojis";
 
     const [popperRef, popperContent] = createPopperActions({
         placement: "right",
@@ -22,7 +22,7 @@
     export let channel: TopicChatChannelInterface | TopicChatRoomInterface;
     export let isInline: boolean;
 
-    const timeFormatter = new Intl.DateTimeFormat("en");
+    const timeFormatter = new Intl.DateTimeFormat("en-UK");
 
     let showUserProfilePopup = false;
 </script>
@@ -73,12 +73,13 @@
                 </div>
             {/if}
             <div class="prose prose-invert">
-                {#await convertMessageEmojis({ content: message.content, topic: channel?.topic })}
-                    {@html marked(parseMessage(message.content))}
+                {#await convertMessageEmojis({ content: message.content })}
+                    <!-- Render the emojis as red blocks until it loads -->
+                    {@html marked(parseMessageEmojis(message.content))}
                 {:then content}
                     {@html marked(content)}
                 {:catch error}
-                    {@html marked(parseMessage(message.content))}
+                    {@html marked(parseMessageEmojis(message.content))}
                 {/await}
             </div>
         </div>

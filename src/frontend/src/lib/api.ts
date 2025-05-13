@@ -6,6 +6,7 @@ export const getCookie = (name: string) =>
 
 interface CustomRequestInit extends RequestInit {
     csrfToken?: string;
+    appendSlash?: boolean;
 }
 
 export const fetchApi = async (
@@ -13,6 +14,7 @@ export const fetchApi = async (
     options?: CustomRequestInit
 ): Promise<Response> => {
     const csrfToken = options?.csrfToken ? options?.csrfToken : getCookie("csrftoken");
+    const appendSlash = options?.appendSlash ?? true;
     const defaultOptions = { ...options };
 
     defaultOptions.headers = {
@@ -21,7 +23,7 @@ export const fetchApi = async (
         ...defaultOptions.headers
     };
 
-    if (!endpoint.endsWith('/')) {
+    if (!endpoint.endsWith('/') && appendSlash) {
         endpoint = endpoint + '/'
     }
 

@@ -14,7 +14,6 @@ from django.core.asgi import get_asgi_application
 from messaging.ws_middleware import URLParamAuthMiddleware, WSMiddlewareStack
 from messaging.urls import websocket_urlpatterns
 
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 # Initialize Django ASGI application early to ensure the AppRegistry
 # is populated before importing code that may import ORM models.

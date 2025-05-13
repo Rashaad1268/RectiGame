@@ -134,7 +134,7 @@ function handleWsMessage(event: MessageEvent) {
                         console.log(2.5, roomIndex, joinedRooms[joinedRoom.topic][roomIndex]);
                     } else {
                         console.log(3);
-                        // use joined a new room
+                        // current user joined a new room
                         joinedRooms[joinedRoom.topic].push(joinedRoom);
                         goto(`/topics/${joinedRoom.topic}/channel/${joinedRoom.id}/`);
                     }

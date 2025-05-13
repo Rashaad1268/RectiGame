@@ -90,6 +90,4 @@ class TopicCustomEmojiViewSet(CustomViewSet):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
-        return CustomTopicEmoji.objects.filter(
-            topic__slug=self.kwargs["topic_pk"]
-        ).order_by("-id")
+        return CustomTopicEmoji.objects.all()

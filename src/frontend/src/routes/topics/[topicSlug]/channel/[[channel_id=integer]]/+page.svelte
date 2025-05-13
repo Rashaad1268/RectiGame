@@ -81,13 +81,13 @@
     }
 
     function calculateIsInlineMsg(idx: number, message: TopicChatMessageInterface): boolean {
-        const msg = ($messageStore[channel!.id]?.results ?? [])[idx + 1];
+        const prevMsg = ($messageStore[channel!.id]?.results ?? [])[idx + 1];
 
-        if (msg?.author?.user.id === message?.author.user.id) {
-            const prevMsgCreatedAt = Date.parse(msg.created_at);
+        if (prevMsg?.author?.user.id === message?.author.user.id) {
+            const prevMsgCreatedAt = Date.parse(prevMsg.created_at);
             const currentMsgCreatedAt = Date.parse(message.created_at);
 
-            // Calculate the time gap between the 3 messages in seconds
+            // Calculate the time gap between the 2 messages in seconds
             const diffInSeconds = Math.floor((currentMsgCreatedAt - prevMsgCreatedAt) / 1000);
 
             // if the time gap between the 2 messages from the same author is more than 5 minutes,
@@ -122,17 +122,12 @@
     }
 
     async function addRoomMember() {
-        channel as TopicChatRoomInterface;
         const inviteLink = window.location.origin + `/invite/${room.invite_code}`;
 
         await navigator.clipboard.writeText(inviteLink);
 
-        toast.success("Successfully copied room invite link to clipboard", {
+        toast.success("Successfully copied room invite  ", {
             duration: 7000,
-            action: {
-                label: "Copy again",
-                onClick: () => navigator.clipboard.writeText(inviteLink)
-            }
         });
     }
 </script>
