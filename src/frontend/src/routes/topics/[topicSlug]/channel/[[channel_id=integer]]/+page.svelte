@@ -123,6 +123,7 @@
 
     async function addRoomMember() {
         const inviteLink = window.location.origin + `/invite/${room.invite_code}`;
+        console.log(inviteLink)
 
         await navigator.clipboard.writeText(inviteLink);
 

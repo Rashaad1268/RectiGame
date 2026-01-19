@@ -6,6 +6,7 @@ const SERVER_ADDR = process.env.SERVER_ADDR || "http://127.0.0.1:8000/";
 const config: UserConfig = {
     plugins: [sveltekit()],
     server: {
+    allowedHosts: ["creature-cameron-writes-belt.trycloudflare.com"],
         proxy: {
             "/api/ws/": {
                 // Websocket Proxy

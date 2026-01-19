@@ -14,7 +14,7 @@ export function parseMessageEmojis(content: string) {
 
     // eslint-disable-next-line no-constant-condition
     for (const emoji of emojis) {
-        const emojiHtml = `<span class="size-5 object-contain m-0 inline-block" />`;
+        const emojiHtml = `<span class="size-6 object-contain m-0 inline-block" />`;
 
         newContent = newContent.replace(emoji[0], emojiHtml);
     }

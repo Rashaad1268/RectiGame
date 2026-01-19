@@ -18,5 +18,9 @@ export async function GET({ request, cookies, url }) {
         wsAddr = `ws://${url.host}/api/ws/${wsQueryParam}`
     }
 
+    if (false) {
+        wsAddr = wsAddr.replace('ws://', 'wss://');
+    }
+
     return json({wsUrl: wsAddr, sessionIdExists: true})
 }

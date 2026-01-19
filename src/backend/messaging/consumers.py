@@ -16,7 +16,7 @@ class ChatConsumer(WebsocketConsumer):
         print('okokokok')
 
         if user.is_anonymous:
-            print("Not todayu ANON")
+            print("Not today ANON")
             return self.close()
 
         user.is_online = True
@@ -104,6 +104,9 @@ class ChatConsumer(WebsocketConsumer):
 
         match data["a"].upper():
             case "SUBSCRIBE_TO_TOPIC":
+                # adds a user to the topics websocket group
+                # this is called when a user joins a topic,
+                # so then the messages from the topic are sent to him
                 topic_slug = data["d"].get("topic_slug")
 
                 if topic_slug and Topic.objects.filter(slug=topic_slug).exists():
@@ -112,6 +115,8 @@ class ChatConsumer(WebsocketConsumer):
                     )
 
             case "UNSUBSCRIBE_FROM_TOPIC":
+                # this is called when the user leaves a topic,
+                # so that he won't receive messages from that topic's chats anymore
                 topic_slug = data["d"].get("topic_slug")
 
                 if topic_slug and Topic.objects.filter(slug=topic_slug).exists():

@@ -18,7 +18,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    profile_picture = serializers.ImageField()
+    # profile_picture = serializers.ImageField()
 
     class Meta:
         model = Profile

@@ -17,5 +17,5 @@ export function getPermission(value: number, permission: number) {
 }
 
 export function has_permissions(value: number, permissions: number) {
-    return (value & permissions) == permissions;
+    return (value & permissions) === permissions;
 }

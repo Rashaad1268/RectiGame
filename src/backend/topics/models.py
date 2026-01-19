@@ -32,7 +32,7 @@ class Topic(models.Model):
 
     @property
     def channel_name(self):
-        """The named used for channel groups"""
+        """The named used for websocket channel groups"""
         return f"Topic-{self.slug}"
 
     def __str__(self):

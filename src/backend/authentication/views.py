@@ -40,7 +40,7 @@ class LoginView(views.APIView):
 
         if not user.is_active:
             return Response(
-                {"detail": "User is not active"}, status=status.HTTP_401_UNAUTHORIZED
+                {"detail": "User account is disabled"}, status=status.HTTP_401_UNAUTHORIZED
             )
 
         login(request, user)

@@ -7,7 +7,7 @@
 {#if user?.profile.profile_picture}
     <img
         {...$$restProps}
-        src={user?.profile.profile_picture}
+        src={user?.profile.profile_picture.replace("http://127.0.0.1:8000", "")}
         class="{$$restProps.class ?? ''} profile-pic-img"
         alt={$$restProps.alt ?? "profile"}
     />
